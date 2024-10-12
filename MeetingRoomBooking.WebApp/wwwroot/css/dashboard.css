@@ -1,0 +1,209 @@
+﻿:root {
+    --total-meeting-room-color: #FFB23F;
+    --reccuring-booking-color: #6AB315;
+    --reschedule-booking-color: #FF5858;
+    --todays-booking-color: #87B6FE;
+}
+
+* {
+    font-family: "Open Sans", sans-serif;
+}
+
+.center-flex {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.card-grp {
+    justify-content: space-evenly;
+    width: 100%;
+}
+
+.custom-card {
+    display: flex;
+    background-color: white;
+    border-radius: 10px;
+    height: 100px;
+    box-sizing: border-box;
+    overflow: hidden;
+    width: 300px;
+}
+
+.card-text {
+    flex: 1;
+}
+
+    .card-text * {
+        margin: 0;
+    }
+
+.left-color {
+    width: 10px;
+    height: 100%;
+    margin-right: 10px;
+}
+
+.card-circle {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    margin: 0 15px;
+}
+
+    .card-circle i {
+        font-size: 20px;
+    }
+
+.total-meeting .left-color {
+    background-color: var(--total-meeting-room-color);
+}
+
+.recurring-booking .left-color {
+    background-color: var(--reccuring-booking-color);
+}
+
+.reschedule-booking .left-color {
+    background-color: var(--reschedule-booking-color);
+}
+
+.todays-booking .left-color {
+    background-color: var(--todays-booking-color);
+}
+
+.total-meeting .card-circle {
+    border: 1px solid var(--total-meeting-room-color);
+}
+
+.recurring-booking .card-circle {
+    border: 1px solid var(--reccuring-booking-color);
+}
+
+.reschedule-booking .card-circle {
+    border: 1px solid var(--reschedule-booking-color);
+}
+
+.todays-booking .card-circle {
+    border: 1px solid var(--todays-booking-color);
+}
+
+.total-meeting .card-circle i {
+    color: var(--total-meeting-room-color);
+}
+
+.recurring-booking .card-circle i {
+    color: var(--reccuring-booking-color);
+}
+
+.reschedule-booking .card-circle i {
+    color: var(--reschedule-booking-color);
+}
+
+.todays-booking .card-circle i {
+    color: var(--todays-booking-color);
+}
+
+.top-of-table {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    width: 100%;
+    margin-top: 15px;
+}
+
+    .top-of-table h4 {
+        flex: 3;
+    }
+
+    .top-of-table .search-group {
+        flex: 1;
+    }
+
+.filter-button {
+    height: 36px;
+    background-color: white;
+    color: #2F65B8;
+    border: 1px solid #2F65B8;
+    border-radius: 5px;
+    padding: 5px 10px;
+    transition: 0.2s;
+    display: flex;
+    margin-left: 10px;
+}
+
+    .filter-button i {
+        color: #2F65B8;
+    }
+
+    .filter-button:hover {
+        background-color: #2F65B8;
+        color: white;
+        border-color: white;
+    }
+
+        .filter-button:hover i {
+            color: white;
+        }
+
+.search-group {
+    display: flex;
+}
+
+.search-bar {
+    height: 36px;
+    width: 200px;
+    padding: 5px 10px;
+    border: 1px solid #E1E6ED;
+    border-radius: 6px;
+    box-shadow: 0 4px 0px -2px rgb(225, 230, 237, 1);
+}
+
+    .search-bar:focus {
+        outline: none;
+    }
+
+table {
+    margin-top: 10px;
+    font-size: 14px;
+    text-align: center;
+}
+
+tr {
+    background-color: transparent !important;
+}
+
+.pagination {
+    justify-content: center;
+}
+
+
+@media (max-width: 600px) {
+    table{
+        width: 90% !important;
+        overflow: scroll !important;
+    }
+    table * {
+        font-size: 12px;
+    }
+    .card-grp {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 5px;
+    }
+    .card-icon {
+        display: none;
+    }
+    .custom-card {
+        margin: 0 auto;
+        width: 100%;
+    }
+    .top-of-table h4 {
+        font-size: 16px;
+    }
+    .search-bar {
+        width: 200px;
+    }
+    .filter-button .bi {
+        display: none;
+    }
+}

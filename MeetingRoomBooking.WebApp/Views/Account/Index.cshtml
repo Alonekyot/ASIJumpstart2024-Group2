@@ -1,0 +1,43 @@
+﻿@section style {
+    <link rel="stylesheet" href="~/css/defaultLayout.css" />
+}
+@{
+
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="background">
+    <header class="head">
+        <div class="left-header">
+            <img src="~/assets/meetingRoomLogo.png" />
+            <div class="title">
+                Meeting Room Booking
+            </div>
+        </div>
+        <div>
+            <ul class="header-links">
+                <li>
+                    <a asp-controller="Puno" asp-action="AboutUs">About us</a>
+                </li>
+                <li>
+                    <a asp-controller="Puno" asp-action="Contact">Contact Us</a>
+                </li>
+            </ul>
+        </div>
+    </header>
+    <div class="intro-content">
+        <h2>
+            Book your perfect rooms <span>effortlessly</span>
+        </h2>
+        <p>
+            Boost team collaboration in our inspiring, fully-equipped meeting rooms.
+        </p>
+        <form asp-controller="Account" asp-action="Login" method="post">
+            <button class="start-button" type="submit">
+                <i class="bi bi-rocket-takeoff"></i>
+                Get Started
+            </button>
+        </form>
+        
+    </div>
+</div>

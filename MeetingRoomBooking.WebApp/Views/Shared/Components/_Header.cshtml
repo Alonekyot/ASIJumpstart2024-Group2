@@ -1,0 +1,33 @@
+﻿@using System.Security.Claims
+<header>
+    <div class="flex-center left-header">
+        <a class="sidebar-toggle burger" data-bs-toggle="offcanvas" href="#offcanvasExample" role="button" aria-controls="offcanvasExample">
+            <i class="bi bi-list"></i>
+        </a>
+        <img src="~/assets/meetingRoomLogo.png" class="logo" />
+    </div>
+    <div class="middle-header"></div>
+    <div class="right-header">
+        <div class="position-relative notif">
+            <i class="bi bi-bell notification"></i>
+            <span class="position-absolute start-100 translate-middle badge rounded-pill bg-danger">
+                6
+                <span class="visually-hidden">unread messages</span>
+            </span>
+        </div>
+
+        <div class="vertical-line"></div>
+        <div class="dropdown">
+            <div class="profile-area" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="bi bi-person-circle profile-image"></i>
+                <div class="profile-name">@User.FindFirstValue(ClaimTypes.Name)</div>
+                <i class="bi bi-caret-down-fill"></i>
+            </div>
+            <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="#">Profile</a></li>
+                <li><a class="dropdown-item" href="#">Settings</a></li>
+                <li><a class="dropdown-item" asp-controller="Account" asp-action="Logout">Log out</a></li>
+            </ul>
+        </div>
+    </div>
+</header>

@@ -1,0 +1,161 @@
+﻿﻿:root {
+    --profile-image-size: 24px;
+}
+
+html, body {
+    height: 100%;
+    margin: 0;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+}
+
+header {
+    background-color: #37A3E0;
+    width: 100%;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    padding: 10px 20px;
+}
+
+.sidebar-toggle i {
+    font-size: 24px;
+    color: black;
+}
+
+.flex-center {
+    display: flex;
+    align-items: center;
+}
+
+i {
+    color: #EBEBEB;
+}
+
+.notification {
+    font-size: 20px;
+}
+
+.logo {
+    width: 24px;
+    height: auto;
+}
+
+.left-header {
+    flex: 1;
+}
+
+.middle-header {
+    flex: 3;
+}
+
+.right-header {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    height: 100%;
+    padding: 5px 0;
+}
+
+.burger {
+    margin-right: 10px;
+}
+
+.vertical-line {
+    background-color: #D8D8D8;
+    height: 100%;
+    width: 1px;
+    border: 1px solid #D8D8D8;
+}
+
+.notif {
+    cursor: pointer;
+}
+
+.notif-badge {
+    background-color: red;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 0;
+    right: -7px;
+    font-size: 10px !important;
+    width: 15px !important;
+    height: 15px !important;
+    align-content: flex-start;
+    color: white;
+}
+
+.profile-area {
+    display: flex;
+}
+
+.profile-name {
+    color: white;
+    padding: 0 10px;
+}
+
+.profile-image {
+    height: var(--profile-image-size) !important;
+    width: var(--profile-image-size) !important;
+    margin-right: 5px !important;
+    color: #E8E8E8
+}
+
+.badge {
+    top: 5px !important;
+    font-size: 9px !important;
+}
+
+.content {
+    background-color: #F9F9F9;
+    flex: 1;
+    padding: 15px 30px;
+    display: flex;
+    flex-direction: column;
+}
+
+.bi {
+    color: white;
+    font-size: 14px;
+}
+.offcanvas {
+    width: 250px !important;
+}
+
+.sidebar {
+    display: flex !important;
+    flex-direction: column !important;
+
+}
+.sidebar-item {
+    width: 100%;
+    background-color: yellow;
+    text-decoration: none;
+    color: black;
+    font-size: 1.5em;
+    font-family: 'Poppins', sans-serif;
+    margin: 5px 0;
+}
+    .sidebar-item i {
+        color: #37A3E0;
+        font-size: 1em;
+    }
+
+@media (max-width: 600px) {
+    .middle-header {
+        display: none;
+    }
+    .right-header {
+        margin-right: 5px;
+    }
+    .content {
+        padding: 15px;
+    }
+}

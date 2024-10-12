@@ -1,0 +1,138 @@
+﻿html, body {
+    height: 100%;
+    margin: 0;
+}
+
+.signin-bg {
+    flex: 1;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+    background-image: url('/assets/index-bg.jpg');
+    background-size: cover;
+    background-position: center;
+}
+
+.title {
+    display: flex;
+    align-items: center;
+}
+
+    .title h2 {
+        margin: 0;
+    }
+
+.logo {
+    margin-right: 10px;
+}
+
+form {
+    width: 40%;
+    max-width: 450px;
+    min-width: 350px;
+    border: 1px solid black;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 30px;
+    border-radius: 20px;
+    margin-top: 2em;
+    background: rgba(255, 2555, 255, 0.24);
+}
+
+    form * {
+        font-family: "Poppins", sans-serif;
+    }
+
+.input-area, .input-section {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 15px;
+}
+
+.input-text {
+    width: 100%;
+    border-radius: 10px;
+    border: 1px solid #666666;
+    height: 45px;
+    padding: 10px;
+}
+
+input {
+    background-color: transparent;
+}
+
+.input-text:focus {
+    outline: none;
+}
+
+a {
+    color: #333;
+}
+
+.password-label {
+    display: flex;
+    justify-content: space-between;
+}
+
+.label {
+    font-size: 12px;
+    align-items: flex-end;
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+}
+.password-label {
+    width: 100%;
+}
+.word-toggle {
+    font-size: 18px;
+}
+button {
+    border: none;
+    background-color: #549CC5;
+    color: white;
+    font-weight: 500;
+    font-size: 17px;
+    width: 100%;
+    margin: 30px 0;
+    padding: 10px;
+    border-radius: 50px;
+}
+
+.form-title {
+    font-size: 26px;
+}
+
+.extra-text {
+    font-size: 12px;
+}
+
+.forgot-pass {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.icon-toggle {
+    font-size: 20px;
+    color: #666666;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    user-select: none;
+}
+
+@media (max-width: 600px) {
+    form {
+        width: 90%;
+        max-width: 350px;
+        margin-top: 4em;
+        padding: 20px;
+    }
+}

@@ -1,0 +1,116 @@
+﻿@section style {
+    <link rel="stylesheet" href="~/css/dashboard.css" />
+}
+
+@{
+    Layout = "_HomeLayout";
+    ViewData["Title"] = "Dashboard";
+}
+<div class="use-font">
+    <h5>Dashboard</h5>
+    <div class="center-flex card-grp">
+        <div class="custom-card center-flex total-meeting">
+            <div class="left-color">
+
+            </div>
+            <div class="card-text">
+                <h4>05</h4>
+                <p>Total Meeting Rooms</p>
+            </div>
+            <div class="card-icon">
+                <div class="card-circle center-flex">
+                    <i class="bi bi-calendar2-week"></i>
+                </div>
+            </div>
+        </div>
+        <div class="custom-card center-flex recurring-booking">
+            <div class="left-color">
+            </div>
+            <div class="card-text">
+                <h4>05</h4>
+                <p>Total Meeting Rooms</p>
+            </div>
+            <div class="card-icon">
+                <div class="card-circle center-flex">
+                    <i class="bi bi-calendar2-week"></i>
+                </div>
+            </div>
+        </div>
+        <div class="custom-card center-flex reschedule-booking">
+            <div class="left-color">
+
+            </div>
+            <div class="card-text">
+                <h4>05</h4>
+                <p>Total Meeting Rooms</p>
+            </div>
+            <div class="card-icon">
+                <div class="card-circle center-flex">
+                    <i class="bi bi-calendar2-week"></i>
+                </div>
+            </div>
+        </div>
+        <div class="custom-card center-flex todays-booking">
+            <div class="left-color">
+            </div>
+            <div class="card-text">
+                <h4>05</h4>
+                <p>Total Meeting Rooms</p>
+            </div>
+            <div class="card-icon">
+                <div class="card-circle todays-booking-icon center-flex">
+                    <i class="bi bi-calendar2-week"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="top-of-table">
+        <h4>
+            List of bookings
+        </h4>
+        <div class="search-group">
+            <input type="text" name="name" value="" placeholder="Search here" class="search-bar" />
+            <button type="button" class="filter-button" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                <i class="bi bi-funnel"></i>
+                Filter
+            </button>
+        </div>
+    </div>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">Room Name</th>
+                <th scope="col">Start Date</th>
+                <th scope="col">End Date</th>
+                <th scope="col">Start Time</th>
+                <th scope="col">End Time</th>
+                <th scope="col">Booking Date</th>
+                <th scope="col">Meeting Agenda</th>
+            </tr>
+        </thead>
+        <tbody class="table-group-divider">
+            @for(int i=0; i < 5; i++)
+            {
+                <tr>
+                    <td>CPE LAB</td>
+                    <td>9/11/24</td>
+                    <td>9/11/24</td>
+                    <td>1:30 pm</td>
+                    <td>3:30 pm</td>
+                    <td>9/10/24</td>
+                    <td>Discussion</td>
+                </tr>
+            }
+            
+            
+        </tbody>
+    </table>
+    <ul class="pagination">
+        <li class="page-item"><a class="page-link" href="#">Prev</a></li>
+        <li class="page-item"><a class="page-link" href="#">1</a></li>
+        <li class="page-item"><a class="page-link" href="#">2</a></li>
+        <li class="page-item"><a class="page-link" href="#">3</a></li>
+        <li class="page-item"><a class="page-link" href="#">Next</a></li>
+    </ul>
+</div>
