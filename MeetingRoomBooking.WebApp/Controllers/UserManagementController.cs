@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using MeetingRoomBooking.Data.Models;
 using MeetingRoomBooking.Services.Managers;
 using MeetingRoomBooking.Services.Manager;
+using MeetingRoomBooking.WebApp.Models;
 
 namespace MeetingRoomBooking.WebApp.Controllers {
 
@@ -26,10 +27,17 @@ namespace MeetingRoomBooking.WebApp.Controllers {
             return View();
         }
 
-        public IActionResult Delete(int id) {
-            return View();
+        public IActionResult Details(int? id)
+        {
+            foreach (var user in _context.Users)
+            {
+                if (user.UserId == id)
+                {
+                    return View(user);
+                }
+            }
+            return NotFound();
         }
-
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("LastName, FirstName, Email, Phone, Password")] User user) {
