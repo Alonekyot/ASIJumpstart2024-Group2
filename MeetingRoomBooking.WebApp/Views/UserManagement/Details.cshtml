@@ -13,7 +13,8 @@
             @Html.DisplayNameFor(model => model.LastName)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.LastName)
+            <input asp-for="LastName" class="form-control" disabled/>
+            
         </dd>
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.FirstName)
@@ -41,8 +42,13 @@
         </dd>
     </dl>
 </div>
+    <script>
+    function enableInput() {
+        document.getElementById("LastName").disabled = false;
+    }
+    </script>
     <!-- Button trigger modal -->
-    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+    <button onclick="enableInput()"type="button" class="btn btn-primary">
         Edit
     </button>
     <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
