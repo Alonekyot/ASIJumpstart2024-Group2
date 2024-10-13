@@ -5,6 +5,8 @@ using MeetingRoomBooking.Data.Models;
 using MeetingRoomBooking.Services.Managers;
 using MeetingRoomBooking.Services.Manager;
 using MeetingRoomBooking.WebApp.Models;
+using MeetingRoomBooking.Data.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace MeetingRoomBooking.WebApp.Controllers {
 
@@ -33,6 +35,7 @@ namespace MeetingRoomBooking.WebApp.Controllers {
             {
                 if (user.UserId == id)
                 {
+                   System.Diagnostics.Debug.WriteLine("Hello!!!!!!!!");
                     return View(user);
                 }
             }
@@ -81,5 +84,63 @@ namespace MeetingRoomBooking.WebApp.Controllers {
             return View(user); // Return the view with validation errors
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Details([Bind("UserId, LastName, FirstName, Email, Phone")] User user)
+        {
+            var existingUser = await _context.Users.FindAsync(user.UserId);
+            ModelState.Remove(nameof(user.Password));
+            if (existingUser.Email != user.Email && _context.Users.Any(u => u.Email == user.Email))
+            {
+                ModelState.AddModelError("Email", "Email is already in use.");
+            }
+
+            System.Diagnostics.Debug.WriteLine("STEP1");
+           
+            
+            if (existingUser == null)
+            {
+                return NotFound();
+            }
+            System.Diagnostics.Debug.WriteLine("Step2");
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    existingUser.LastName = user.LastName;
+                    existingUser.FirstName = user.FirstName;
+                    existingUser.Email = user.Email;
+                    existingUser.Phone = user.Phone;
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!UserExists(user.UserId))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                System.Diagnostics.Debug.WriteLine("Reached the end");
+                return RedirectToAction(nameof(Index));
+            }
+           
+            return View(existingUser);
+
+
+
+
+
+
+
+        }
+
+        private bool UserExists(int Userid)
+        {
+            return _context.Users.Any(e => e.UserId == Userid);
+        }
     }
 }
