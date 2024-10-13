@@ -3,8 +3,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MeetingRoomBooking.Data.Models;
 using MeetingRoomBooking.Services.Managers;
-using MeetingRoomBooking.Services.Manager;
 using MeetingRoomBooking.WebApp.Models;
+using MeetingRoomBooking.Services.ServiceModels;
 
 namespace MeetingRoomBooking.WebApp.Controllers {
 
@@ -13,13 +13,18 @@ namespace MeetingRoomBooking.WebApp.Controllers {
     public class UserManagementController : Controller {
 
         private readonly MeetingRoomBookingDbContext _context;
-        public UserManagementController(MeetingRoomBookingDbContext context) {
+        private readonly UserManager _userManager;
+        public UserManagementController(MeetingRoomBookingDbContext context,
+                                        UserManager userManager) {
             _context = context;
+            _userManager = userManager;
         }
 
         
         public IActionResult Index() {
-            var users = _context.Users.ToList();
+            var users = _context.Users
+                .Where(u => !u.Deleted)
+                .ToList();
             return View(users);
         }
 
@@ -40,45 +45,19 @@ namespace MeetingRoomBooking.WebApp.Controllers {
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("LastName, FirstName, Email, Phone, Password")] User user) {
+        public async Task<IActionResult> Create(UserViewModel newUser) {
 
-            if (_context.Users.Any(u => u.Email == user.Email)) {
+            if(_context.Users.Any(u => u.Email == newUser.Email)) {
                 ModelState.AddModelError("Email", "Email is already in use.");
             }
-            user.Password = PasswordManager.EncryptPassword(user.Password);
-            user.Role = 0; // Default to User role (0 = User)
-
-            switch (user.Role) {
-                case 0:
-                    user.Remarks = "User";
-                    break;
-                case 1:
-                    user.Remarks = "Admin";
-                    break;
-                case 2:
-                    user.Remarks = "Super Admin";
-                    break;
-                default:
-                    user.Remarks = "Unknown";
-                    break;
-            }
-
-            user.Deleted = false; // Default to not deleted
 
             if (ModelState.IsValid) {
+                var user = _userManager.Add(newUser);
                 _context.Add(user);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-
-            Console.WriteLine("Model is not valid");
-
-            foreach (var error in ModelState.Values.SelectMany(v => v.Errors)) {
-                Console.WriteLine(error.ErrorMessage);
-            }
-
-
-            return View(user); // Return the view with validation errors
+            return View(newUser);
         }
 
     }

@@ -3,6 +3,7 @@ using MeetingRoomBooking.Services.Manager;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using MeetingRoomBooking.WebApp.Models;
+using MeetingRoomBooking.Services.Managers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,6 +19,7 @@ PasswordManager.SetUp(tokenAuthSection);
 builder.Services.AddDbContext<MeetingRoomBookingDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("Default") ?? throw new InvalidOperationException("Connection string 'Default' not found.")));
 
+builder.Services.AddScoped<UserManager>();
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie();
 builder.Services.AddControllersWithViews();
 
