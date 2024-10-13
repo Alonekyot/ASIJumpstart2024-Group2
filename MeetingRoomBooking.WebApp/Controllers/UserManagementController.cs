@@ -20,11 +20,19 @@ namespace MeetingRoomBooking.WebApp.Controllers {
             _userManager = userManager;
         }
 
-        
-        public IActionResult Index() {
+
+        public IActionResult Index(int pageNumber = 1, int pageSize = 5) {
             var users = _context.Users
                 .Where(u => !u.Deleted)
+                .OrderBy(u => u.FirstName) // Sorting logic, adjust as needed
+                .Skip((pageNumber - 1) * pageSize) // Skip the previous pages' records
+                .Take(pageSize) // Take only the current page's records
                 .ToList();
+
+            int totalRecords = _context.Users.Count();
+            ViewBag.TotalPages = (int)Math.Ceiling((double)totalRecords / pageSize);
+            ViewBag.CurrentPage = pageNumber;
+
             return View(users);
         }
 
