@@ -40,14 +40,17 @@ namespace MeetingRoomBooking.WebApp.Controllers {
             return View();
         }
 
+        public void Detail(int? id) {
+            var user = _context.Users
+                .FirstOrDefault(u => u.UserId == id);
+        }
+
         public IActionResult Details(int? id)
         {
-            foreach (var user in _context.Users)
-            {
-                if (user.UserId == id)
-                {
-                    return View(user);
-                }
+            var user = _context.Users
+                .FirstOrDefault(u => u.UserId == id);
+            if(user != null) {
+                return View(user);
             }
             return NotFound();
         }
