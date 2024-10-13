@@ -14,42 +14,45 @@
         </dt>
         <dd class="col-sm-10">
             <input asp-for="LastName" class="form-control" disabled/>
-            
         </dd>
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.FirstName)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.FirstName)
+            <input asp-for="FirstName" class="form-control" disabled />
         </dd>
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.UserId)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.UserId)
+            <input asp-for="UserId" class="form-control" disabled />
         </dd>
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Email)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Email)
+            <input asp-for="Email" class="form-control" disabled />
         </dd>
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Phone)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Phone)
+            <input asp-for="Phone" class="form-control" disabled />
         </dd>
     </dl>
 </div>
     <script>
     function enableInput() {
         document.getElementById("LastName").disabled = false;
+        document.getElementById("FirstName").disabled = false;
+        document.getElementById("UserId").disabled = false;
+        document.getElementById("Email").disabled = false;
+        document.getElementById("Phone").disabled = false;
     }
     </script>
     <!-- Button trigger modal -->
     <button onclick="enableInput()"type="button" class="btn btn-primary">
-        Edit
+        Save Changes
     </button>
     <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
         Delete
