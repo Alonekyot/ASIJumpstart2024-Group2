@@ -127,7 +127,14 @@ button {
     align-items: center;
     user-select: none;
 }
+.back-btn {
+    width: 100%;
+    font-size: 12px;
 
+}
+.back-btn a {
+    text-decoration: none;
+}
 @media (max-width: 600px) {
     form {
         width: 90%;
