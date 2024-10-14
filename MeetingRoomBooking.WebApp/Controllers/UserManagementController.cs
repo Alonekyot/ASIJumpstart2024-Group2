@@ -94,15 +94,12 @@ namespace MeetingRoomBooking.WebApp.Controllers {
             {
                 ModelState.AddModelError("Email", "Email is already in use.");
             }
-
-            System.Diagnostics.Debug.WriteLine("STEP1");
            
             
             if (existingUser == null)
             {
                 return NotFound();
             }
-            System.Diagnostics.Debug.WriteLine("Step2");
             if (ModelState.IsValid)
             {
                 try
