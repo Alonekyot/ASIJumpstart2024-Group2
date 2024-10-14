@@ -10,15 +10,18 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication;
 using MeetingRoomBooking.Services.Manager;
 using Microsoft.EntityFrameworkCore;
+using MeetingRoomBooking.Services.Services;
 using MeetingRoomBooking.Services.ServiceModels;
 
 namespace MeetingRoomBooking.WebApp.Controllers {
     public class AccountController : Controller {
 
         private readonly MeetingRoomBookingDbContext _context;
+        private readonly LoginService _loginService;
 
-        public AccountController(MeetingRoomBookingDbContext meetingRoomBookingDbContext) {
+        public AccountController(MeetingRoomBookingDbContext meetingRoomBookingDbContext, LoginService loginService) {
             _context = meetingRoomBookingDbContext;
+            _loginService = loginService;
         }
 
 
@@ -88,6 +91,7 @@ namespace MeetingRoomBooking.WebApp.Controllers {
 
             if (ModelState.IsValid) {
                 // Find the user by email
+
                 var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == newPasswordModel.Email);
                 if (user == null) {
                     ModelState.AddModelError("Email", "No user found with that email address.");
