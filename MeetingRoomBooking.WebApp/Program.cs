@@ -23,6 +23,10 @@ builder.Services.AddScoped<UserManager>();
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie();
 builder.Services.AddControllersWithViews();
 
+//For adding output logs for testing
+builder.Logging.AddConsole();
+
+
 var app = builder.Build();
 
 using (var scope = app.Services.CreateScope())

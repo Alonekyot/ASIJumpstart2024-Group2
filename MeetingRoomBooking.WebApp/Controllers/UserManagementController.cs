@@ -71,5 +71,60 @@ namespace MeetingRoomBooking.WebApp.Controllers {
             return View(newUser);
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Details([Bind("UserId, LastName, FirstName, Email, Phone")] User user)
+        {
+            var existingUser = await _context.Users.FindAsync(user.UserId);
+            ModelState.Remove(nameof(user.Password));
+            if (existingUser.Email != user.Email && _context.Users.Any(u => u.Email == user.Email))
+            {
+                ModelState.AddModelError("Email", "Email is already in use.");
+            }
+           
+            
+            if (existingUser == null)
+            {
+                return NotFound();
+            }
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    existingUser.LastName = user.LastName;
+                    existingUser.FirstName = user.FirstName;
+                    existingUser.Email = user.Email;
+                    existingUser.Phone = user.Phone;
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!UserExists(user.UserId))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                System.Diagnostics.Debug.WriteLine("Reached the end");
+                return RedirectToAction(nameof(Index));
+            }
+           
+            return View(existingUser);
+
+
+
+
+
+
+
+        }
+
+        private bool UserExists(int Userid)
+        {
+            return _context.Users.Any(e => e.UserId == Userid);
+        }
     }
 }
