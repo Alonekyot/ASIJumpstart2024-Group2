@@ -53,7 +53,7 @@ li a {
     justify-content: center;
 }
 .background {
-    background-image: url('/assets/signin-bg.jpg');
+    background-image: url('/assets/index-bg.png');
     background-size: cover;
     background-position: center;
     height: 100%;
@@ -94,7 +94,11 @@ span {
     border: none;
     padding: 10px 30px;
     border-radius: 10px;
+    text-decoration: none;
 }
+    .start-button:hover {
+        color: white;
+    }
 
 .foot {
     width: 100%;

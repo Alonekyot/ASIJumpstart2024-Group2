@@ -24,11 +24,11 @@ namespace MeetingRoomBooking.WebApp.Controllers {
 
 
         public IActionResult Index() {
-            return View(_context.Users.ToList());
+            return View();
         }
 
         public IActionResult Login() {
-            return View("~/Views/Account/Login.cshtml");
+            return View();
         }
 
         //[HttpPost]
@@ -89,11 +89,11 @@ namespace MeetingRoomBooking.WebApp.Controllers {
                         return RedirectToAction("Index", "Home");
                     }
                     else {
-                        ModelState.AddModelError("", "Email or Password is not found");
+                        ModelState.AddModelError("Password", "Password is incorrect");
                     }
                 }
                 else {
-                    ModelState.AddModelError("", "Email or Password is not found");
+                    ModelState.AddModelError("Email", "Email is not found");
                 }
             }
             return View(model);
@@ -114,14 +114,15 @@ namespace MeetingRoomBooking.WebApp.Controllers {
         public async Task<IActionResult> SubmitPassword(ForgotPasswordViewModel model)
         {
             if (model.NewPassword != model.ConfirmNewPassword) {
-                ModelState.AddModelError("", "Password do not match");
+                ModelState.AddModelError("ConfirmNewPassword", "Password do not match");
+                return View("ForgotPassword", model);
             }
             var user = _context.Users
                 .Where(u => u.Email == model.Email)
                 .FirstOrDefault();
             if (user == null) {
                 ModelState.AddModelError("Email", "User not found.");
-                return RedirectToAction("ForgotPassword", model);
+                return View("ForgotPassword", model);
             }
             user.Password = PasswordManager.EncryptPassword(model.NewPassword);
 
