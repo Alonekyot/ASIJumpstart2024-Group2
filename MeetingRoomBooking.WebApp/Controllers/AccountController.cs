@@ -10,6 +10,7 @@ using MeetingRoomBooking.Data;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication;
 using MeetingRoomBooking.Services.Manager;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace MeetingRoomBooking.WebApp.Controllers {
     public class AccountController : Controller {
@@ -110,9 +111,23 @@ namespace MeetingRoomBooking.WebApp.Controllers {
         }
 
         [HttpPost]
-        public IActionResult SubmitPassword()
+        public async Task<IActionResult> SubmitPassword(ForgotPasswordViewModel model)
         {
-            return View("~/Views/Account/Login.cshtml");
+            if (model.NewPassword != model.ConfirmNewPassword) {
+                ModelState.AddModelError("", "Password do not match");
+            }
+            var user = _context.Users
+                .Where(u => u.Email == model.Email)
+                .FirstOrDefault();
+            if (user == null) {
+                ModelState.AddModelError("Email", "User not found.");
+                return RedirectToAction("ForgotPassword", model);
+            }
+            user.Password = PasswordManager.EncryptPassword(model.NewPassword);
+
+            await _context.SaveChangesAsync();
+            return RedirectToAction("Login");
+
         }
     }
 }

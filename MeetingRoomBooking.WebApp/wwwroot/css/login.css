@@ -127,6 +127,12 @@ button {
     align-items: center;
     user-select: none;
 }
+.back-area{
+    width: 100%;
+}
+.back-area a{
+    text-decoration: none;
+}
 
 @media (max-width: 600px) {
     form {
