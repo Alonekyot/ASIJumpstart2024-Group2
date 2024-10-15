@@ -5,11 +5,11 @@ using System.Collections.Generic;
 
 namespace MeetingRoomBooking.Services.Interfaces {
     public interface IUserService {
-        IEnumerable<UserViewModel> RetrieveAll(int? id = null, string firstName = null);
-        UserViewModel RetrieveUser(int id);
-        void Add(UserViewModel model);
-        void Update(UserViewModel model);
-        void Delete(int id);
-        LoginResult AuthenticateUser(string userCode, string password, ref User user);
+        //IEnumerable<UserViewModel> RetrieveAll(int? id = null, string firstName = null);
+        //UserViewModel RetrieveUser(int id);
+        User Add(UserViewModel model);
+        //void Update(UserViewModel model);
+        //void Delete(int id);
+        //LoginResult AuthenticateUser(string userCode, string password, ref User user);
     }
 }
