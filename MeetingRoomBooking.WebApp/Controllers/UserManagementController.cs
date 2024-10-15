@@ -21,7 +21,7 @@ namespace MeetingRoomBooking.WebApp.Controllers {
         }
 
 
-        public IActionResult Index(int pageNumber = 1, int pageSize = 5) {
+        public IActionResult Index(int pageNumber = 1, int pageSize = 7) {
             var users = _context.Users
                 .Where(u => !u.Deleted)
                 .OrderBy(u => u.FirstName) // Sorting logic, adjust as needed
@@ -34,6 +34,14 @@ namespace MeetingRoomBooking.WebApp.Controllers {
             ViewBag.CurrentPage = pageNumber;
 
             return View(users);
+        }
+
+        [HttpPost]
+        public IActionResult SearchUser(string filter) {
+            var users = _context.Users
+                .Where(u => u.FirstName.ToLower().Contains(filter.ToLower()) || u.LastName.ToLower().Contains(filter.ToLower()))
+                .ToList();
+            return RedirectToAction("Index", users);
         }
 
         public IActionResult Create() {
