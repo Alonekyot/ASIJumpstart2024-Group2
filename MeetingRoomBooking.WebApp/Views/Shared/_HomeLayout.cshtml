@@ -4,7 +4,7 @@
 <html>
 <head>
     <meta name="viewport" content="width=device-width" />
-    <title>@ViewBag.Title</title>
+    <title>@ViewBag.ActivePage</title>
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="~/css/HomeStyles.css" asp-append-version="true" />
@@ -26,21 +26,21 @@
             <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
         </div>
         <div class="offcanvas-body sidebar">
-            <a class="sidebar-item" asp-controller="Home" asp-action="Index">
-                <i class="bi bi-grid-1x2-fill"></i>
-                Dashboard
-            </a>
-            <a class="sidebar-item" asp-controller="Home" asp-action="Index">
-                <i class="bi bi-grid-1x2-fill"></i>
-                My Bookings
-            </a>
-            @if (int.Parse(User.FindFirstValue("Role")) == 2 || int.Parse(User.FindFirstValue("Role")) == 1) {
-                <a class="sidebar-item" asp-controller="UserManagement" asp-action="Index">
-                    <i class="bi bi-people-fill"></i>
-                    User Management
-                </a>
-            }
 
+            <a class="sidebar-item @(ViewBag.ActivePage == "Dashboard" ? "active" : "")" href="@Url.Action("Index", "Home")">
+                        <i class="bi bi-grid-1x2-fill"></i>
+                        Dashboard
+                    </a>
+                
+                @if (int.Parse(User.FindFirstValue("Role")) == 2 || int.Parse(User.FindFirstValue("Role")) == 1) {
+                    <a class="sidebar-item @(ViewBag.ActivePage == "UserManagement" ? "active" : "")" href="@Url.Action("Index", "UserManagement")">
+                            <i class="bi bi-people-fill"></i>
+                            User Management
+                        </a>
+                    </li>
+                }
+
+            </ul>
         </div>
         
     </div>

@@ -8,9 +8,10 @@ using MeetingRoomBooking.Data;
 using MeetingRoomBooking.Services.ServiceModels;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
+using MeetingRoomBooking.Services.Interfaces;
 
 namespace MeetingRoomBooking.Services.Managers {
-    public class LoginManager {
+    public class LoginManager: ILoginManager {
 
         private readonly MeetingRoomBookingDbContext _context;
 
