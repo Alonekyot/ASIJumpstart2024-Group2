@@ -5,6 +5,7 @@ using MeetingRoomBooking.Data.Models;
 using MeetingRoomBooking.Services.Managers;
 using MeetingRoomBooking.WebApp.Models;
 using MeetingRoomBooking.Services.ServiceModels;
+using Microsoft.EntityFrameworkCore;
 
 namespace MeetingRoomBooking.WebApp.Controllers {
 
