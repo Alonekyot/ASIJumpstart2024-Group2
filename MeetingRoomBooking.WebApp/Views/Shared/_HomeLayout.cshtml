@@ -28,9 +28,9 @@
         <div class="offcanvas-body sidebar">
 
             <a class="sidebar-item @(ViewBag.ActivePage == "Dashboard" ? "active" : "")" href="@Url.Action("Index", "Home")">
-                        <i class="bi bi-grid-1x2-fill"></i>
-                        Dashboard
-                    </a>
+                <i class="bi bi-grid-1x2-fill"></i>
+                Dashboard
+            </a>
                 
                 @if (int.Parse(User.FindFirstValue("Role")) == 2 || int.Parse(User.FindFirstValue("Role")) == 1) {
                     <a class="sidebar-item @(ViewBag.ActivePage == "UserManagement" ? "active" : "")" href="@Url.Action("Index", "UserManagement")">

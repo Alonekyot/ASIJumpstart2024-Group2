@@ -47,7 +47,7 @@ namespace MeetingRoomBooking.WebApp.Controllers {
                 }
 
                 // Add error message if login failed
-                ModelState.AddModelError("", result.ErrorMessage);
+                ModelState.AddModelError("Email", result.ErrorMessage);
             }
             return View(model);
         }
@@ -71,7 +71,13 @@ namespace MeetingRoomBooking.WebApp.Controllers {
 
             // If there's an error message, add it to ModelState and return the view
             if (!string.IsNullOrEmpty(errorMessage)) {
-                ModelState.AddModelError("", errorMessage);
+                if(errorMessage == "Passwords do not match.") {
+                    ModelState.AddModelError("ConfirmNewPassword", errorMessage);
+                }
+                else {
+                    ModelState.AddModelError("Email", errorMessage);
+                }
+                
                 return View("ForgotPassword", model);
             }
 
