@@ -20,6 +20,7 @@ builder.Services.AddDbContext<MeetingRoomBookingDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("Default") ?? throw new InvalidOperationException("Connection string 'Default' not found.")));
 
 builder.Services.AddScoped<UserManager>();
+builder.Services.AddScoped<LoginManager>();
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie();
 builder.Services.AddControllersWithViews();
 

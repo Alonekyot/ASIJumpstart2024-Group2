@@ -1,6 +1,11 @@
 ﻿@using System.Security.Claims
 @using MeetingRoomBooking.Services.Manager
 @model IEnumerable<MeetingRoomBooking.Data.Models.User>
+
+@section style {
+    <link rel="stylesheet" href="~/css/userList.css" />
+}
+
 @{
     Layout = "_HomeLayout";
 }
@@ -8,8 +13,19 @@
 <div style="display:flex;">
     <h2>User List</h2>
     <div style="flex: 1;"></div>
-    <a class="btn btn-primary" style="align-content:center" asp-action="Create">Create User</a>
+    
 </div>
+<div class="under-title">
+    <div class="search-group">
+        <input type="text" placeholder="Search" class="search" />
+        <a class="search-btn"><i class="bi bi-search"></i></a>
+    </div>
+    <a class="create-user-button" style="align-content:center" asp-action="Create">
+        <i class="bi bi-plus"></i>
+        Add User
+        </a>
+</div>
+
 <div class="flex">
     <table class="table">
         <thead>

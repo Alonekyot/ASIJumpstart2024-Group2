@@ -18,6 +18,7 @@ namespace MeetingRoomBooking.WebApp.Controllers {
         }
 
         public IActionResult Index() {
+            ViewBag.ActivePage = "Dashboard";
             return View();
         }
 

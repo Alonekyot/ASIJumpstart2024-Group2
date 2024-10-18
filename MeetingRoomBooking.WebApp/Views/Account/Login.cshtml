@@ -1,4 +1,4 @@
-﻿@model LoginViewModel
+﻿@model MeetingRoomBooking.Services.ServiceModels.LoginViewModel
 @section style {
     <link rel="stylesheet" href="~/css/login.css" />
 }
@@ -36,14 +36,15 @@
                 </div>
                 <input type="password" class="input-text" id="password" asp-for="Password" />
                 
-                
             </div>
+            <span asp-validation-for="Email" class="error-message"></span>
             <button type="submit" >Log in</button>
             <div class="extra-text">By continuing, you agree to the <a href="#">Terms of use</a> and <a href="#">Privacy Policy</a></div>
             <div class="forgot-pass">
                 <a asp-controller="Account" asp-action="ForgotPassword" class="extra-text">Forgot your password?</a>
             </div>
         </div>
+        
     </form>
 </div>
 

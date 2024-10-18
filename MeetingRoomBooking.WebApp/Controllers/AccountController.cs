@@ -5,95 +5,49 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using System;
 using System.IO;
 using System.Threading.Tasks;
-using MeetingRoomBooking.WebApp.Models;
+using MeetingRoomBooking.Services.ServiceModels;
 using MeetingRoomBooking.Data;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication;
 using MeetingRoomBooking.Services.Manager;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using MeetingRoomBooking.Services.Managers;
 
 namespace MeetingRoomBooking.WebApp.Controllers {
     public class AccountController : Controller {
 
         private readonly MeetingRoomBookingDbContext _context;
+        private readonly LoginManager _loginManager;
 
-        public AccountController(MeetingRoomBookingDbContext meetingRoomBookingDbContext)
+        public AccountController(MeetingRoomBookingDbContext meetingRoomBookingDbContext, LoginManager loginManager)
         {
             _context = meetingRoomBookingDbContext;
+            _loginManager = loginManager;
         }
 
 
         public IActionResult Index() {
-            return View(_context.Users.ToList());
+            return View();
         }
 
         public IActionResult Login() {
-            return View("~/Views/Account/Login.cshtml");
+            return View();
         }
 
-        //[HttpPost]
-        //public IActionResult Login(LoginViewModel model)
-        //{
-        //    if (ModelState.IsValid) {
-        //        var user = _context.Users.Where(x => (x.Email == model.Email || x.Phone == model.Email) 
-        //        && x.Password == model.Password && !x.Deleted)
-        //            .FirstOrDefault();
-        //        if (user != null) {
-        //            //login successfull, creating cookie
-        //            var claims = new List<Claim>
-        //            {
-        //                new Claim (ClaimTypes.Name, (user.FirstName + " " + user.LastName)),
-        //                new Claim("UserId", user.UserId.ToString()),
-        //                new Claim("Role", user.Role.ToString())
-        //            };
-
-        //            var claimsIdentity = new ClaimsIdentity (claims, CookieAuthenticationDefaults.AuthenticationScheme);
-        //            HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
-
-        //            return RedirectToAction("Index", "Home");
-
-        //        }
-        //        else {
-        //            ModelState.AddModelError("", "Email or Password is not found");
-        //        }
-        //    }
-        //    return View(model);
-
-        //}
-
         [HttpPost]
-        public IActionResult Login(LoginViewModel model) {
+        public async Task<IActionResult> Login(LoginViewModel model) {
             if (ModelState.IsValid) {
-                // Retrieve the user by email or phone, ensuring the account is not deleted
-                var user = _context.Users
-                    .Where(x => (x.Email == model.Email || x.Phone == model.Email) && !x.Deleted)
-                    .FirstOrDefault();
+                var result = await _loginManager.LoginAsync(model);
 
-                if (user != null) {
-                    // Decrypt the stored password
-                    string decryptedPassword = PasswordManager.DecryptPassword(user.Password);
-
-                    // Compare the decrypted password with the entered password
-                    if (decryptedPassword == model.Password) {
-                        // Login successful, creating cookie
-                        var claims = new List<Claim>
-                        {
-                            new Claim(ClaimTypes.Name, user.FirstName + " " + user.LastName),
-                            new Claim("UserId", user.UserId.ToString()),
-                            new Claim("Role", user.Role.ToString())
-                        };
-
-                        var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-                        HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
-
-                        return RedirectToAction("Index", "Home");
-                    }
-                    else {
-                        ModelState.AddModelError("", "Email or Password is not found");
-                    }
+                if (result.Success) {
+                    // Login successful, creating cookie
+                    var claimsIdentity = new ClaimsIdentity(result.Claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                    await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
+                    return RedirectToAction("Index", "Home");
                 }
-                else {
-                    ModelState.AddModelError("", "Email or Password is not found");
-                }
+
+                // Add error message if login failed
+                ModelState.AddModelError("Email", result.ErrorMessage);
             }
             return View(model);
         }
@@ -110,9 +64,26 @@ namespace MeetingRoomBooking.WebApp.Controllers {
         }
 
         [HttpPost]
-        public IActionResult SubmitPassword()
+        public async Task<IActionResult> SubmitPassword(ForgotPasswordViewModel model)
         {
-            return View("~/Views/Account/Login.cshtml");
+            // Call the service method to update the password
+            var errorMessage = await _loginManager.UpdatePasswordAsync(model);
+
+            // If there's an error message, add it to ModelState and return the view
+            if (!string.IsNullOrEmpty(errorMessage)) {
+                if(errorMessage == "Passwords do not match.") {
+                    ModelState.AddModelError("ConfirmNewPassword", errorMessage);
+                }
+                else {
+                    ModelState.AddModelError("Email", errorMessage);
+                }
+                
+                return View("ForgotPassword", model);
+            }
+
+            // Redirect to the login page on success
+            return RedirectToAction("Login");
+
         }
     }
 }

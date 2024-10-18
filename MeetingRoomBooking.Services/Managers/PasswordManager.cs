@@ -79,5 +79,9 @@ namespace MeetingRoomBooking.Services.Manager {
             }
         }
 
+        public static bool VerifyPassword(string modelPassword, string userPassword) {
+            return (EncryptPassword(modelPassword)) == userPassword;
+        }
+
     }
 }

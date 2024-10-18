@@ -12,16 +12,19 @@ namespace MeetingRoomBooking.WebApp.Controllers {
     [RoleAuthorize(new int[] { 1, 2 })]// Only Roles with values 1 or 2, or Admin or Suer admin respectively
     public class UserManagementController : Controller {
 
+
         private readonly MeetingRoomBookingDbContext _context;
         private readonly UserManager _userManager;
         public UserManagementController(MeetingRoomBookingDbContext context,
                                         UserManager userManager) {
             _context = context;
             _userManager = userManager;
+            
         }
 
 
-        public IActionResult Index(int pageNumber = 1, int pageSize = 5) {
+        public IActionResult Index(int pageNumber = 1, int pageSize = 7) {
+            ViewBag.ActivePage = "UserManagement";
             var users = _context.Users
                 .Where(u => !u.Deleted)
                 .OrderBy(u => u.FirstName) // Sorting logic, adjust as needed
@@ -36,17 +39,22 @@ namespace MeetingRoomBooking.WebApp.Controllers {
             return View(users);
         }
 
-        public IActionResult Create() {
-            return View();
+        [HttpPost]
+        public IActionResult SearchUser(string filter) {
+            var users = _context.Users
+                .Where(u => u.FirstName.ToLower().Contains(filter.ToLower()) || u.LastName.ToLower().Contains(filter.ToLower()))
+                .ToList();
+            return RedirectToAction("Index", users);
         }
 
-        public void Detail(int? id) {
-            var user = _context.Users
-                .FirstOrDefault(u => u.UserId == id);
+        public IActionResult Create() {
+            ViewBag.ActivePage = "UserManagement";
+            return View();
         }
 
         public IActionResult Details(int? id)
         {
+            ViewBag.ActivePage = "UserManagement";
             var user = _context.Users
                 .FirstOrDefault(u => u.UserId == id);
             if(user != null) {
@@ -92,6 +100,21 @@ namespace MeetingRoomBooking.WebApp.Controllers {
             }
             return View(user);
         }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Delete(int UserId) {
+            var user = await _context.Users.FindAsync(UserId);
+            if (user != null)
+            {
+               user.Deleted = true;
+               await _context.SaveChangesAsync();
+            }
 
+            return RedirectToAction("Index");
+        }
+        private bool UserExists(int Userid)
+        {
+            return _context.Users.Any(e => e.UserId == Userid);
+        }
     }
 }

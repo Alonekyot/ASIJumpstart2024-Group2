@@ -1,7 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.Text.Json.Serialization;
 
-namespace MeetingRoomBooking.WebApp.Models {
+namespace MeetingRoomBooking.Services.ServiceModels {
     public class LoginViewModel {
 
         [Required(ErrorMessage = "Email or Phone number is required")]
