@@ -1,5 +1,9 @@
 ﻿@model MeetingRoomBooking.Data.Models.User
 
+@section script {
+    <script src="~/js/EditUser.js"></script>
+}
+
 @{
     Layout = "_HomeLayout";
     ViewData["Title"] = "Details";
@@ -42,27 +46,26 @@
             <span asp-validation-for="Phone" class="text-danger"></span>
         </dd>
     </dl>
-        <button type="submit" class="btn btn-primary">Save Changes</button>
-    <</form>
-</div>
-    <script>
-    function enableInput() {
-        document.getElementById("LastName").disabled = false;
-        document.getElementById("FirstName").disabled = false;
-        document.getElementById("UserId").disabled = false;
-        document.getElementById("Email").disabled = false;
-        document.getElementById("Phone").disabled = false;
-    }
-    </script>
+        <button type="submit" id="saveButton" style="display: none;" onclick="swapButtons()" class="btn btn-primary">Save Changes</button>
+    </form>
+    <button id="editButton" onclick="enableInput()" type="button" class="btn btn-primary"> Edit</button>
+    <br id="break">
+    <a type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal"> Delete</a>
     <!-- Button trigger modal -->
-    <button onclick="enableInput()"type="button" class="btn btn-primary">
-        Edit
-    </button>
+</div>
+<div>
+    
+</div>
 
 
-    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
-        Delete
-    </button>
+
+    
+
+
+    
+   
+
+
     <!-- Modal -->
     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
