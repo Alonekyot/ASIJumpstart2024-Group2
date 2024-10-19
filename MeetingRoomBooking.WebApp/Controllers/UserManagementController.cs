@@ -106,7 +106,7 @@ namespace MeetingRoomBooking.WebApp.Controllers {
                     existingUser.Phone = user.Phone;
                     await _context.SaveChangesAsync();
                 }
-                catch (DbUpdateConcurrencyException)
+                catch (Microsoft.EntityFrameworkCore.DbUpdateConcurrencyException)
                 {
                     if (!UserExists(user.UserId))
                     {
