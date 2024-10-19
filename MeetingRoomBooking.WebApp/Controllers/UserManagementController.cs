@@ -123,14 +123,19 @@ namespace MeetingRoomBooking.WebApp.Controllers {
            
             return View(existingUser);
 
-
-
-
-
-
-
         }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Delete(int UserId) {
+            var user = await _context.Users.FindAsync(UserId);
+            if (user != null)
+            {
+               user.Deleted = true;
+               await _context.SaveChangesAsync();
+            }
 
+            return RedirectToAction("Index");
+        }
         private bool UserExists(int Userid)
         {
             return _context.Users.Any(e => e.UserId == Userid);

@@ -76,7 +76,11 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Confirm Delete</button>
+                <form asp-action="Delete" method="post">
+                    @Html.AntiForgeryToken()
+                    @Html.HiddenFor(u => u.UserId);
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                </form>
                 </div>
             </div>
         </div>
