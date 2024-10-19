@@ -42,8 +42,18 @@
             <span asp-validation-for="Phone" class="text-danger"></span>
         </dd>
     </dl>
-        <button type="submit" class="btn btn-primary">Save Changes</button>
-    <</form>
+        <button type="submit" id="saveButton" style="display:none" class="btn btn-primary">Save Changes</button>
+    </form>
+
+
+    <button id="editButton" onclick="enableInput()" type="button" class="btn btn-primary">
+        Edit
+    </button>
+    <br />
+
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+        Delete
+    </button>
 </div>
     <script>
     function enableInput() {
@@ -52,17 +62,15 @@
         document.getElementById("UserId").disabled = false;
         document.getElementById("Email").disabled = false;
         document.getElementById("Phone").disabled = false;
+        
+        document.getElementById("saveButton").style.display = "inline-block"
+        document.getElementById("editButton").style.display = "none"
+
+
     }
     </script>
     <!-- Button trigger modal -->
-    <button onclick="enableInput()"type="button" class="btn btn-primary">
-        Edit
-    </button>
-
-
-    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
-        Delete
-    </button>
+    
     <!-- Modal -->
     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
