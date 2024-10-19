@@ -1,0 +1,104 @@
+﻿
+@{
+	Layout = "_HomeLayout";
+}
+
+@section style {
+	<link rel="stylesheet" href="/css/roomManagementStyle.css" />
+}
+
+<div class="rooms">
+	<div><h5>Meeting Rooms</h5></div>
+	<div class="main">
+		<main class="card-grid">
+
+			@for(int i=0; i < 20 ; i++)
+			{
+				<div class="room-card">
+					<div class="image-container">
+						<img src="~/assets/login-gb.jpg" alt="Alternate Text" />
+					</div>
+					<div class="room-info">
+						<div class="info-top">
+							<h6>CBE 901</h6>
+							<p><span>Seating capacity: </span> 69</p>
+						</div>
+						<p><span>Location: </span>CBE Building</p>
+					</div>
+					<div class="amenities">
+						<p> <span>Amenities: </span></p>
+						Icons
+					</div>
+					<div class="edit-details"><a href="#">Edit details</a></div>
+				</div>
+			}
+
+			
+		</main>
+		<div class="create-room">
+			<form method="post">
+				<div class="input-area">
+					<label>Room name:</label>
+					<input type="text" />
+				</div>
+				<div class="input-area">
+					<label>Location:</label>
+					<input type="text" />
+				</div>
+				<div class="input-area">
+					<label>Seating capacity:</label>
+					<input type="number" />
+				</div>
+				<div>
+					<label>
+						<input type="checkbox" class="toggle"  />
+						<span>Audio</span>
+					</label>
+					<label>
+						<input type="checkbox" />
+						<span>Video</span>
+					</label>
+					<label>
+						<input type="checkbox" />
+						<span>White board</span>
+					</label>
+					<label>
+						<input type="checkbox" />
+						<span>Projector</span>
+					</label>
+					<label>
+						<input type="checkbox" />
+						<span>HDMI</span>
+					</label>
+					<label>
+						<input type="checkbox" />
+						<span>Loudspeaker</span>
+					</label>
+				</div>
+				<div>
+					<div>
+						<input type="file" id="imageUpload" name="imageUpload" accept="image/*" onchange="validateImage()" />
+					</div>
+
+				</div>
+				<div class="submit-area">
+					<button class="submit-btn">Create room</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+
+<script>
+	function validateImage() {
+		const fileInput = document.getElementById('imageUpload');
+		const filePath = fileInput.value;
+		const allowedExtensions = /(\.jpg|\.jpeg|\.png)$/i;
+
+		if (!allowedExtensions.exec(filePath)) {
+			alert('Please upload an image file (jpg, jpeg, png).');
+			fileInput.value = ''; // Clear the input
+			return false;
+		}
+	}
+</script>
