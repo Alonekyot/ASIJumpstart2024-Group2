@@ -34,9 +34,13 @@
                 
                 @if (int.Parse(User.FindFirstValue("Role")) == 2 || int.Parse(User.FindFirstValue("Role")) == 1) {
                     <a class="sidebar-item @(ViewBag.ActivePage == "UserManagement" ? "active" : "")" href="@Url.Action("Index", "UserManagement")">
-                            <i class="bi bi-people-fill"></i>
-                            User Management
-                        </a>
+                        <i class="bi bi-people-fill"></i>
+                        User Management
+                    </a>
+                    <a class="sidebar-item @(ViewBag.ActivePage == "RoomManagement" ? "active" : "")" href="@Url.Action("Index", "RoomManagement")">
+                        <i class="bi bi-people-fill"></i>
+                        Room Management
+                    </a>
                 }
         </div>
         
