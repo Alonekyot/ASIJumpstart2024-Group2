@@ -69,6 +69,7 @@ p span {
     padding: 10px;
     display: flex;
     justify-content: center;
+    
 }
 .create-room form {
     background-color: white;
@@ -76,12 +77,43 @@ p span {
     border: 1px solid black;
     height: fit-content;
     width: 100%;
+    border-radius: 5px;
 }
 .input-area {
     display: flex;
     flex-direction: column;
 }
-
+.txt-area {
+    border: 1px solid #d0d0d0;
+    border-radius: 5px;
+    font-size: 18px;
+    padding: 3px 5px;
+}
+.txt-area:active , .txt-area:focus {
+    outline: none;
+}
+.toggle-btn {
+    display: flex;
+    border: 1px solid #888888;
+    align-items: center;
+    justify-content: center;
+    width: fit-content;
+    padding: 3px 5px;
+    color: #888888;
+    border-radius: 5px;
+    cursor: pointer;
+}
+.toggle-active {
+    background-color: #888888;
+    color: white;
+}
+.toggle-btn input {
+    width: 100%;
+    height: 100%;
+}
+.toggle-btn p {
+    margin: 0;
+}
 
 .checkbox-button {
     display: inline-block;
@@ -106,6 +138,34 @@ p span {
     color: white;
     border: none;
     padding: 5px 10px;
+}
+.drag-drop-box {
+    width: fit-content;
+    height: fit-content;
+    border: 2px dashed #ccc;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    cursor: pointer;
+    position: relative;
+}
+
+    .drag-drop-box.dragover {
+        border-color: #6c6;
+        background-color: #f8f8f8;
+    }
+.drop-area {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+#previewImage {
+    max-width: 100%;
+    max-height: 100%;
+    border-radius: 10px;
 }
 
 

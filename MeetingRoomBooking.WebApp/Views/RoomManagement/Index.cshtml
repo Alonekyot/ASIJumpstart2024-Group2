@@ -1,4 +1,5 @@
-﻿
+﻿@model MeetingRoomBooking.Services.ServiceModels.CreateRoomModel
+@using MeetingRoomBooking.Resources.Constants
 @{
 	Layout = "_HomeLayout";
 }
@@ -12,7 +13,7 @@
 	<div class="main">
 		<main class="card-grid">
 
-			@for(int i=0; i < 20 ; i++)
+			@for(int i=0; i < 10 ; i++)
 			{
 				<div class="room-card">
 					<div class="image-container">
@@ -39,50 +40,32 @@
 			<form method="post">
 				<div class="input-area">
 					<label>Room name:</label>
-					<input type="text" />
+					<input type="text" class="txt-area" asp-for="RoomName" required/>
 				</div>
 				<div class="input-area">
 					<label>Location:</label>
-					<input type="text" />
+					<input type="text" class="txt-area" asp-for="RoomLocation" required />
 				</div>
 				<div class="input-area">
 					<label>Seating capacity:</label>
-					<input type="number" />
+					<input type="number" class="txt-area" asp-for="RoomCapacity" required />
 				</div>
 				<div>
-					<label>
-						<input type="checkbox" class="toggle"  />
-						<span>Audio</span>
-					</label>
-					<label>
-						<input type="checkbox" />
-						<span>Video</span>
-					</label>
-					<label>
-						<input type="checkbox" />
-						<span>White board</span>
-					</label>
-					<label>
-						<input type="checkbox" />
-						<span>Projector</span>
-					</label>
-					<label>
-						<input type="checkbox" />
-						<span>HDMI</span>
-					</label>
-					<label>
-						<input type="checkbox" />
-						<span>Loudspeaker</span>
+					<label class="toggle-btn" id="audio">
+						<input type="checkbox" onclick="toggleClass(this, 'audio')" hidden />
+						<p>Audio</p>
 					</label>
 				</div>
-				<div>
-					<div>
-						<input type="file" id="imageUpload" name="imageUpload" accept="image/*" onchange="validateImage()" />
+				<div class="drop-area">
+					<div id="dropArea" class="drag-drop-box">
+						<p id="uploadText">Drag & Drop an image here or click to upload</p>
+						<input type="file" id="imageUpload" name="imageUpload" accept="image/*" asp-for="Image" onchange="displayImage()" hidden />
+						<img id="previewImage" src="" alt="Uploaded Image" style="display:none;" />
 					</div>
 
 				</div>
 				<div class="submit-area">
-					<button class="submit-btn">Create room</button>
+					<button type-submit class="submit-btn">Create room</button>
 				</div>
 			</form>
 		</div>
@@ -101,4 +84,49 @@
 			return false;
 		}
 	}
+	const dropArea = document.getElementById('dropArea');
+const inputFile = document.getElementById('imageUpload');
+const previewImage = document.getElementById('previewImage');
+const uploadText = document.getElementById('uploadText');
+
+dropArea.addEventListener('dragover', (e) => {
+	e.preventDefault();
+	dropArea.classList.add('dragover');
+});
+
+dropArea.addEventListener('dragleave', () => {
+	dropArea.classList.remove('dragover');
+});
+
+dropArea.addEventListener('drop', (e) => {
+	e.preventDefault();
+	dropArea.classList.remove('dragover');
+
+	const files = e.dataTransfer.files;
+	if (files.length > 0) {
+		inputFile.files = files;
+		displayImage();
+	}
+});
+
+dropArea.addEventListener('click', () => {
+	inputFile.click();
+});
+
+function displayImage() {
+	const file = inputFile.files[0];
+	if (file && file.type.startsWith('image/')) {
+		const reader = new FileReader();
+		reader.onload = function(e) {
+			previewImage.src = e.target.result;
+			previewImage.style.display = 'block';
+			uploadText.style.display = 'none';
+		};
+		reader.readAsDataURL(file);
+	} else {
+		console.error('Please select a valid image.');
+	}
+}
+
 </script>
+<script src="~/js/createRoom.js"></script>
