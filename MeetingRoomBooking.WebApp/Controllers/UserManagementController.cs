@@ -6,7 +6,6 @@ using MeetingRoomBooking.Services.Managers;
 using MeetingRoomBooking.WebApp.Models;
 using MeetingRoomBooking.Services.ServiceModels;
 using Microsoft.EntityFrameworkCore;
-
 namespace MeetingRoomBooking.WebApp.Controllers {
 
     [Authorize]
@@ -82,55 +81,37 @@ namespace MeetingRoomBooking.WebApp.Controllers {
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Details([Bind("UserId, LastName, FirstName, Email, Phone")] User user)
+        public async Task<IActionResult> Details(EditUserModel editedUser)
         {
-            var existingUser = await _context.Users.FindAsync(user.UserId);
+            var user = await _context.Users.FindAsync(editedUser.UserId);
             ModelState.Remove(nameof(user.Password));
-            if (existingUser.Email != user.Email && _context.Users.Any(u => u.Email == user.Email))
+            if (user.Email != user.Email && _context.Users.Any(u => u.Email == user.Email))
             {
                 ModelState.AddModelError("Email", "Email is already in use.");
             }
            
             
-            if (existingUser == null)
-            {
-                return NotFound();
-            }
             if (ModelState.IsValid)
             {
-                try
-                {
-                    existingUser.LastName = user.LastName;
-                    existingUser.FirstName = user.FirstName;
-                    existingUser.Email = user.Email;
-                    existingUser.Phone = user.Phone;
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!UserExists(user.UserId))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                System.Diagnostics.Debug.WriteLine("Reached the end");
+                user = _userManager.Edit(editedUser, user);
+                _context.Update(user);
+                await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-           
-            return View(existingUser);
-
-
-
-
-
-
-
+            return View(user);
         }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Delete(int UserId) {
+            var user = await _context.Users.FindAsync(UserId);
+            if (user != null)
+            {
+               user.Deleted = true;
+               await _context.SaveChangesAsync();
+            }
 
+            return RedirectToAction("Index");
+        }
         private bool UserExists(int Userid)
         {
             return _context.Users.Any(e => e.UserId == Userid);
