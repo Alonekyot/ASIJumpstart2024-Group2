@@ -97,11 +97,11 @@ p span {
     border: 1px solid #888888;
     align-items: center;
     justify-content: center;
-    width: fit-content;
     padding: 3px 5px;
     color: #888888;
     border-radius: 5px;
     cursor: pointer;
+    margin: 3px;
 }
 .toggle-active {
     background-color: #888888;
@@ -167,7 +167,11 @@ p span {
     max-height: 100%;
     border-radius: 10px;
 }
-
+.toggle-group {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 5px 0;
+}
 
 @media (max-width: 1110px) {
     .card-grid {

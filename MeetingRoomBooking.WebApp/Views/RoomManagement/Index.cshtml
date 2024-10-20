@@ -50,10 +50,26 @@
 					<label>Seating capacity:</label>
 					<input type="number" class="txt-area" asp-for="RoomCapacity" required />
 				</div>
-				<div>
+				<div class="toggle-group">
 					<label class="toggle-btn" id="audio">
 						<input type="checkbox" onclick="toggleClass(this, 'audio')" hidden />
 						<p>Audio</p>
+					</label>
+					<label class="toggle-btn" id="video">
+						<input type="checkbox" onclick="toggleClass(this, 'video')" hidden />
+						<p>Video</p>
+					</label>
+					<label class="toggle-btn" id="projector">
+						<input type="checkbox" onclick="toggleClass(this, 'projector')" hidden />
+						<p>Projector</p>
+					</label>
+					<label class="toggle-btn" id="whiteBoard">
+						<input type="checkbox" onclick="toggleClass(this, 'whiteBoard')" hidden />
+						<p>White Board</p>
+					</label>
+					<label class="toggle-btn" id="loudspeaker">
+						<input type="checkbox" onclick="toggleClass(this, 'loudspeaker')" hidden />
+						<p>Loud speaker</p>
 					</label>
 				</div>
 				<div class="drop-area">
