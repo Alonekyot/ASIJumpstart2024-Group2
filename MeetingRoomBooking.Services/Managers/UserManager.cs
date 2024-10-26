@@ -37,5 +37,18 @@ namespace MeetingRoomBooking.Services.Managers
 
             return user;
         }
+
+        public User Edit(EditUserModel editedUser, User user)
+        {
+            user.LastName = editedUser.LastName;
+            user.FirstName = editedUser.FirstName;
+            user.Email = editedUser.Email;
+            user.Phone = editedUser.Phone;
+            
+
+            return user;
+        }
+
+        
     }
 }

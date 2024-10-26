@@ -1,12 +1,23 @@
 ﻿@model MeetingRoomBooking.Data.Models.User
 
+@section script {
+    <script src="~/js/EditUser.js"></script>
+}
+
 @{
     Layout = "_HomeLayout";
     ViewData["Title"] = "Details";
 }
 <h1>Details</h1>
+<div style="display:flex; justify-content:space-between">
+    
+
+    <h4>User</h4>
+    <a class="btn btn-primary" asp-action="Index">
+        Return to List
+    </a>
+</div>
 <div>
-<h4>User</h4>
     <hr />
     <form asp-action="Details" method="post">
     <dl class="row">
@@ -41,34 +52,26 @@
             <input asp-for="Phone" class="form-control" disabled />
             <span asp-validation-for="Phone" class="text-danger"></span>
         </dd>
+            <hr />
     </dl>
         <button type="submit" id="saveButton" style="display:none" class="btn btn-primary">Save Changes</button>
     </form>
 
+    <div>
+        <button id="editButton" onclick="enableInput()" type="button" class="btn btn-primary" >
+            Edit
+        </button>
+        <br id="break"/>
 
-    <button id="editButton" onclick="enableInput()" type="button" class="btn btn-primary">
-        Edit
-    </button>
-    <br/>
-    <button type="button"  class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" style="margin-top: 15px;">
-        Delete
-    </button>
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" style="margin-top:8px" data-bs-target="#exampleModal">
+            Delete
+        </button>
+
+    </div>
 </div>
-    <script>
-    function enableInput() {
-        document.getElementById("LastName").disabled = false;
-        document.getElementById("FirstName").disabled = false;
-        document.getElementById("UserId").disabled = false;
-        document.getElementById("Email").disabled = false;
-        document.getElementById("Phone").disabled = false;
-        
-        document.getElementById("saveButton").style.display = "inline-block"
-        document.getElementById("editButton").style.display = "none"
+    
 
 
-    }
-    </script>
-    <!-- Button trigger modal -->
     
     <!-- Modal -->
     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -93,6 +96,15 @@
         </div>
     </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+<style>
+    .form-control{
+        width:40%;
+        min-width: 330px;
+    }
+    .col-sm-2{
+        max-width: 10%;
+
+    }
+
+
+</style>
