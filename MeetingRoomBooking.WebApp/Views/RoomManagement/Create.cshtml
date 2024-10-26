@@ -9,8 +9,12 @@
 @section script {
 	<script src="~/js/createRoom.js"></script>
 }
+<div>
+	<a class="btn btn-primary" asp-action="Index">Back</a>
+</div>
+
 <div class="create-room">
-	<form method="post">
+	<form method="post" asp-action="Create">
 		<div class="input-area">
 			<label class="room-label">Room name:</label>
 			<input type="text" class="txt-area" asp-for="RoomName" required />
@@ -25,23 +29,23 @@
 		</div>
 		<div class="toggle-group">
 			<label class="toggle-btn" id="audio">
-				<input type="checkbox" onclick="toggleClass(this, 'audio')" hidden />
+				<input asp-for="Audio"type="checkbox" onclick="toggleClass(this, 'audio')" hidden />
 				<p>Audio</p>
 			</label>
 			<label class="toggle-btn" id="video">
-				<input type="checkbox" onclick="toggleClass(this, 'video')" hidden />
+				<input asp-for="Video" type="checkbox" onclick="toggleClass(this, 'video')" hidden />
 				<p>Video</p>
 			</label>
 			<label class="toggle-btn" id="projector">
-				<input type="checkbox" onclick="toggleClass(this, 'projector')" hidden />
+				<input asp-for="Projector" type="checkbox" onclick="toggleClass(this, 'projector')" hidden />
 				<p>Projector</p>
 			</label>
 			<label class="toggle-btn" id="whiteBoard">
-				<input type="checkbox" onclick="toggleClass(this, 'whiteBoard')" hidden />
+				<input asp-for="WhiteBoard" type="checkbox" onclick="toggleClass(this, 'whiteBoard')" hidden />
 				<p>White Board</p>
 			</label>
 			<label class="toggle-btn" id="loudspeaker">
-				<input type="checkbox" onclick="toggleClass(this, 'loudspeaker')" hidden />
+				<input asp-for="Loudspeaker" type="checkbox" onclick="toggleClass(this, 'loudspeaker')" hidden />
 				<p>Loud speaker</p>
 			</label>
 		</div>
