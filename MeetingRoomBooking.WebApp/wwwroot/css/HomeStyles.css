@@ -166,7 +166,36 @@ i {
 .sidebar a.active i{
     color: white !important; /* Change text color if needed */
 }
-
+.main{
+    display: flex;
+    flex: 1;    
+}
+.aside{
+    height: 100%;
+    width: 50px;
+    transition: 0.5s;
+    border-right: 1px solid black;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;    
+    
+}
+.navbar-active {
+    width: 250px !important;
+}
+.navbar-list {
+    list-style-type: none;
+}
+.navbar-list li a{
+    display: flex;
+}
+.navbar-item-text{
+    display: none;
+}
+.navbar-show-text {
+    margin-left: 5px;
+    display: block !important;
+    white-space: nowrap;
+}
 @media (max-width: 600px) {
     .middle-header {
         display: none;
