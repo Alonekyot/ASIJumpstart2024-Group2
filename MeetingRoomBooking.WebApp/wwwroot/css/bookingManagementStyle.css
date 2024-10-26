@@ -1,0 +1,123 @@
+﻿@import url('https://fonts.googleapis.com/css2?family=Inclusive+Sans:ital@0;1&family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap');
+
+.title {
+    font-size: 1.25rem;
+}
+aside p {
+    font: 600 1.25rem "Open sans", sans-serif;
+}
+.font-lato {
+    font-family: "Lato", sans-serif;
+}
+.filter-section {
+    background-color: white;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0px 4px 4px 0px rgba(55,55,55,0.5);
+}
+.flex {
+    display: flex;
+}
+.flex-center1 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.filter-section .flex-center1 {
+    margin-bottom: 15px;
+}
+.filter-button {
+    border-radius: 10px;
+    border: 1px solid #E1E6ED;
+    color: #3B3B3B;
+    box-shadow: 0 4px 0px -2px rgba(124, 124, 124, 1);
+}
+.filter-button i {
+    color: #3B3B3B;
+}
+.horizontal-margin {
+    margin-left: 20px;
+    margin-right: 20px;
+}
+.padding-20 {
+    padding: 20px;
+}
+
+.book-card {
+    box-shadow: 0px 5px 4px 0px rgba(0,0,0,0.25);
+    padding: 20px;
+    border-radius: 10px;
+    background-color: white;
+}
+.search {
+    background-color: #F5F5F5;
+    border: 1px solid #E1E6ED;
+    box-shadow: 0 4px 0px -2px rgba(124, 124, 124, 1);
+    border-radius: 10px;
+    padding: 0.3rem 0.5rem;
+}
+main{
+    max-width:750px;
+}
+.search:active, .search:focus{
+    outline: none;
+}
+.category {
+    font: bold 0.8rem "Open-sans", sans-serif;
+    margin-bottom: 0;
+}
+section ul {
+    list-style-type: none;
+}
+section ul li{
+    font-size: 0.8rem;
+    margin: 7px auto;
+}
+.image-container {
+    height: 100px;
+    width: auto;
+    background-size: cover
+}
+.image-container img {
+    height: 100%;
+    width: auto;
+}
+.book-title a {
+    text-decoration: none;
+    font: normal 0.9rem "Inclusive sans", sans-serif;
+    color: #437DD6;
+}
+.card-grid {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    gap: 15px;
+}
+.room-name {
+    font: bold 0.9rem "Lato", sans-serif;
+}
+.room-info {
+    display: flex;
+    flex-direction: column;
+    margin: 0 10px;
+}
+.room-info div div{
+    font: normal 0.65rem "Open sans", sans-serif;
+    color: #888888;
+}
+.room-info div div span{
+    color: black;
+}
+.room-details {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    flex: 1;
+}
+.book-btn {
+    background-color: #437DD6;
+    color: white;
+    text-decoration: none;
+    font: bold 0.6rem "Open sans", sans-serif;
+    padding: 10px 20px;
+    border-radius: 6px;
+}

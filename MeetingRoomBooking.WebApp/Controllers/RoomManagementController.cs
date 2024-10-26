@@ -11,6 +11,10 @@ namespace MeetingRoomBooking.WebApp.Controllers
 			return View();
         }
 
+        public IActionResult Create() {
+            return View();
+        }
+
         [HttpPost]
         public async Task<IActionResult> Create(CreateRoomModel model) {
             if(ModelState.IsValid) {

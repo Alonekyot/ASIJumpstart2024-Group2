@@ -1,0 +1,122 @@
+﻿@{
+	Layout = "_HomeLayout";
+}
+@section style {
+	<link href="~/css/bookingManagementStyle.css" rel="stylesheet" />
+}
+<p class="title font-lato">Booking Management</p>
+<div class="flex">
+	<aside class="filter">
+		<p>Filter</p>
+		<div class="filter-section">
+			<div class="flex-center1">
+				<input type="text" class="search" placeholder="Search here" />
+				<button class="filter-button"><i class="bi bi-funnel"></i></button>
+			</div>
+			<div class="font-lato">
+				<section>
+					<p class="category">Room Availability</p>
+					<ul>
+						<li>
+							<label>
+								<input type="checkbox" />
+								Available
+							</label>
+						</li>
+						<li>
+							<label>
+								<input type="checkbox" />
+								Not Available
+							</label>
+						</li>
+					</ul>
+				</section>
+				<section>
+					<p class="category">Room capacity</p>
+					<ul>
+						<li>
+							<label>
+								<input type="checkbox" />
+								5 seating
+							</label>
+						</li>
+						<li>
+							<label>
+								<input type="checkbox" />
+								10 seating
+							</label>
+						</li>
+						<li>
+							<label>
+								<input type="checkbox" />
+								15 seating
+							</label>
+						</li>
+						<li>
+							<label>
+								<input type="checkbox" />
+								25 seating
+							</label>
+						</li>
+					</ul>
+				</section>
+				<section>
+					<p class="category">Amenities</p>
+					<ul>
+						<li>
+							<label>
+								<input type="checkbox" />
+								Audio
+							</label>
+						</li>
+						<li>
+							<label>
+								<input type="checkbox" />
+								Video
+							</label>
+						</li>
+						<li>
+							<label>
+								<input type="checkbox" />
+								Projector
+							</label>
+						</li>
+						<li>
+							<label>
+								<input type="checkbox" />
+								White Board
+							</label>
+						</li>
+					</ul>
+				</section>
+			</div>
+		</div>
+	</aside>
+	<main class="flex-grow-1 horizontal-margin padding-20">
+		<div class="flex justify-content-between book-title">
+			<h6>Rooms</h6>
+			<a href="#">View Bookings</a>
+		</div>
+		<div class="card-grid">
+			@for(int i=0; i < 5 ; i++) {
+				<div class="flex book-card">
+					<div class="image-container">
+						<img src="~/assets/login-gb.jpg" alt="Alternate Text" />
+					</div>
+					<div class="room-info flex-grow-1">
+						<h4 class="room-name">Meeting Room</h4>
+						<div class="room-details">
+							<div><span>Seating capacity: </span>90</div>
+							<div><span>Location: </span>bisan asa</div>
+							<div><span>Facilities: </span>daghan</div>
+						</div>
+					</div>
+					<div>
+						<a class="book-btn">Book</a>
+					</div>
+				</div>
+			}
+			
+		</div>
+	</main>
+</div>
