@@ -1,0 +1,122 @@
+﻿@model MeetingRoomBooking.Services.ServiceModels.CreateRoomModel
+@{
+	Layout = "_HomeLayout";
+}
+
+@section style {
+	<link rel="stylesheet" href="/css/roomManagementStyle.css" />
+}
+@section script {
+	<script src="~/js/createRoom.js"></script>
+}
+<div>
+	<a class="btn btn-primary" asp-action="Index">Back</a>
+</div>
+
+<div class="create-room">
+	<form method="post" asp-action="Create">
+		<div class="input-area">
+			<label class="room-label">Room name:</label>
+			<input type="text" class="txt-area" asp-for="RoomName" required />
+		</div>
+		<div class="input-area">
+			<label class="room-label">Location:</label>
+			<input type="text" class="txt-area" asp-for="RoomLocation" required />
+		</div>
+		<div class="input-area">
+			<label class="room-label">Seating capacity:</label>
+			<input type="number" class="txt-area" asp-for="RoomCapacity" required />
+		</div>
+		<div class="toggle-group">
+			<label class="toggle-btn" id="audio">
+				<input asp-for="Audio"type="checkbox" onclick="toggleClass(this, 'audio')" hidden />
+				<p>Audio</p>
+			</label>
+			<label class="toggle-btn" id="video">
+				<input asp-for="Video" type="checkbox" onclick="toggleClass(this, 'video')" hidden />
+				<p>Video</p>
+			</label>
+			<label class="toggle-btn" id="projector">
+				<input asp-for="Projector" type="checkbox" onclick="toggleClass(this, 'projector')" hidden />
+				<p>Projector</p>
+			</label>
+			<label class="toggle-btn" id="whiteBoard">
+				<input asp-for="WhiteBoard" type="checkbox" onclick="toggleClass(this, 'whiteBoard')" hidden />
+				<p>White Board</p>
+			</label>
+			<label class="toggle-btn" id="loudspeaker">
+				<input asp-for="Loudspeaker" type="checkbox" onclick="toggleClass(this, 'loudspeaker')" hidden />
+				<p>Loud speaker</p>
+			</label>
+		</div>
+		<div class="drop-area">
+			<div id="dropArea" class="drag-drop-box">
+				<p id="uploadText">Drag & Drop an image here or click to upload</p>
+				<input type="file" id="imageUpload" name="imageUpload" accept="image/*" asp-for="Image" onchange="displayImage()" hidden />
+				<img id="previewImage" src="" alt="Uploaded Image" style="display:none;" />
+			</div>
+
+		</div>
+		<div class="submit-area">
+			<button type-submit class="submit-btn">Create room</button>
+		</div>
+	</form>
+</div>
+
+<script>
+	function validateImage() {
+		const fileInput = document.getElementById('imageUpload');
+		const filePath = fileInput.value;
+		const allowedExtensions = /(\.jpg|\.jpeg|\.png)$/i;
+
+		if (!allowedExtensions.exec(filePath)) {
+			alert('Please upload an image file (jpg, jpeg, png).');
+			fileInput.value = ''; // Clear the input
+			return false;
+		}
+	}
+	const dropArea = document.getElementById('dropArea');
+	const inputFile = document.getElementById('imageUpload');
+	const previewImage = document.getElementById('previewImage');
+	const uploadText = document.getElementById('uploadText');
+
+	dropArea.addEventListener('dragover', (e) => {
+		e.preventDefault();
+		dropArea.classList.add('dragover');
+	});
+
+	dropArea.addEventListener('dragleave', () => {
+		dropArea.classList.remove('dragover');
+	});
+
+	dropArea.addEventListener('drop', (e) => {
+		e.preventDefault();
+		dropArea.classList.remove('dragover');
+
+		const files = e.dataTransfer.files;
+		if (files.length > 0) {
+			inputFile.files = files;
+			displayImage();
+		}
+	});
+
+	dropArea.addEventListener('click', () => {
+		inputFile.click();
+	});
+
+	function displayImage() {
+		const file = inputFile.files[0];
+		if (file && file.type.startsWith('image/')) {
+			const reader = new FileReader();
+			reader.onload = function (e) {
+				previewImage.src = e.target.result;
+				previewImage.style.display = 'block';
+				uploadText.style.display = 'none';
+			};
+			reader.readAsDataURL(file);
+		} else {
+			console.error('Please select a valid image.');
+		}
+	}
+
+</script>
