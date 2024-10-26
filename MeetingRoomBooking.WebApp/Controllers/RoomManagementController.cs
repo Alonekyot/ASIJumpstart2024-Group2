@@ -22,15 +22,16 @@ namespace MeetingRoomBooking.WebApp.Controllers
 		public IActionResult Index()
         {
 			ViewBag.ActivePage = "RoomManagement";
-			return View();
+			var rooms = _context.Rooms.ToList();
+			return View(rooms);
         }
 
         public IActionResult Create() {
             return View();
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Create(CreateRoomModel newRoom) {
+		[HttpPost]
+		public async Task<IActionResult> Create(CreateRoomModel newRoom) {
             if(ModelState.IsValid) {
 				var room  = _roomManager.Add(newRoom);
 				_context.Add(room);
@@ -39,5 +40,6 @@ namespace MeetingRoomBooking.WebApp.Controllers
 			}
 			return View("Index", newRoom);
 		}
-    }
+
+	}
 }
