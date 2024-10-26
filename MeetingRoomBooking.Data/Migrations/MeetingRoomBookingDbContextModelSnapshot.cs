@@ -29,24 +29,34 @@ namespace MeetingRoomBooking.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("RoomId"));
 
-                    b.Property<string>("Amenities")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<bool>("Audio")
+                        .HasColumnType("bit");
 
-                    b.Property<string>("Location")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<byte[]>("RoomImage")
-                        .IsRequired()
+                    b.Property<byte[]>("Image")
                         .HasColumnType("varbinary(max)");
+
+                    b.Property<bool>("Loudspeaker")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Projector")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("RoomCapacity")
+                        .HasColumnType("int");
+
+                    b.Property<string>("RoomLocation")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("RoomName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("SeatingCapacity")
-                        .HasColumnType("int");
+                    b.Property<bool>("Video")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("WhiteBoard")
+                        .HasColumnType("bit");
 
                     b.HasKey("RoomId");
 

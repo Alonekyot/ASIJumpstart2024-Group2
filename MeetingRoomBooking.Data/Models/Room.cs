@@ -12,14 +12,13 @@ namespace MeetingRoomBooking.Data.Models
 		[Key]
 		public int RoomId { get; set; }
 		public string RoomName { get; set; }
-
-		public string Location { get; set; }
-
-		public int SeatingCapacity { get; set; }
-
-		public string Amenities { get; set; }
-
-		public Byte[] RoomImage { get; set; }
-	
+		public string RoomLocation { get; set; }
+		public int RoomCapacity { get; set; }
+		public bool Audio { get; set; }
+		public bool Video { get; set; }
+		public bool WhiteBoard { get; set; }
+		public bool Projector { get; set; }
+		public bool Loudspeaker { get; set; }
+		public byte[]? Image { get; set; }
 	}
 }

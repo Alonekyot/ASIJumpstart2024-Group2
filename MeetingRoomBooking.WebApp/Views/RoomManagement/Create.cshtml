@@ -14,10 +14,11 @@
 </div>
 
 <div class="create-room">
-	<form method="post">
+	<form method="post" asp-action="Create">
 		<div class="input-area">
 			<label class="room-label">Room name:</label>
 			<input type="text" class="txt-area" asp-for="RoomName" required />
+			<span asp-validation-for="RoomName" class="text-danger"></span>
 		</div>
 		<div class="input-area">
 			<label class="room-label">Location:</label>

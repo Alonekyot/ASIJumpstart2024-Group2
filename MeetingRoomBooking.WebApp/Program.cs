@@ -21,6 +21,7 @@ builder.Services.AddDbContext<MeetingRoomBookingDbContext>(options =>
 
 builder.Services.AddScoped<UserManager>();
 builder.Services.AddScoped<LoginManager>();
+builder.Services.AddScoped<RoomManager>(); 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie();
 builder.Services.AddControllersWithViews();
 
