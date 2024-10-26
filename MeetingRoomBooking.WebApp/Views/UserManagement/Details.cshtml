@@ -5,8 +5,11 @@
     ViewData["Title"] = "Details";
 }
 <h1>Details</h1>
+<div style="display:flex; justify-content: space-between">
+    <h4>User</h4s>
+<button>Hello</button>
+</div>
 <div>
-<h4>User</h4>
     <hr />
     <form asp-action="Details" method="post">
     <dl class="row">
@@ -70,8 +73,7 @@
     }
     </script>
     <!-- Button trigger modal -->
-    
-    <!-- Modal -->
+<!-- Modal -->
     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -86,7 +88,7 @@
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                 <form asp-action="Delete" method="post">
                     @Html.AntiForgeryToken()
-                    @Html.HiddenFor(u => u.UserId);
+                    @Html.HiddenFor(u => u.UserId)
                     <button type="submit" class="btn btn-danger">Delete</button>
                 </form>
                 </div>
