@@ -26,19 +26,19 @@
     }
 
 .logo {
-    margin-right: 10px;
+    margin-right: 0.625rem;
 }
 
 form {
     width: 40%;
-    max-width: 450px;
-    min-width: 350px;
+    max-width: 28.125rem;
+    min-width: 21.875rem;
     border: 1px solid black;
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 30px;
-    border-radius: 20px;
+    padding: 1.875rem;
+    border-radius: 1.25rem;
     margin-top: 2em;
     background: rgba(255, 2555, 255, 0.24);
 }
@@ -52,15 +52,15 @@ form {
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-top: 15px;
+    margin-top: 0.9375rem;
 }
 
 .input-text {
     width: 100%;
-    border-radius: 10px;
+    border-radius: 0.625rem;
     border: 1px solid #666666;
-    height: 45px;
-    padding: 10px;
+    height: 2.8125rem;
+    padding: 0.625rem;
 }
 
 input {
@@ -81,7 +81,7 @@ a {
 }
 
 .label {
-    font-size: 12px;
+    font-size: 0.75rem;
     align-items: flex-end;
     display: flex;
     width: 100%;
@@ -91,26 +91,26 @@ a {
     width: 100%;
 }
 .word-toggle {
-    font-size: 18px;
+    font-size: 1.125rem;
 }
 button {
     border: none;
     background-color: #549CC5;
     color: white;
     font-weight: 500;
-    font-size: 17px;
+    font-size: 1.125rem;
     width: 100%;
-    margin: 30px 0;
-    padding: 10px;
-    border-radius: 50px;
+    margin: 1.875rem 0;
+    padding: 0.625rem;
+    border-radius: 3.125rem;
 }
 
 .form-title {
-    font-size: 26px;
+    font-size: 1.625rem;
 }
 
 .extra-text {
-    font-size: 12px;
+    font-size: 0.75rem;
 }
 
 .forgot-pass {
@@ -120,7 +120,7 @@ button {
 }
 
 .icon-toggle {
-    font-size: 20px;
+    font-size: 1.25rem;
     color: #666666;
     display: flex;
     justify-content: space-between;
@@ -135,14 +135,14 @@ button {
 }
 .error-message {
     color: red;
-    font-size: 14px;
+    font-size: 0.875rem;
 }
 
 @media (max-width: 600px) {
     form {
         width: 90%;
-        max-width: 350px;
+        max-width: 21.875rem;
         margin-top: 4em;
-        padding: 20px;
+        padding: 1.25rem;
     }
 }

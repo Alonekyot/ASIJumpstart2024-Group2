@@ -1,8 +1,12 @@
-﻿using MeetingRoomBooking.Services.ServiceModels;
+﻿using MeetingRoomBooking.Services.Managers;
+using MeetingRoomBooking.Services.ServiceModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MeetingRoomBooking.WebApp.Controllers
 {
+    [Authorize]
+    [RoleAuthorize(new int[] { 1, 2 })]
     public class RoomManagementController : Controller
     {
         public IActionResult Index()
