@@ -16,6 +16,8 @@ namespace MeetingRoomBooking.WebApp.Models
 		public bool WhiteBoard { get; set; }
 		public bool Projector { get; set; }
 		public bool Loudspeaker { get; set; }
-		public byte[]? Image { get; set; }
+		public byte[]? Image { get; set; }		
+		public bool Available {  get; set; }
+		public bool Deleted { get; set; }
 	}
 }

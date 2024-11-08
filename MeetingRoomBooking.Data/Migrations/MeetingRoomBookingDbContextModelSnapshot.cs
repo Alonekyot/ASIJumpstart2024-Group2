@@ -32,6 +32,12 @@ namespace MeetingRoomBooking.Data.Migrations
                     b.Property<bool>("Audio")
                         .HasColumnType("bit");
 
+                    b.Property<bool>("Available")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Deleted")
+                        .HasColumnType("bit");
+
                     b.Property<byte[]>("Image")
                         .HasColumnType("varbinary(max)");
 

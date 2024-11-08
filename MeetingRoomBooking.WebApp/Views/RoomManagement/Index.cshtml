@@ -33,6 +33,13 @@
 						<p> <span>Amenities: </span></p>
 						Icons
 					</div>
+					<div>
+						<form asp-action ="Delete" method="post">
+						<button type="submit" class="btn btn-primary" asp-route-id="@room.RoomId">
+							Delete
+						</button>
+						</form>
+					</div>
 					<div class="edit-details"><a href="#">Edit details</a></div>
 				</div>
 			}
@@ -41,5 +48,6 @@
 		
 	</div>
 </div>
+
 
 

@@ -22,7 +22,8 @@ namespace MeetingRoomBooking.WebApp.Controllers
 		public IActionResult Index()
         {
 			ViewBag.ActivePage = "RoomManagement";
-			var rooms = _context.Rooms.ToList();
+			var rooms = _context.Rooms.ToList()
+				.Where(u => !u.Deleted);
 			return View(rooms);
         }
 
@@ -39,6 +40,19 @@ namespace MeetingRoomBooking.WebApp.Controllers
 				return RedirectToAction(nameof(Index));
 			}
 			return View("Index", newRoom);
+		}
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		public async Task<IActionResult> Delete(int RoomId)
+		{
+			var room = await _context.Rooms.FindAsync(RoomId);
+			if (room != null)
+			{
+				room.Deleted = true;
+				await _context.SaveChangesAsync();
+			}
+
+			return RedirectToAction("Index");
 		}
 
 	}

@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MeetingRoomBooking.Data.Migrations
 {
     [DbContext(typeof(MeetingRoomBookingDbContext))]
-    [Migration("20241026061017_room_initial")]
-    partial class room_initial
+    [Migration("20241107141602_room")]
+    partial class room
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -33,6 +33,12 @@ namespace MeetingRoomBooking.Data.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("RoomId"));
 
                     b.Property<bool>("Audio")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Available")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Deleted")
                         .HasColumnType("bit");
 
                     b.Property<byte[]>("Image")

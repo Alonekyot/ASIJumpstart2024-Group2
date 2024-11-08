@@ -24,6 +24,8 @@ namespace MeetingRoomBooking.Services.Managers
 			room.Projector = model.Projector;
 			room.Loudspeaker = model.Loudspeaker;
 			room.Image = model.Image;
+			room.Available = true;
+			room.Deleted = false;
 
 			return room;
 		}

@@ -20,5 +20,7 @@ namespace MeetingRoomBooking.Data.Models
 		public bool Projector { get; set; }
 		public bool Loudspeaker { get; set; }
 		public byte[]? Image { get; set; }
+		public bool Available { get; set; }
+		public bool Deleted { get; set; }
 	}
 }
