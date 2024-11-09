@@ -22,5 +22,6 @@ namespace MeetingRoomBooking.Data.Models
 		public byte[]? Image { get; set; }
 		public bool Available { get; set; }
 		public bool Deleted { get; set; }
+		public ICollection<Booking> booking { get; set; }
 	}
 }
