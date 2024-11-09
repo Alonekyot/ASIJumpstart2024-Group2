@@ -20,4 +20,7 @@ namespace MeetingRoomBooking.WebApp.Models
 		public bool Available {  get; set; }
 		public bool Deleted { get; set; }
 	}
+
+
+
 }
