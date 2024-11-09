@@ -1,5 +1,6 @@
 ﻿@model IEnumerable<MeetingRoomBooking.Data.Models.Room>
 @using MeetingRoomBooking.Resources.Constants
+
 @{
 	Layout = "_HomeLayout";
 }
@@ -34,11 +35,10 @@
 						Icons
 					</div>
 					<div>
-						<form asp-action ="Delete" method="post">
-						<button type="submit" class="btn btn-primary" asp-route-id="@room.RoomId">
-							Delete
-						</button>
-						</form>
+							<button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal"
+									data-room-id="@room.RoomId">
+								Delete
+							</button>
 					</div>
 					<div class="edit-details"><a href="#">Edit details</a></div>
 				</div>
@@ -48,6 +48,41 @@
 		
 	</div>
 </div>
+
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h1 class="modal-title fs-5" id="exampleModalLabel">Delete Room</h1>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body">
+				Are you sure you want to delete this room?
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+				<form asp-action="Delete" method="post">
+					@Html.AntiForgeryToken()
+					@Html.Hidden("RoomId")
+					<input type="hidden" name="RoomId" id="RoomId" />
+					<button type="submit" class="btn btn-danger">Delete</button>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script>
+	var exampleModal = document.getElementById('exampleModal');
+	exampleModal.addEventListener('show.bs.modal', function (event) {
+		var button = event.relatedTarget; // Button that triggered the modal
+		var roomId = button.getAttribute('data-room-id'); // Extract RoomId from data-* attribute
+		var modalForm = exampleModal.querySelector('form'); // Get the modal form
+
+		// Set the hidden RoomId input field with the roomId
+		modalForm.querySelector('input[name="RoomId"]').value = roomId;
+	});
+</script>
 
 
 

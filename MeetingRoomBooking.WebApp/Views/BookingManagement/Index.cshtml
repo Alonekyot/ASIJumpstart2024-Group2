@@ -1,4 +1,5 @@
-﻿@{
+﻿@model IEnumerable<MeetingRoomBooking.Data.Models.Room>
+@{
 	Layout = "_HomeLayout";
 }
 @section style {
@@ -98,16 +99,17 @@
 			<a href="#">View Bookings</a>
 		</div>
 		<div class="card-grid">
-			@for(int i=0; i < 5 ; i++) {
+			@foreach (var room in Model)
+			{
 				<div class="flex book-card">
 					<div class="image-container">
 						<img src="~/assets/login-gb.jpg" alt="Alternate Text" />
 					</div>
 					<div class="room-info flex-grow-1">
-						<h4 class="room-name">Meeting Room</h4>
+						<h4 class="room-name">@room.RoomName</h4>
 						<div class="room-details">
-							<div><span>Seating capacity: </span>90</div>
-							<div><span>Location: </span>bisan asa</div>
+							<div><span>Seating capacity: </span>@room.RoomCapacity</div>
+							<div><span>Location: </span>@room.RoomLocation</div>
 							<div><span>Facilities: </span>daghan</div>
 						</div>
 					</div>
@@ -116,7 +118,6 @@
 					</div>
 				</div>
 			}
-			
 		</div>
 	</main>
 </div>
