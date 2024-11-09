@@ -88,6 +88,9 @@ li.active i{
     width: 3.125rem;
     transition: 0.5s;
     padding: 0 5px;
+    border: 1px solid #d9d9d9;
+    border-bottom-right-radius: 5px;
+    border-top-right-radius: 5px;
 }
 .navbar-active {
     width: 15.625rem !important;

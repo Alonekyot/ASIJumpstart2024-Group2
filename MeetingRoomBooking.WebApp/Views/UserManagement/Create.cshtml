@@ -4,7 +4,9 @@
     Layout = "_HomeLayout";
     ViewData["Title"] = "Create User";
 }
-
+@section style {
+    <link href="~/css/cretaeUser.css" rel="stylesheet" />
+}
 <h1>Create User</h1>
 
 <form asp-action="Create" method="post">
@@ -46,10 +48,10 @@
         </div>
     }
     
-    <button type="submit" class="btn btn-primary">Create</button>
+    <button type="submit" class="primary-btn">Create</button>
 </form>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a class="secondary-btn" asp-action="Index">Back to List</a>
 </div>
 

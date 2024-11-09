@@ -1,0 +1,33 @@
+﻿@import url('https://fonts.googleapis.com/css2?family=Inclusive+Sans:ital@0;1&display=swap');
+
+.primary-btn {
+    background-color: #37A3E0;
+    padding: 0.3125rem 0.75rem;
+    color: white;
+    border: 1px solid white;
+    text-decoration: none;
+    border-radius: 0.25rem;
+    font-family: "Inclusive sans", sans-serif;
+    font-weight: 600;
+}
+
+.secondary-btn {
+    background-color: white;
+    padding: 0.5rem 0.75rem;
+    color: #37A3E0;
+    border: 1px solid #37A3E0;
+    text-decoration: none;
+    border-radius: 0.25rem;
+    font-family: "Inclusive sans", sans-serif;
+    font-weight: 600;
+}
+.danger-btn {
+    background-color: #dc3545;
+    padding: 0.5rem 0.75rem;
+    color: white;
+    border: 1px solid #dc3545;
+    text-decoration: none;
+    border-radius: 0.25rem;
+    font-family: "Inclusive sans", sans-serif;
+    font-weight: 600;
+}
