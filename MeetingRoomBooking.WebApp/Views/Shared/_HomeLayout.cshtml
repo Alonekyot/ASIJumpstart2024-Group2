@@ -34,25 +34,28 @@
                         <span class="navbar-item-text">Booking</span>
                     </a>    
                 </li>
-                <li class="sidebar-item @(ViewBag.ActivePage == "UserManagement" ? "active" : "")">
-                    <a class="no-underline" href="@Url.Action("Index", "UserManagement")">
-                        <i class="bi bi-people-fill"></i>
-                        <span class="navbar-item-text">User Management</span>
-                    </a>
-                </li>
-                <li class="sidebar-item @(ViewBag.ActivePage == "RoomManagement" ? "active" : "")">
-                    <a class="no-underline" href="@Url.Action("Index", "RoomManagement")">
-                        <i class="bi bi-people-fill"></i>
-                        <span class="navbar-item-text">Room Management</span>
-                    </a>
-                </li>
+                @if (int.TryParse(User.FindFirstValue("Role"), out int role) && role == 2 || role == 1) {
+                    <li class="sidebar-item @(ViewBag.ActivePage == "UserManagement" ? "active" : "")">
+                        <a class="no-underline" href="@Url.Action("Index", "UserManagement")">
+                            <i class="bi bi-people-fill"></i>
+                            <span class="navbar-item-text">User Management</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item @(ViewBag.ActivePage == "RoomManagement" ? "active" : "")">
+                        <a class="no-underline" href="@Url.Action("Index", "RoomManagement")">
+                            <i class="bi bi-people-fill"></i>
+                            <span class="navbar-item-text">Room Management</span>
+                        </a>
+                    </li>
+                }
+                
             </ul>
         </aside>
         <div class="content">
             @RenderBody()
         </div>
     </div>
-    
+
     
     @Html.Partial("Components/_FilterModal")
 
@@ -61,7 +64,7 @@
         <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
         <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
     }
-
+    
     <script src="~/js/navbar.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     @await RenderSectionAsync("script", required: false)
