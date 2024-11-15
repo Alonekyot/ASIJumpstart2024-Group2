@@ -1,0 +1,67 @@
+﻿@using MeetingRoomBooking.Resources.Constants
+
+@{
+    Layout = "_HomeLayout";
+}
+@section style {
+    <link rel="stylesheet" href="~/css/CreateBooking.css" />
+}
+@section script {
+    <script src="~/js/CreateBooking.js"></script>
+}
+
+<link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/main.min.css" rel="stylesheet" />
+
+
+<div class="form-container">
+    <div id="calendar"></div>
+    <form>
+        <div class="input-group input-group-sm mb-3">
+            <span class="input-group-text" id="inputGroup-sizing-sm">Meeting date</span>
+            <input type="date" value="@DateTime.Now.ToString("yyyy-MM-dd")"
+                   class="form-control"
+                   aria-label="Sizing example input"
+                   aria-describedby="inputGroup-sizing-sm">
+        </div>
+        <div class="input-group input-group-sm mb-3">
+            <span class="input-group-text" id="inputGroup-sizing-sm">Starts at</span>
+            <input type="time" value="@DateTime.Now.AddHours(1).ToString("HH:mm")"
+                   class="form-control"
+                   aria-label="Sizing example input"
+                   aria-describedby="inputGroup-sizing-sm">
+        </div>
+        <div class="input-group input-group-sm mb-3">
+            <span class="input-group-text" id="inputGroup-sizing-sm">Ends at</span>
+            <input type="time" value="@DateTime.Now.AddHours(2).ToString("HH:mm")"
+                   class="form-control"
+                   aria-label="Sizing example input"
+                   aria-describedby="inputGroup-sizing-sm">
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+            <label class="form-check-label" for="flexCheckDefault" >
+                Recurring?
+            </label>
+        </div>
+        <div id="recurring-form">
+            <select class="form-select" aria-label="Default select example">
+                @foreach (var pattern in Enum.GetValues(typeof(Enums.RecurringPatterns))) {
+                    <option value="@pattern">@pattern</option>
+                }
+            </select>
+            <div class=input-group input-group-sm mb-3">
+                <span class="input-group-text" id="inputGroup-sizing-sm">Number of recurrence</span>
+                <input type="number"
+                       class="form-control"
+                       aria-label="Sizing example input"
+                       aria-describedby="inputGroup-sizing-sm">
+            </div>
+        </div>
+    </form>
+</div>
+
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/main.min.js"></script>
+
