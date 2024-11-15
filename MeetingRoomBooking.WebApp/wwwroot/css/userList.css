@@ -15,7 +15,6 @@
 .search {
     border: none;
     background-color: transparent;
-    width: 250px;
 }
 .search:focus {
     outline: none;
@@ -43,4 +42,12 @@
     color: white !important;
     font-size: 20px;
     font-weight: bold;
+}
+@media (max-width: 800px) {
+    .table {
+        width: 100% !important;
+    }
+    .table-container {
+        overflow-x: scroll;
+    }
 }

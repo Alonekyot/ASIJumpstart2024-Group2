@@ -188,6 +188,11 @@ p span {
     font-family: "Inclusive sans", sans-serif;
     font-size: 0.82em;
 }
+.room-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
 
 @media (max-width: 1110px) {
     .card-grid {

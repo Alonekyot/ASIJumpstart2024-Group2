@@ -121,3 +121,25 @@ section ul li{
     padding: 10px 20px;
     border-radius: 6px;
 }
+
+@media (max-width: 600px) {
+    main{
+        padding: 0 !important;
+        margin: 0 !important;
+    }
+    .card-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+    }
+    .book-card {
+        flex-direction: column;
+        width: fit-content;
+        padding: 10px;
+    }
+    .image-container img{
+        margin: 0 auto;
+    }
+    .book {
+        flex-direction: column-reverse;
+    }
+}

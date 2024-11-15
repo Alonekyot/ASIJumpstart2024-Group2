@@ -6,3 +6,4 @@
         label.classList.remove('toggle-active'); // Remove active class if unchecked
     }
 }
+
