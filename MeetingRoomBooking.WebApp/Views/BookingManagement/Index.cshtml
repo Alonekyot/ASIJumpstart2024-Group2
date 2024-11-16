@@ -110,7 +110,41 @@
 						<div class="room-details">
 							<div><span>Seating capacity: </span>@room.RoomCapacity</div>
 							<div><span>Location: </span>@room.RoomLocation</div>
-							<div><span>Facilities: </span>daghan</div>
+							<div class="amenities">
+								<p> <span>Amenities: </span></p>
+								<div class="icons-list">
+									@if (room.Audio)
+									{
+										<div class="circle">
+											<i class="bi bi-headset"></i>
+										</div>
+									}
+									@if (room.Video)
+									{
+										<div class="circle">
+											<i class="bi bi-camera-video-fill"></i>
+										</div>
+									}
+									@if (room.WhiteBoard)
+									{
+										<div class="circle">
+											<i class="bi bi-tv-fill"></i>
+										</div>
+									}
+									@if (room.Projector)
+									{
+										<div class="circle">
+											<i class="bi bi-projector-fill"></i>
+										</div>
+									}
+									@if (room.Loudspeaker)
+									{
+										<div class="circle">
+											<i class="bi bi-speaker-fill"></i>
+										</div>
+									}
+								</div>
+							</div>
 						</div>
 					</div>
 					<div>

@@ -44,19 +44,22 @@
             </label>
         </div>
         <div id="recurring-form">
-            <select class="form-select" aria-label="Default select example">
+            <select class="form-select mb-3" aria-label="Default select example">
                 @foreach (var pattern in Enum.GetValues(typeof(Enums.RecurringPatterns))) {
                     <option value="@pattern">@pattern</option>
                 }
             </select>
-            <div class=input-group input-group-sm mb-3">
+            <div class="input-group input-group-sm mb-3">
                 <span class="input-group-text" id="inputGroup-sizing-sm">Number of recurrence</span>
                 <input type="number"
                        class="form-control"
                        aria-label="Sizing example input"
-                       aria-describedby="inputGroup-sizing-sm">
+                       aria-describedby="inputGroup-sizing-sm mb-3">
             </div>
         </div>
+        <button class="primary-btn">
+            Book
+        </button>
     </form>
 </div>
 
