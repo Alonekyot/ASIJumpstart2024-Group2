@@ -32,15 +32,49 @@
 					</div>
 					<div class="amenities">
 						<p> <span>Amenities: </span></p>
-						Icons
+						<div class="icons-list">
+							@if (room.Audio)
+							{
+								<div class="circle" data-bs-toggle="tooltip">
+									<i class="bi bi-headset"></i>
+								</div>
+							}
+							@if(room.Video)
+							{
+								<div class="circle">
+									<i class="bi bi-camera-video-fill"></i>
+								</div>
+							}
+							@if (room.WhiteBoard)
+							{
+								<div class="circle">
+									<i class="bi bi-tv-fill"></i>
+								</div>
+							}
+							@if (room.Projector)
+							{
+								<div class="circle">
+									<i class="bi bi-projector-fill"></i>	
+								</div>
+							}
+							@if (room.Loudspeaker)
+							{
+								<div class="circle">
+									<i class="bi bi-speaker-fill"></i>
+								</div>
+							}
+						</div>
 					</div>
 					<div>
-							<button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal"
-									data-room-id="@room.RoomId">
-								Delete
-							</button>
+							
 					</div>
-					<div class="edit-details"><a href="#">Edit details</a></div>
+					<div class="edit-details">
+						<button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal"
+								data-room-id="@room.RoomId">
+							Delete
+						</button>
+						<a href="#">Edit details</a>
+					</div>
 				</div>
 			}
 
