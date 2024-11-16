@@ -16,10 +16,13 @@
     
 </div>
 <div class="under-title">
-    <div class="search-group">
-        <input type="text" placeholder="Search" class="search" />
-        <a class="search-btn"><i class="bi bi-search"></i></a>
-    </div>
+    <form method="post" asp-action="SearchUser">
+        <div class="form-group">
+            <label for="filter">Search by First Name or Last Name</label>
+            <input type="text" id="filter" name="filter" class="form-control" placeholder="Enter name" />
+        </div>
+        <button type="submit" class="btn btn-primary">Search</button>
+    </form>
     <a class="create-user-button" style="align-content:center" asp-action="Create">
         <i class="bi bi-plus"></i>
         Add User
