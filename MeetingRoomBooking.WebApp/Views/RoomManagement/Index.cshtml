@@ -19,7 +19,7 @@
 
 			@foreach (var room in Model)
 			{
-				<div class="room-card">
+				<sdiv class="room-card">
 					<div class="image-container">
 						<img src="~/assets/login-gb.jpg" alt="Alternate Text" />
 					</div>	
@@ -40,8 +40,11 @@
 								Delete
 							</button>
 					</div>
-					<div class="edit-details"><a href="#">Edit details</a></div>
-				</div>
+						<div class="edit-details" ><a asp-action="Edit" asp-route-id="@room.RoomId">Edit details</a>
+						</div>
+						
+					
+				</sdiv>
 			}
 
 		</main>

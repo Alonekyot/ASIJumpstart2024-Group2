@@ -2,6 +2,8 @@
 using MeetingRoomBooking.Services.Managers;
 using MeetingRoomBooking.Services.ServiceModels;
 using Microsoft.AspNetCore.Authorization;
+using MeetingRoomBooking.WebApp.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -56,5 +58,31 @@ namespace MeetingRoomBooking.WebApp.Controllers
 			return RedirectToAction("Index");
 		}
 
+        public IActionResult Edit(int id)
+        {
+			var room = _context.Rooms.FirstOrDefault(u => u.RoomId == id);
+			if (room != null)
+			{
+				return View(room);
+			}
+			return View();
+        }
+
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		public async Task<IActionResult> Edit(EditRoomModel editedRoom)
+		{
+			var room = await _context.Rooms.FindAsync(editedRoom.RoomId);
+			Console.WriteLine(editedRoom.RoomId+"---------------------------------------");
+			
+			if (ModelState.IsValid)
+			{
+				room = _roomManager.Edit(editedRoom, room);
+				_context.Update(room);
+				await _context.SaveChangesAsync();
+				return RedirectToAction(nameof(Index));
+			}
+			return View(room);
+		}
 	}
 }

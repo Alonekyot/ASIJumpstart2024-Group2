@@ -100,6 +100,7 @@ namespace MeetingRoomBooking.WebApp.Controllers {
             }
             return View(user);
         }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(int UserId) {
