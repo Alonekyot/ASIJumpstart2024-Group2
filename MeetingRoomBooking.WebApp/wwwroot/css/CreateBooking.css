@@ -1,0 +1,21 @@
+﻿.form-container {
+    display: flex;
+    flex: 1;
+    justify-content: space-around;
+}
+form {
+    border: 1px solid #666666;
+    height: fit-content;
+    border-radius: 6px;
+    padding: 10px;
+    width: 270px;
+}
+#recurring-form {
+    display: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+.show {
+    display: block !important;
+    opacity: 1 !important;
+}

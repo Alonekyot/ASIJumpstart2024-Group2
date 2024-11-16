@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
+using System.Collections.Generic;
 using System.Security.Claims;
 
 namespace MeetingRoomBooking.WebApp.Controllers {
@@ -22,11 +23,18 @@ namespace MeetingRoomBooking.WebApp.Controllers {
             return View();
         }
 
-        public IActionResult Bookings() {
-            return View();
+        public JsonResult GetEvents() {
+            var events = new List<CalendarEvent>
+            {
+                new CalendarEvent { Title = "Event 1", Start = DateTime.Today, End = DateTime.Today.AddDays(1) },
+                new CalendarEvent { Title = "Event 2", Start = new DateTime(2024, 11, 22, 8,0,0), End = new DateTime(2024, 11, 22, 12,0,0) },
+            };
+
+            return new JsonResult(events);
         }
 
-        public IActionResult Privacy() {
+
+        public IActionResult Bookings() {
             return View();
         }
 

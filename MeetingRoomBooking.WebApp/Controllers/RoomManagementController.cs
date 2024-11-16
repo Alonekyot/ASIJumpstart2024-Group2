@@ -1,6 +1,7 @@
 ﻿using MeetingRoomBooking.Data;
 using MeetingRoomBooking.Services.Managers;
 using MeetingRoomBooking.Services.ServiceModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
