@@ -19,13 +19,13 @@
 
 			@foreach (var room in Model)
 			{
-				<sdiv class="room-card">
+				<div class="room-card">
 					<div class="image-container">
 						<img src="~/assets/login-gb.jpg" alt="Alternate Text" />
 					</div>	
 					<div class="room-info">
 						<div class="info-top">
-							<h6>@room.RoomName</h6>
+							<h6>Room name: @room.RoomName</h6>
 							<p><span>Seating capacity: </span>@room.RoomCapacity</p>
 						</div>
 						<p><span>Location: </span>@room.RoomLocation</p>
@@ -72,14 +72,11 @@
 						<button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal"
 								data-room-id="@room.RoomId">
 							Delete
-						</button>
-						<a href="#">Edit details</a>
+						</button>					
+							<a asp-action="Edit" asp-route-id="@room.RoomId">Edit details</a>
 					</div>
-						<div class="edit-details" ><a asp-action="Edit" asp-route-id="@room.RoomId">Edit details</a>
-						</div>
-						
-					
-				</sdiv>
+										
+				</div>
 			}
 
 		</main>
