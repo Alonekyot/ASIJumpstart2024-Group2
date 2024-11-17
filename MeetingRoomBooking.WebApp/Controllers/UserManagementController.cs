@@ -32,11 +32,17 @@ namespace MeetingRoomBooking.WebApp.Controllers {
                 .Take(pageSize) // Take only the current page's records
                 .ToList();
 
+            var userModel = new UserModel
+            {
+                Users = users, // Replace with your actual data-fetching logic
+                CreateUser = new UserViewModel()
+            };
+
             int totalRecords = _context.Users.Count();
             ViewBag.TotalPages = (int)Math.Ceiling((double)totalRecords / pageSize);
             ViewBag.CurrentPage = pageNumber;
 
-            return View(users);
+            return View(userModel);
         }
 
         [HttpPost]
@@ -64,7 +70,9 @@ namespace MeetingRoomBooking.WebApp.Controllers {
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(UserViewModel newUser) {
+        public async Task<IActionResult> CreateUser(UserModel model) {
+
+            var newUser = model.CreateUser;
 
             if(_context.Users.Any(u => u.Email == newUser.Email)) {
                 ModelState.AddModelError("Email", "Email is already in use.");
@@ -74,9 +82,14 @@ namespace MeetingRoomBooking.WebApp.Controllers {
                 var user = _userManager.Add(newUser);
                 _context.Add(user);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Index");
             }
-            return View(newUser);
+            else {
+                foreach (var error in ModelState.Values.SelectMany(v => v.Errors)) {
+                    Console.WriteLine(error.ErrorMessage);
+                }
+            }
+            return RedirectToAction("Index");
         }
 
         [HttpPost]

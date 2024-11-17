@@ -41,7 +41,7 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var user in ) {
+            @foreach (var user in Model.Users) {
                 <tr>
                     <td>@user.FirstName</td>
                     <td>@user.LastName</td>
@@ -80,52 +80,53 @@
 
 
 <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
-    <form class="offcanvas-body">
+    <form class="offcanvas-body" asp-controller="UserManagement" asp-action="CreateUser" method="post">
+        @Html.AntiForgeryToken()
         <h3>User Information</h3>
         <div class="create-btn-grp" data-bs-dismiss="offcanvas" aria-label="Close">
             <a class="cancel-btn">
                 Cancel
             </a>
-            <a class="create-btn">
+            <button type="submit" class="create-btn">
                 <i class="bi bi-person-plus"></i>
                 Create User
-            </a>
+            </button>
         </div>
         <hr />
         <div class="user-input">
             <div class="input-section">
                 <span>First Name</span>
-                <input type="text" />
+                <input type="text" asp-for="CreateUser.FirstName" />
             </div>
         </div>
         <div class="user-input">
             <div class="input-section">
                 <span>Last Name</span>
-                <input type="text" />
+                <input type="text" asp-for="CreateUser.LastName" />
             </div>
         </div>
         <div class="user-input">
             <div class="input-section">
                 <span>Email</span>
-                <input type="email" />
+                <input type="email" asp-for="CreateUser.Email" />
             </div>
         </div>
         <div class="user-input">
             <div class="input-section">
                 <span>Phone</span>
-                <input type="text" />
+                <input type="text" asp-for="CreateUser.Phone" />
             </div>
         </div>
         <div class="user-input">
             <div class="input-section">
                 <span>Password</span>
-                <input type="password" />
+                <input type="password" asp-for="CreateUser.Password" />
             </div>
         </div>
         <div class="user-input">
             <div class="input-section">
                 <span>Role</span>
-                <select aria-label="Default select example">
+                <select asp-for="CreateUser.Remarks">
                     <option disabled selected>Select a role</option>
                     <option value="User">User</option>
                     <option value="Admin">Admin</option>

@@ -11,8 +11,8 @@ using System.Threading.Tasks;
 namespace MeetingRoomBooking.Services.ServiceModels {
 
     public class UserModel {
-        public IEnumerable<User> Users { get; set; }
-        public UserListViewModel CreateUser { get; set; }
+        public IEnumerable<User>? Users { get; set; }
+        public UserViewModel CreateUser { get; set; }
     }
 
     public class UserViewModel {
