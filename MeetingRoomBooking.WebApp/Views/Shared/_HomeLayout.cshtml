@@ -24,44 +24,85 @@
     @RenderSection("style", required: false)
 </head>
 <body>
-    
-    @Html.Partial("Components/_Header")
-    <div class="main">
-        <aside class="aside" id="navbar">
-            <ul class="navbar-list">
-                <li class="sidebar-item @(ViewBag.ActivePage == "Dashboard" ? "active" : "")">
-                    <a class="no-underline" href="@Url.Action("Index", "Home")">
-                        <i class="bi bi-grid-1x2-fill"></i>
-                        <span class="navbar-item-text">Dashboard</span>
-                    </a>
-                </li>
-                <li class="sidebar-item @(ViewBag.ActivePage == "BookingManagement" ? "active" : "")">
-                    <a class="no-underline" href="@Url.Action("Index", "BookingManagement")">
-                        <i class="bi bi-bookmarks-fill"></i>
-                        <span class="navbar-item-text">Booking</span>
-                    </a>    
-                </li>
-                @if (int.TryParse(User.FindFirstValue("Role"), out int role) && role == 2 || role == 1) {
-                    <li class="sidebar-item @(ViewBag.ActivePage == "UserManagement" ? "active" : "")">
-                        <a class="no-underline" href="@Url.Action("Index", "UserManagement")">
-                            <i class="bi bi-people-fill"></i>
-                            <span class="navbar-item-text">User Management</span>
+    <div class="screen">
+        <aside class="aside column" id="navbar">
+            <div class="group">
+                <div class="logo-container">
+                    <img src="~/assets/meetingRoomLogo.png" class="logo" id="navbar-toggle" />
+                    <div class="column navbar-item-text">
+                        <span class="name company">
+                            BANKY SOLUTIONS
+                        </span>
+                        <span class="name meet">
+                            Meeting Room Booking
+                        </span>
+                    </div>
+                </div>
+
+                <ul class="navbar-list">
+                    <li class="sidebar-item @(ViewBag.ActivePage == "Dashboard" ? "active" : "")">
+                        <a class="no-underline" href="@Url.Action("Index", "Home")">
+                            <i class="bi bi-grid-1x2"></i>
+                            <span class="navbar-item-text">Dashboard</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item @(ViewBag.ActivePage == "BookingManagement" ? "active" : "")">
+                        <a class="no-underline" href="@Url.Action("Index", "BookingManagement")">
+                            <i class="bi bi-journal-bookmark-fill"></i>
+                            <span class="navbar-item-text">Booking</span>
+                        </a>
+                    </li>
+                    @if (int.TryParse(User.FindFirstValue("Role"), out int role) && role == 2 || role == 1) {
+                        <li class="sidebar-item @(ViewBag.ActivePage == "UserManagement" ? "active" : "")">
+                            <a class="no-underline" href="@Url.Action("Index", "UserManagement")">
+                                <i class="bi bi-people"></i>
+                                <span class="navbar-item-text">User Management</span>
+                            </a>
+                        </li>
+                        <li class="sidebar-item @(ViewBag.ActivePage == "RoomManagement" ? "active" : "")">
+                            <a class="no-underline" href="@Url.Action("Index", "RoomManagement")">
+                                <i class="bi bi-door-open"></i>
+                                <span class="navbar-item-text">Room Management</span>
+                            </a>
+                        </li>
+                    }
+                    <li class="sidebar-item @(ViewBag.ActivePage == "RoomManagement" ? "active" : "")">
+                        <a class="no-underline" href="@Url.Action("Index", "RoomManagement")">
+                            <i class="bi bi-clipboard-data"></i>
+                            <span class="navbar-item-text">Report Analytics</span>
                         </a>
                     </li>
                     <li class="sidebar-item @(ViewBag.ActivePage == "RoomManagement" ? "active" : "")">
                         <a class="no-underline" href="@Url.Action("Index", "RoomManagement")">
-                            <i class="bi bi-people-fill"></i>
-                            <span class="navbar-item-text">Room Management</span>
+                            <i class="bi bi-gear"></i>
+                            <span class="navbar-item-text">Settings</span>
                         </a>
                     </li>
-                }
-                
-            </ul>
+
+                </ul>
+            </div>
+            
+
+            <div class="logout-section">
+                <div class="horizontal-line"></div>
+                <a class="logout" asp-controller="Account" asp-action="Logout">
+                    <i class="bi bi-box-arrow-right"></i>
+                    <span class="navbar-item-text">Logout</span>
+                </a>
+            </div>
+            
+
         </aside>
-        <div class="content">
-            @RenderBody()
+
+
+        <div class="main">
+            @Html.Partial("Components/_Header")
+            <div class="content">
+                @RenderBody()
+            </div>
         </div>
     </div>
+    
 
     
     @Html.Partial("Components/_FilterModal")

@@ -75,12 +75,12 @@ section ul li{
 }
 .image-container {
     height: 100px;
-    width: auto;
-    background-size: cover
+    width: 160px;
+    background-size: cover;
+    overflow: hidden;
 }
 .image-container img {
     height: 100%;
-    width: auto;
 }
 .book-title a {
     text-decoration: none;
@@ -93,7 +93,8 @@ section ul li{
     gap: 15px;
 }
 .room-name {
-    font: bold 0.9rem "Lato", sans-serif;
+    font: bold 1.2rem "Lato", sans-serif;
+    margin: 0;
 }
 .room-info {
     display: flex;

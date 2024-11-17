@@ -44,7 +44,11 @@
 .notif {
     cursor: pointer;
 }
-
+.page{
+    color: white;
+    font-weight: bold;
+    font-size: 1.5rem;
+}
 .notif-badge {
     background-color: red;
     border-radius: 50%;
