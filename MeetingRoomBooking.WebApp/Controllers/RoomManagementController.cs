@@ -1,4 +1,6 @@
 ﻿using MeetingRoomBooking.Data;
+using MeetingRoomBooking.Data.Models;
+using MeetingRoomBooking.Services.Interfaces;
 using MeetingRoomBooking.Services.Managers;
 using MeetingRoomBooking.Services.ServiceModels;
 using Microsoft.AspNetCore.Authorization;
@@ -34,8 +36,35 @@ namespace MeetingRoomBooking.WebApp.Controllers
 
 		[HttpPost]
 		public async Task<IActionResult> Create(CreateRoomModel newRoom) {
-            if(ModelState.IsValid) {
-				var room  = _roomManager.Add(newRoom);
+			if (ModelState.IsValid) {
+				byte[]? imageData = null;
+
+				if (newRoom.ImageFile != null) {
+					using (var memoryStream = new MemoryStream()) {
+						await newRoom.ImageFile.CopyToAsync(memoryStream);
+						imageData = memoryStream.ToArray();
+					}
+					Console.WriteLine("not");
+				}
+				else {
+					Console.WriteLine("null");
+				}
+
+				var room = new Room
+				{
+					RoomName = newRoom.RoomName,
+					RoomLocation = newRoom.RoomLocation,
+					RoomCapacity = newRoom.RoomCapacity,
+					Audio = newRoom.Audio,
+					Video = newRoom.Video,
+					WhiteBoard = newRoom.WhiteBoard,
+					Projector = newRoom.Projector,
+					Loudspeaker = newRoom.Loudspeaker,
+					Image = imageData,
+					Available = true,
+					Deleted = false
+				};
+
 				_context.Add(room);
 				await _context.SaveChangesAsync();
 				return RedirectToAction(nameof(Index));

@@ -8,25 +8,34 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MeetingRoomBooking.Data;
 
 namespace MeetingRoomBooking.Services.Managers
 {
 	public class RoomManager : IRoomServices
 	{
-		public Room Add(CreateRoomModel model) {
-			var room = new Room();
-			room.RoomName = model.RoomName;
-			room.RoomLocation = model.RoomLocation;
-			room.RoomCapacity = model.RoomCapacity;
-			room.Audio = model.Audio;
-			room.Video = model.Video;
-			room.WhiteBoard = model.WhiteBoard;
-			room.Projector = model.Projector;
-			room.Loudspeaker = model.Loudspeaker;
-			room.Image = model.Image;
-			room.Available = true;
-			room.Deleted = false;
+		private MeetingRoomBookingDbContext _context;
 
+		public RoomManager(MeetingRoomBookingDbContext context) {
+			_context = context;
+		}
+
+
+		public Room Add(CreateRoomModel model) {
+			var room = new Room()
+			{
+				RoomName = model.RoomName,
+				RoomLocation = model.RoomLocation,
+				RoomCapacity = model.RoomCapacity,
+				Audio = model.Audio,
+				Video = model.Video,
+				WhiteBoard = model.WhiteBoard,
+				Projector = model.Projector,
+				Loudspeaker = model.Loudspeaker,
+				//Image = model.ImageFile,
+				Available = true,
+				Deleted = false
+			};
 			return room;
 		}
 	}

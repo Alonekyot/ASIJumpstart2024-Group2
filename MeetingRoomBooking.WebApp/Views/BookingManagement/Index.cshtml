@@ -16,23 +16,6 @@
 			</div>
 			<div class="font-lato">
 				<section>
-					<p class="category">Room Availability</p>
-					<ul>
-						<li>
-							<label>
-								<input type="checkbox" />
-								Available
-							</label>
-						</li>
-						<li>
-							<label>
-								<input type="checkbox" />
-								Not Available
-							</label>
-						</li>
-					</ul>
-				</section>
-				<section>
 					<p class="category">Room capacity</p>
 					<ul>
 						<li>
@@ -103,7 +86,15 @@
 			{
 				<div class="flex book-card">
 					<div class="image-container">
-						<img src="~/assets/login-gb.jpg" alt="Alternate Text" />
+						@if (room.Image != null && room.Image.Length > 0) {
+							// Convert byte[] to base64 string and set it as the image source
+							var base64Image = Convert.ToBase64String(room.Image);
+							<img src="data:image/jpeg;base64,@base64Image" alt="Room Image" />
+						}
+						else {
+							// Fallback to a default image if no image is available
+							<img src="~/assets/login-gb.jpg" alt="Room Image" />
+						}
 					</div>
 					<div class="room-info flex-grow-1">
 						<h4 class="room-name">@room.RoomName</h4>

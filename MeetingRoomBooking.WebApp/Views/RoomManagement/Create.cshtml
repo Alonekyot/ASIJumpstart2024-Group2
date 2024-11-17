@@ -14,7 +14,7 @@
 </div>
 
 <div class="create-room">
-	<form method="post" asp-action="Create">
+	<form method="post" asp-action="Create" enctype="multipart/form-data">
 		<div class="input-area">
 			<label class="room-label">Room name:</label>
 			<input type="text" class="txt-area" asp-for="RoomName" required />
@@ -52,7 +52,7 @@
 		<div class="drop-area">
 			<div id="dropArea" class="drag-drop-box">
 				<p id="uploadText">Drag & Drop an image here or click to upload</p>
-				<input type="file" id="imageUpload" name="imageUpload" accept="image/*" asp-for="Image" onchange="displayImage()" hidden />
+				<input type="file" id="imageUpload" accept="image/*" asp-for="ImageFile" onchange="displayImage()" hidden />
 				<img id="previewImage" src="" alt="Uploaded Image" style="display:none;" />
 			</div>
 		</div>

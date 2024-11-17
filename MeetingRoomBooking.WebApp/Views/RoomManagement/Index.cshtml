@@ -1,122 +1,114 @@
 ﻿@model IEnumerable<MeetingRoomBooking.Data.Models.Room>
-@using MeetingRoomBooking.Resources.Constants
 
 @{
-	Layout = "_HomeLayout";
+    Layout = "_HomeLayout";
 }
 
 @section style {
-	<link rel="stylesheet" href="/css/roomManagementStyle.css" />
+    <link rel="stylesheet" href="/css/roomManagementStyle.css" />
 }
 
 <div class="rooms">
-	<div class="room-header">
-		<h5>Meeting Rooms</h5>
-		<a class="primary-btn" asp-action="Create">Create</a>
-		</div>
-	<div class="main">
-		<main class="card-grid">
-
-			@foreach (var room in Model)
-			{
-				<div class="room-card">
-					<div class="image-container">
-						<img src="~/assets/login-gb.jpg" alt="Alternate Text" />
-					</div>	
-					<div class="room-info">
-						<div class="info-top">
-							<h6>@room.RoomName</h6>
-							<p><span>Seating capacity: </span>@room.RoomCapacity</p>
-						</div>
-						<p><span>Location: </span>@room.RoomLocation</p>
-					</div>
-					<div class="amenities">
-						<p> <span>Amenities: </span></p>
-						<div class="icons-list">
-							@if (room.Audio)
-							{
-								<div class="circle" data-bs-toggle="tooltip">
-									<i class="bi bi-headset"></i>
-								</div>
-							}
-							@if(room.Video)
-							{
-								<div class="circle">
-									<i class="bi bi-camera-video-fill"></i>
-								</div>
-							}
-							@if (room.WhiteBoard)
-							{
-								<div class="circle">
-									<i class="bi bi-tv-fill"></i>
-								</div>
-							}
-							@if (room.Projector)
-							{
-								<div class="circle">
-									<i class="bi bi-projector-fill"></i>	
-								</div>
-							}
-							@if (room.Loudspeaker)
-							{
-								<div class="circle">
-									<i class="bi bi-speaker-fill"></i>
-								</div>
-							}
-						</div>
-					</div>
-					<div>
-							
-					</div>
-					<div class="edit-details">
-						<button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal"
-								data-room-id="@room.RoomId">
-							Delete
-						</button>
-						<a href="#">Edit details</a>
-					</div>
-				</div>
-			}
-
-		</main>
-		
-	</div>
+    <div class="room-header">
+        <h5>Meeting Rooms</h5>
+        <a class="primary-btn" asp-action="Create">Create</a>
+    </div>
+    <div class="main">
+        <main class="card-grid">
+            @foreach (var room in Model) {
+                <div class="room-card">
+                    <div class="image-container">
+                        @if (room.Image != null && room.Image.Length > 0) {
+                            // Convert byte[] to base64 string and set it as the image source
+                            var base64Image = Convert.ToBase64String(room.Image);
+                            <img src="data:image/jpeg;base64,@base64Image" alt="Room Image" />
+                        }
+                        else {
+                            // Fallback to a default image if no image is available
+                            <img src="~/assets/login-gb.jpg" alt="Room Image" />
+                        }
+                    </div>
+                    <div class="room-info">
+                        <div class="info-top">
+                            <h6>@room.RoomName</h6>
+                            <p><span>Seating capacity: </span>@room.RoomCapacity</p>
+                        </div>
+                        <p><span>Location: </span>@room.RoomLocation</p>
+                    </div>
+                    <div class="amenities">
+                        <p> <span>Amenities: </span></p>
+                        <div class="icons-list">
+                            @if (room.Audio) {
+                                <div class="circle" data-bs-toggle="tooltip">
+                                    <i class="bi bi-headset"></i>
+                                </div>
+                            }
+                            @if (room.Video) {
+                                <div class="circle">
+                                    <i class="bi bi-camera-video-fill"></i>
+                                </div>
+                            }
+                            @if (room.WhiteBoard) {
+                                <div class="circle">
+                                    <i class="bi bi-tv-fill"></i>
+                                </div>
+                            }
+                            @if (room.Projector) {
+                                <div class="circle">
+                                    <i class="bi bi-projector-fill"></i>
+                                </div>
+                            }
+                            @if (room.Loudspeaker) {
+                                <div class="circle">
+                                    <i class="bi bi-speaker-fill"></i>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                    <div class="edit-details">
+                        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal"
+                                data-room-id="@room.RoomId">
+                            Delete
+                        </button>
+                        <a href="#">Edit details</a>
+                    </div>
+                </div>
+            }
+        </main>
+    </div>
 </div>
 
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<div class="modal-header">
-				<h1 class="modal-title fs-5" id="exampleModalLabel">Delete Room</h1>
-				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-			</div>
-			<div class="modal-body">
-				Are you sure you want to delete this room?
-			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-				<form asp-action="Delete" method="post">
-					@Html.AntiForgeryToken()
-					@Html.Hidden("RoomId")
-					<input type="hidden" name="RoomId" id="RoomId" />
-					<button type="submit" class="btn btn-danger">Delete</button>
-				</form>
-			</div>
-		</div>
-	</div>
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Delete Room</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to delete this room?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <form asp-action="Delete" method="post">
+                    @Html.AntiForgeryToken()
+                    @Html.Hidden("RoomId")
+                    <input type="hidden" name="RoomId" id="RoomId" />
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                </form>
+            </div>
+        </div>
+    </div>
 </div>
 
 <script>
-	var exampleModal = document.getElementById('exampleModal');
-	exampleModal.addEventListener('show.bs.modal', function (event) {
-		var button = event.relatedTarget; // Button that triggered the modal
-		var roomId = button.getAttribute('data-room-id'); // Extract RoomId from data-* attribute
-		var modalForm = exampleModal.querySelector('form'); // Get the modal form
+    var exampleModal = document.getElementById('exampleModal');
+    exampleModal.addEventListener('show.bs.modal', function (event) {
+        var button = event.relatedTarget; // Button that triggered the modal
+        var roomId = button.getAttribute('data-room-id'); // Extract RoomId from data-* attribute
+        var modalForm = exampleModal.querySelector('form'); // Get the modal form
 
-		// Set the hidden RoomId input field with the roomId
-		modalForm.querySelector('input[name="RoomId"]').value = roomId;
-	});
+        // Set the hidden RoomId input field with the roomId
+        modalForm.querySelector('input[name="RoomId"]').value = roomId;
+    });
 </script>
-
-
-
