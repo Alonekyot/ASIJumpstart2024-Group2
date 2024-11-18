@@ -9,10 +9,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using MeetingRoomBooking.Data;
+using Microsoft.AspNetCore.Http;
+using Microsoft.IdentityModel.Tokens;
 
 namespace MeetingRoomBooking.Services.Managers
 {
-	public class RoomManager : IRoomServices
+	public class RoomManager
 	{
 		private MeetingRoomBookingDbContext _context;
 
@@ -21,22 +23,65 @@ namespace MeetingRoomBooking.Services.Managers
 		}
 
 
-		public Room Add(CreateRoomModel model) {
-			var room = new Room()
-			{
-				RoomName = model.RoomName,
-				RoomLocation = model.RoomLocation,
-				RoomCapacity = model.RoomCapacity,
-				Audio = model.Audio,
-				Video = model.Video,
-				WhiteBoard = model.WhiteBoard,
-				Projector = model.Projector,
-				Loudspeaker = model.Loudspeaker,
-				//Image = model.ImageFile,
-				Available = true,
-				Deleted = false
-			};
-			return room;
-		}
-	}
+        public async Task<bool> AddAsync(CreateRoomModel model) {
+            try {
+                byte[]? imageData = null;
+
+                if (model.ImageFile != null) {
+                    // Validate file type and size
+                    if (!IsImageFile(model.ImageFile)) {
+                        return false; // Invalid file type
+                    }
+
+                    if (model.ImageFile.Length > 5 * 1024 * 1024) // 5MB limit
+                    {
+                        return false; 
+                    }
+
+                    using (var memoryStream = new MemoryStream()) {
+                        await model.ImageFile.CopyToAsync(memoryStream); 
+                        imageData = memoryStream.ToArray();
+                    }
+                }
+                var room = new Room
+                {
+                    RoomName = model.RoomName,
+                    RoomLocation = model.RoomLocation,
+                    RoomCapacity = model.RoomCapacity,
+                    Audio = model.Audio,
+                    Video = model.Video,
+                    WhiteBoard = model.WhiteBoard,
+                    Projector = model.Projector,
+                    Loudspeaker = model.Loudspeaker,
+                    Image = imageData,
+                    Available = true,
+                    Deleted = false
+                };
+                _context.Rooms.Add(room);
+
+                return true;
+            }
+            catch (Exception ex) {
+                Console.Error.WriteLine($"Error while adding room: {ex.Message}");
+                return false; 
+            }
+        }
+
+        private bool IsImageFile(IFormFile file) {
+            var permittedExtensions = new[] { ".jpg", ".jpeg", ".png", ".gif" };
+            var extension = Path.GetExtension(file.FileName).ToLowerInvariant();
+            return !string.IsNullOrEmpty(extension) && permittedExtensions.Contains(extension);
+        }
+
+        public async Task<bool> Delete(int RoomId) {
+            var room = await _context.Rooms.FindAsync(RoomId);
+            if (room == null) {
+                return false;
+            }
+
+            room.Deleted = true;
+            await _context.SaveChangesAsync(); 
+            return true;
+        }
+    }
 }

@@ -8,17 +8,19 @@
     box-shadow: 0px 6px 4px 0px rgba(0,0,0,0.25);
     background-color: white;
 }
-.main {
+.rooms-content {
     display: flex;
-    height: 100%;
 }
 .card-grid {
     flex: 3;
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 10px;
-    padding: 20px;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 5px;
+    padding: 10px;
     place-items: center;
+}
+.grid-2-cols{
+    grid-template-columns: repeat(2, 1fr);
 }
 .create-room {
     flex: 1;
@@ -84,9 +86,8 @@ p span {
     padding: 5px;
     border: 1px solid black;
     height: fit-content;
-    width: 50%;
-    min-width: 250px;
-    max-width: 350px;
+    width: 100%;
+    max-width: 400px;
     border-radius: 5px;
 }
 .input-area {
@@ -94,7 +95,7 @@ p span {
     flex-direction: column;
 }
 .txt-area {
-    border: 1px solid #d0d0d0;
+    border: 1px solid #0F75AE;
     border-radius: 5px;
     font-size: 18px;
     padding: 3px 5px;
@@ -105,17 +106,17 @@ p span {
 }
 .toggle-btn {
     display: flex;
-    border: 1px solid #888888;
+    border: 1px solid #0F75AE;
     align-items: center;
     justify-content: center;
     padding: 3px 5px;
-    color: #888888;
+    color: #0F75AE;
     border-radius: 5px;
     cursor: pointer;
     margin: 3px;
 }
 .toggle-active {
-    background-color: #888888;
+    background-color: #0F75AE;
     color: white;
 }
 .toggle-btn input {
@@ -189,8 +190,8 @@ p span {
     margin: 5px 0;
 }
 .room-label {
-    color: #979797;
-    font-family: "Inclusive sans", sans-serif;
+    color: #0F75AE;
+    font-family: Rubik, sans-serif;
     font-size: 0.82em;
 }
 .room-header {
@@ -216,8 +217,8 @@ p span {
     font-size: 12px;
     color: #37A3E0;
 }
-
-@media (max-width: 1110px) {
+/*
+    @media (max-width: 1110px) {
     .card-grid {
         grid-template-columns: repeat(3, 1fr);
     }
@@ -240,3 +241,4 @@ p span {
         flex-direction: column-reverse; 
     }
 }
+*/

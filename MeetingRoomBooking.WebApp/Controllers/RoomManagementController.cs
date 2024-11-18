@@ -27,63 +27,48 @@ namespace MeetingRoomBooking.WebApp.Controllers
 			ViewBag.ActivePage = "RoomManagement";
 			var rooms = _context.Rooms.ToList()
 				.Where(u => !u.Deleted);
-			return View(rooms);
-        }
 
-        public IActionResult Create() {
-            return View();
-        }
-
-		[HttpPost]
-		public async Task<IActionResult> Create(CreateRoomModel newRoom) {
-			if (ModelState.IsValid) {
-				byte[]? imageData = null;
-
-				if (newRoom.ImageFile != null) {
-					using (var memoryStream = new MemoryStream()) {
-						await newRoom.ImageFile.CopyToAsync(memoryStream);
-						imageData = memoryStream.ToArray();
-					}
-					Console.WriteLine("not");
-				}
-				else {
-					Console.WriteLine("null");
-				}
-
-				var room = new Room
-				{
-					RoomName = newRoom.RoomName,
-					RoomLocation = newRoom.RoomLocation,
-					RoomCapacity = newRoom.RoomCapacity,
-					Audio = newRoom.Audio,
-					Video = newRoom.Video,
-					WhiteBoard = newRoom.WhiteBoard,
-					Projector = newRoom.Projector,
-					Loudspeaker = newRoom.Loudspeaker,
-					Image = imageData,
-					Available = true,
-					Deleted = false
-				};
-
-				_context.Add(room);
-				await _context.SaveChangesAsync();
-				return RedirectToAction(nameof(Index));
-			}
-			return View("Index", newRoom);
-		}
-		[HttpPost]
-		[ValidateAntiForgeryToken]
-		public async Task<IActionResult> Delete(int RoomId)
-		{
-			var room = await _context.Rooms.FindAsync(RoomId);
-			if (room != null)
+			var roomModel = new RoomModel
 			{
-				room.Deleted = true;
-				await _context.SaveChangesAsync();
-			}
+				Rooms = rooms,
+				NewRoom = new CreateRoomModel()
+			};
 
-			return RedirectToAction("Index");
-		}
+			return View(roomModel);
+        }
 
-	}
+		[HttpPost]
+        public async Task<IActionResult> Create(RoomModel model) {
+            if (!ModelState.IsValid) {
+                return View("Index", model.NewRoom);
+            }
+
+            try {
+                var success = await _roomManager.AddAsync(model.NewRoom);
+                if (success) {
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+                }
+                else {
+                    ModelState.AddModelError("", "Unable to add the room. Please try again.");
+                }
+            }
+            catch (Exception ex) {
+                ModelState.AddModelError("", "An error occurred while creating the room. Please try again.");
+            }
+
+            return View("Index", model.NewRoom);
+        }
+
+        [HttpPost]
+		[ValidateAntiForgeryToken]
+        public async Task<IActionResult> Delete(int RoomId) {
+            bool success = await _roomManager.Delete(RoomId);
+            if (!success) {
+                return NotFound("Room not found.");
+            }
+            return RedirectToAction("Index");
+        }
+
+    }
 }

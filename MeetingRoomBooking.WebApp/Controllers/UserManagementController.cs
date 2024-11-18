@@ -53,11 +53,6 @@ namespace MeetingRoomBooking.WebApp.Controllers {
             return RedirectToAction("Index", users);
         }
 
-        public IActionResult Create() {
-            ViewBag.ActivePage = "UserManagement";
-            return View();
-        }
-
         public IActionResult Details(int? id)
         {
             ViewBag.ActivePage = "UserManagement";
