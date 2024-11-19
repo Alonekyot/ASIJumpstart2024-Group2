@@ -4,6 +4,7 @@
 }
 @section style {
 	<link href="~/css/bookingManagementStyle.css" rel="stylesheet" />
+	<link href="~/css/Cards.css" rel="stylesheet" />
 }
 <p class="title font-lato">Booking Management</p>
 <div class="flex">
@@ -91,7 +92,7 @@
 			@foreach (var room in Model)
 			{
 				<div class="flex book-card">
-					<div class="image-container">
+					<div class="book-image-container">
 						@if (room.Image != null && room.Image.Length > 0) {
 							// Convert byte[] to base64 string and set it as the image source
 							var base64Image = Convert.ToBase64String(room.Image);
@@ -145,7 +146,7 @@
 						</div>
 					</div>
 					<div>
-						<a class="book-btn" asp-action="Create">Book</a>
+						<a class="book-btn" asp-action="Create" asp-route-id="@room.RoomId">Book</a>
 					</div>
 				</div>
 			}

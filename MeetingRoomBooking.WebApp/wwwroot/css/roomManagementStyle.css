@@ -1,16 +1,6 @@
 ﻿@import url('https://fonts.googleapis.com/css2?family=Inclusive+Sans:ital@0;1&display=swap');
 
-.room-card {    
-    padding: 10px;
-    min-width: 200px;
-    max-width: 250px;
-    border-radius: 5px;
-    box-shadow: 0px 6px 4px 0px rgba(0,0,0,0.25);
-    background-color: white;
-}
-.rooms-content {
-    display: flex;
-}
+
 .card-grid {
     flex: 3;
     display: grid;
@@ -26,53 +16,8 @@
     flex: 1;
 
 }
-.room-info *{
-    font-size: 12px;
-    font-family: "Poppins", sans-serif;
-}
-.image-container {
-    width: 100%;
-    height: 150px;
-    overflow: hidden;
-    display: flex; /* Use flexbox for centering */
-    justify-content: center; /* Center horizontally */
-    align-items: center;
-    margin-bottom: 15px;
-}
-    .image-container img {
-        width: 100%; /* Image takes full width of the container */
-        height: auto; /* Maintain aspect ratio */
-        display: block; /* Remove bottom space */
-        object-fit: contain;
-    }
-.info-top {
-    display: flex;
-    justify-content: space-between;
-}
-.info-top p span {
-    font-weight: bold;
-}
-.info-top h6 {
-    font-weight: bold;
-}
-.edit-details {
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-end;  
-}
-.edit-details a {
-    text-decoration: none;
-}
-p span {
-    font-weight: bold;
-}
-.amenities {
-    display: flex;
-    align-items: center;
-}
-.amenities p {
-    margin: 0;
+h2.title {
+    color: #0F75AE;
 }
 .create-room {
     padding: 10px;
@@ -84,7 +29,7 @@ p span {
     font-family: "Inclusive sans", sans-serif;
     background-color: white;
     padding: 5px;
-    border: 1px solid black;
+    box-shadow: 1px 4px 14px 3px rgba(25,25,25,0.5);
     height: fit-content;
     width: 100%;
     max-width: 400px;
@@ -93,6 +38,7 @@ p span {
 .input-area {
     display: flex;
     flex-direction: column;
+    margin-top: 1rem;
 }
 .txt-area {
     border: 1px solid #0F75AE;
@@ -143,6 +89,7 @@ p span {
     width: 100%;
     display: flex;
     justify-content: center;
+    margin-top: 1rem;
 }
 .submit-btn {
     background-color: #37A3E0;

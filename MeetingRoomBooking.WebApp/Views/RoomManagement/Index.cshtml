@@ -1,4 +1,5 @@
 ﻿@model MeetingRoomBooking.Services.ServiceModels.RoomModel
+@Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
 @{
     Layout = "_HomeLayout";
@@ -9,11 +10,12 @@
 }
 @section style {
     <link rel="stylesheet" href="/css/roomManagementStyle.css" />
+    <link rel="stylesheet" href="/css/Cards.css" />
 }
 
     <div class="rooms-content">
         <div>
-            <h2>Meeting Rooms</h2>
+            <h2 class="title">Meeting Rooms</h2>
             <main id="card-grid" class="card-grid">
                 @foreach (var room in Model.Rooms) {
                     <div class="room-card">
@@ -77,40 +79,42 @@
             </main>
         </div> 
         <div>
-            <h2>Create New Room</h2>
+            <h2 class="title">Create New Room</h2>
             <div class="create-room">
                 <form method="post" asp-action="Create" enctype="multipart/form-data">
+                    <span asp-validation-for="NewRoom.RoomCapacity" class="text-danger"></span>
                     <div class="input-area">
                         <label class="room-label">Room name:</label>
-                        <input type="text" class="txt-area" asp-for="NewRoom.RoomName" required />
+                        <input type="text" class="txt-area" asp-for="NewRoom.RoomName"  />
                     </div>
                     <div class="input-area">
                         <label class="room-label">Location:</label>
-                    <input type="text" class="txt-area" asp-for="NewRoom.RoomLocation" required />
+                        <input type="text" class="txt-area" asp-for="NewRoom.RoomLocation"  />
                     </div>
                     <div class="input-area">
                         <label class="room-label">Seating capacity:</label>
-                    <input type="number" class="txt-area" asp-for="NewRoom.RoomCapacity" required />
+                        <input type="number" class="txt-area" asp-for="NewRoom.RoomCapacity"  />
+                        
                     </div>
                     <div class="toggle-group">
                         <label class="toggle-btn" id="audio">
-                        <input type="checkbox" onclick="toggleClass(this, 'audio')" asp-for="NewRoom.Audio" hidden />
+                            <input type="checkbox" onclick="toggleClass(this, 'audio')" asp-for="NewRoom.Audio" hidden />
                             <p>Audio</p>
                         </label>
                         <label class="toggle-btn" id="video">
-                        <input type="checkbox" onclick="toggleClass(this, 'video')" asp-for="NewRoom.Video" hidden />
+                            <input type="checkbox" onclick="toggleClass(this, 'video')" asp-for="NewRoom.Video" hidden />
                             <p>Video</p>
                         </label>
                         <label class="toggle-btn" id="projector">
-                        <input type="checkbox" onclick="toggleClass(this, 'projector')" asp-for="NewRoom.Projector" hidden />
+                            <input type="checkbox" onclick="toggleClass(this, 'projector')" asp-for="NewRoom.Projector" hidden />
                             <p>Projector</p>
                         </label>
                         <label class="toggle-btn" id="whiteBoard">
-                        <input type="checkbox" onclick="toggleClass(this, 'whiteBoard')" asp-for="NewRoom.WhiteBoard" hidden />
+                            <input type="checkbox" onclick="toggleClass(this, 'whiteBoard')" asp-for="NewRoom.WhiteBoard" hidden />
                             <p>White Board</p>
                         </label>
                         <label class="toggle-btn" id="loudspeaker">
-                        <input type="checkbox" onclick="toggleClass(this, 'loudspeaker')" asp-for="NewRoom.Loudspeaker" hidden />
+                            <input type="checkbox" onclick="toggleClass(this, 'loudspeaker')" asp-for="NewRoom.Loudspeaker" hidden />
                             <p>Loud speaker</p>
                         </label>
                     </div>
@@ -121,6 +125,7 @@
                             <img id="previewImage" src="" alt="Uploaded Image" style="display:none;" />
                         </div>
                     </div>
+                
                     <div class="submit-area">
                         <button type-submit class="primary-btn">Create room</button>
                     </div>

@@ -27,8 +27,8 @@
     <div class="screen">
         <aside class="aside column" id="navbar">
             <div class="group">
-                <div class="logo-container">
-                    <img src="~/assets/meetingRoomLogo.png" class="logo" id="navbar-toggle" />
+                <div class="logo-container" id="navbar-toggle">
+                    <img src="~/assets/meetingRoomLogo.png" class="logo"  />
                     <div class="column navbar-item-text">
                         <span class="name company">
                             BANKY SOLUTIONS
@@ -66,8 +66,8 @@
                             </a>
                         </li>
                     }
-                    <li class="sidebar-item">
-                        <a class="no-underline">
+                    <li class="sidebar-item @(ViewBag.ActivePage == "Report & Analytics" ? "active" : "")">
+                        <a class="no-underline" href="@Url.Action("ReportAnalytics", "Home")">
                             <i class="bi bi-clipboard-data"></i>
                             <span class="navbar-item-text">Report Analytics</span>
                         </a>

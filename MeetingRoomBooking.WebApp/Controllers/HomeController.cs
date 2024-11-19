@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using System.Collections.Generic;
 using System.Security.Claims;
+using MeetingRoomBooking.Data;
 
 namespace MeetingRoomBooking.WebApp.Controllers {
 
@@ -13,16 +14,25 @@ namespace MeetingRoomBooking.WebApp.Controllers {
 
 
         private readonly ILogger<HomeController> _logger;
+        private readonly MeetingRoomBookingDbContext _context;
 
-        public HomeController(ILogger<HomeController> logger) {
+        public HomeController(ILogger<HomeController> logger, MeetingRoomBookingDbContext context) {
             _logger = logger;
+            _context = context;
         }
 
         public IActionResult Index() {
             ViewBag.ActivePage = "Dashboard";
             return View();
         }
+        public IActionResult ReportAnalytics() {
+            ViewBag.ActivePage = "Report & Analytics";
 
+            int roomCount = _context.Rooms
+                .Count();
+            ViewBag.RoomCount = roomCount;
+            return View();
+        }
         public JsonResult GetEvents() {
             var events = new List<CalendarEvent>
             {
