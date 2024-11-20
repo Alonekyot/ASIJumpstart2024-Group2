@@ -6,5 +6,12 @@
             Weekly,
             Monthly
         }
+        public enum BookStatus
+        {
+            Scheduled,
+            InProgress,
+            Cancelled,
+            Completed
+        }
     }
 }

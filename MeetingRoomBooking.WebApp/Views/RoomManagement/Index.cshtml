@@ -82,6 +82,7 @@
             <h2 class="title">Create New Room</h2>
             <div class="create-room">
                 <form method="post" asp-action="Create" enctype="multipart/form-data">
+                @Html.AntiForgeryToken()
                     <span asp-validation-for="NewRoom.RoomCapacity" class="text-danger"></span>
                     <div class="input-area">
                         <label class="room-label">Room name:</label>
@@ -127,7 +128,7 @@
                     </div>
                 
                     <div class="submit-area">
-                        <button type-submit class="primary-btn">Create room</button>
+                        <button type="submit" class="primary-btn">Create room</button>
                     </div>
                 </form>
             </div>

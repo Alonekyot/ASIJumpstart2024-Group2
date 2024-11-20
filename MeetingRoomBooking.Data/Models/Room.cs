@@ -16,7 +16,6 @@ namespace MeetingRoomBooking.Data.Models
 		public bool Loudspeaker { get; set; }
 		public byte[]? Image { get; set; }
 		public bool Available { get; set; }
-		public bool Deleted { get; set; }
 		public ICollection<Booking> booking { get; set; }
 	}
 }

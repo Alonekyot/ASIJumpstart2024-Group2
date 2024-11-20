@@ -25,8 +25,7 @@ namespace MeetingRoomBooking.WebApp.Controllers
 		public IActionResult Index()
         {
 			ViewBag.ActivePage = "RoomManagement";
-			var rooms = _context.Rooms.ToList()
-				.Where(u => !u.Deleted);
+			var rooms = _context.Rooms.ToList();
 
 			var roomModel = new RoomModel
 			{
@@ -37,27 +36,19 @@ namespace MeetingRoomBooking.WebApp.Controllers
 			return View(roomModel);
         }
 
-		[HttpPost]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(RoomModel model) {
+
+            var newRoom = model.NewRoom;
             if (!ModelState.IsValid) {
-                return View("Index", model.NewRoom);
+                return RedirectToAction("Index");
             }
 
-            try {
-                var success = await _roomManager.AddAsync(model.NewRoom);
-                if (success) {
-                    await _context.SaveChangesAsync();
-                    return RedirectToAction(nameof(Index));
-                }
-                else {
-                    ModelState.AddModelError("", "Unable to add the room. Please try again.");
-                }
-            }
-            catch (Exception ex) {
-                ModelState.AddModelError("", "An error occurred while creating the room. Please try again.");
-            }
+            var success = _roomManager.AddAsync(newRoom);
+            await _context.SaveChangesAsync();
 
-            return View("Index", model.NewRoom);
+            return RedirectToAction("Index");
         }
 
         [HttpPost]

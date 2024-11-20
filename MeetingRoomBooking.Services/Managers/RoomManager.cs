@@ -33,11 +33,6 @@ namespace MeetingRoomBooking.Services.Managers
                         return false; // Invalid file type
                     }
 
-                    if (model.ImageFile.Length > 5 * 1024 * 1024) // 5MB limit
-                    {
-                        return false; 
-                    }
-
                     using (var memoryStream = new MemoryStream()) {
                         await model.ImageFile.CopyToAsync(memoryStream); 
                         imageData = memoryStream.ToArray();
@@ -55,7 +50,6 @@ namespace MeetingRoomBooking.Services.Managers
                     Loudspeaker = model.Loudspeaker,
                     Image = imageData,
                     Available = true,
-                    Deleted = false
                 };
                 _context.Rooms.Add(room);
 
@@ -78,8 +72,7 @@ namespace MeetingRoomBooking.Services.Managers
             if (room == null) {
                 return false;
             }
-
-            room.Deleted = true;
+            _context.Rooms.Remove(room);
             await _context.SaveChangesAsync(); 
             return true;
         }

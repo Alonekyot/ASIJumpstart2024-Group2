@@ -4,6 +4,7 @@ using MeetingRoomBooking.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MeetingRoomBooking.Data.Migrations
 {
     [DbContext(typeof(MeetingRoomBookingDbContext))]
-    partial class MeetingRoomBookingDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241120154950_Booking")]
+    partial class Booking
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -39,10 +42,6 @@ namespace MeetingRoomBooking.Data.Migrations
 
                     b.Property<DateOnly>("MeetingDate")
                         .HasColumnType("date");
-
-                    b.Property<string>("MeetingTitle")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("Recurring")
                         .HasColumnType("bit");
