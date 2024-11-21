@@ -72,8 +72,8 @@
                             <span class="navbar-item-text">Report Analytics</span>
                         </a>
                     </li>
-                    <li class="sidebar-item">
-                        <a class="no-underline">
+                    <li class="sidebar-item @(ViewBag.ActivePage == "Setting" ? "active" : "")">
+                        <a class="no-underline" href="@Url.Action("Setting", "Home")">
                             <i class="bi bi-gear"></i>
                             <span class="navbar-item-text">Settings</span>
                         </a>

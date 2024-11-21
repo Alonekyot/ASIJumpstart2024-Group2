@@ -33,6 +33,13 @@ namespace MeetingRoomBooking.WebApp.Controllers {
             ViewBag.RoomCount = roomCount;
             return View();
         }
+
+        public IActionResult Setting()
+        {
+            ViewBag.ActivePage = "Setting";
+            return View();
+        }
+
         public JsonResult GetEvents() {
             var events = new List<CalendarEvent>
             {
