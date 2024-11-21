@@ -6,6 +6,8 @@ using System.Diagnostics;
 using System.Collections.Generic;
 using System.Security.Claims;
 using MeetingRoomBooking.Data;
+using MeetingRoomBooking.Services.ServiceModels;
+using Microsoft.EntityFrameworkCore;
 
 namespace MeetingRoomBooking.WebApp.Controllers {
 
@@ -22,8 +24,41 @@ namespace MeetingRoomBooking.WebApp.Controllers {
         }
 
         public IActionResult Index() {
-            ViewBag.ActivePage = "Dashboard";
+
+
+            var userId = int.Parse(User.FindFirstValue("UserId"));
+            var role = int.Parse(User.FindFirstValue("Role"));
+
+            if (role == 1 || role == 2)
+            {
+                // For Admin: fetch all bookings (both admin and user)
+                var bookings = (from booking in _context.Bookings
+                             join room in _context.Rooms on booking.RoomId equals room.RoomId
+                             join user in _context.Users on booking.UserId equals user.UserId
+                             select new BookingModel
+                             {
+                                 UserName = user.FirstName + " " + user.LastName,
+                                 RoomName = room.RoomName,
+                                 MeetingDate = booking.MeetingDate,
+                                 StartTime = booking.StartTime,
+                                 EndTime = booking.EndTime,
+                                 RoomLocation = room.RoomLocation,
+                                 BookingStatus = booking.BookingStatus,
+                                 MeetingTitle = booking.MeetingTitle
+                             }).ToList();
+
+                
+                return View("AdminDashboard", bookings); // Pass the bookings to the Admin view
+            }
+            else if (role == 0)
+            {
+                // For User: fetch bookings only for the logged-in user
+                var bookings = _context.Bookings.Where(b => b.UserId == userId).Include(b => b.Room).Include(b => b.User).ToList();
+              
+                return View("UserDashboard", bookings); // Pass the bookings to the User view
+            }
             return View();
+
         }
         public IActionResult ReportAnalytics() {
             ViewBag.ActivePage = "Report & Analytics";

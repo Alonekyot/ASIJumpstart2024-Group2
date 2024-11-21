@@ -1,4 +1,11 @@
-﻿<style>
+﻿@model IEnumerable<MeetingRoomBooking.Services.ServiceModels.BookingModel>
+
+@{
+    Layout = "_HomeLayout";
+    ViewData["Title"] = "Dashboard";
+}
+
+<style>
     .fc-daygrid-day {
         max-width: 30px !important; /* Set desired width */
         max-height: 30px !important; /* Set desired height */
@@ -6,6 +13,8 @@
 </style>
 @section style {
     <link rel="stylesheet" href="~/css/calendar.css" />
+    <link rel="stylesheet" href="~/css/dashboard.css" />
+
 }
 <link rel="stylesheet" href="~/css/calendar.css" />
 <link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/main.min.css" rel="stylesheet" />
@@ -36,3 +45,27 @@
     });
 </script>
 
+<table class="table">
+    <thead>
+        <tr>
+            <th>Meeting Title</th>
+            <th>Booking Status</th>
+            <th>...</th>
+        </tr>
+    </thead>
+    <tbody class="table-group-divider">
+        @foreach (var booking in Model)
+        {
+            <tr>
+             
+                <td>@booking.MeetingTitle</td>
+                <td>@booking.BookingStatus</td>
+                <td><a href="#">
+                    Cancel
+                    </a>
+                </td>
+                <!-- Display other booking details -->
+            </tr>
+        }
+    </tbody>
+</table>

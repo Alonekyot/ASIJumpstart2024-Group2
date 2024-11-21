@@ -1,4 +1,14 @@
-﻿
+﻿@model IEnumerable<MeetingRoomBooking.Services.ServiceModels.BookingModel>
+
+@section style {
+    <link rel="stylesheet" href="~/css/dashboard.css" />
+
+}
+
+@{
+    Layout = "_HomeLayout";
+    ViewData["Title"] = "Dashboard";
+}
 
 <div class="use-font">
     <h5>Dashboard</h5>
@@ -72,29 +82,37 @@
     <table class="table">
         <thead>
             <tr>
-                <th scope="col">Room Name</th>
-                <th scope="col">Start Date</th>
-                <th scope="col">End Date</th>
-                <th scope="col">Start Time</th>
-                <th scope="col">End Time</th>
-                <th scope="col">Booking Date</th>
-                <th scope="col">Meeting Agenda</th>
+                <th>Meeting Title</th>
+                <th>User</th>
+                <th>Room Name</th>
+                <th>Meeting Date</th>
+                <th>Start Time</th>
+                <th>End Time</th>
+                <th>Booking Status</th>
+                <th>Location</th>               
+                <th>...</th>
             </tr>
         </thead>
         <tbody class="table-group-divider">
-            @for (int i = 0; i < 5; i++) {
+            @foreach (var booking in Model)
+            {
                 <tr>
-                    <td>CPE LAB</td>
-                    <td>9/11/24</td>
-                    <td>9/11/24</td>
-                    <td>1:30 pm</td>
-                    <td>3:30 pm</td>
-                    <td>9/10/24</td>
-                    <td>Discussion</td>
+                    <td>@booking.MeetingTitle</td>
+                    <td>@booking.UserName</td>
+                    <td>@booking.RoomName</td>
+                    <td>@booking.MeetingDate</td>
+                    <td>@booking.StartTime</td>
+                    <td>@booking.EndTime</td>                 
+                    <td>@booking.BookingStatus</td>
+                    <td>@booking.RoomLocation</td>                   
+                    <td>
+                        <a href="#">
+                            Cancel
+                        </a>
+                    </td>
+                    <!-- Display other booking details -->
                 </tr>
             }
-
-
         </tbody>
     </table>
     <ul class="pagination">
