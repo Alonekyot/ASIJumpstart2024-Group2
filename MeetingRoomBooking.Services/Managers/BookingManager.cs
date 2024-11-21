@@ -29,8 +29,9 @@ namespace MeetingRoomBooking.Services.Managers {
                 RecurringEnd = newbook.RecurringEnd.HasValue ? DateOnly.FromDateTime(newbook.RecurringEnd.Value) : (DateOnly?)null
             };
 
-             _context.Bookings.Add(booking);
-            await _context.SaveChangesAsync();
+            _context.Bookings.Add(booking);
+            _context.SaveChanges();
+            await _context.DisposeAsync();
 
             return true;
         }

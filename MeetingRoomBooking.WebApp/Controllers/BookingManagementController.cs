@@ -4,6 +4,7 @@ using MeetingRoomBooking.Services.ServiceModels;
 using MeetingRoomBooking.WebApp.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace MeetingRoomBooking.WebApp.Controllers {
 
@@ -38,6 +39,22 @@ namespace MeetingRoomBooking.WebApp.Controllers {
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CreateBooking(CreateBooking newBook, int roomId) {
+
+            DateOnly meetingDate = DateOnly.FromDateTime(newBook.MeetingDate);
+            TimeOnly startTime = TimeOnly.FromDateTime(newBook.TimeStart);
+            TimeOnly endTime = TimeOnly.FromDateTime(newBook.TimeEnd);
+            DateTime meetingTimeStart = meetingDate.ToDateTime(startTime);
+            DateTime meetingTimeEnd = meetingDate.ToDateTime(endTime);
+
+            if (meetingTimeStart > meetingTimeEnd) {
+                ModelState.AddModelError("", "A meeting cant end before it starts");
+                return View("Create", newBook);
+            }
+            else if (DateTime.Now > meetingTimeStart) {
+                ModelState.AddModelError("", "The meeting Is already starting");
+                return View("Create", newBook);
+            }
+
             int userId = int.Parse(User.FindFirst("UserId")?.Value);
 
             if (ModelState.IsValid) {

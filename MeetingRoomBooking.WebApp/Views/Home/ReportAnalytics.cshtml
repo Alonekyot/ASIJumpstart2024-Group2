@@ -4,6 +4,9 @@
 @section style {
     <link rel="stylesheet" href="~/css/ReportAnalytics.css" />
 }
+@section script {
+    <script src="~/js/chart.js"></script>
+}
 
 <div class="grid">
     <div class="data-grid">
@@ -24,7 +27,9 @@
             <span class="data">@ViewBag.RoomCount</span>
         </div>
     </div>
-    <div></div>
+    <div>
+        <canvas id="myChart"></canvas>
+    </div>
     <div></div>
     <div></div>
 </div>
