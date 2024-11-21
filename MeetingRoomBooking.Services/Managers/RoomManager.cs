@@ -49,7 +49,6 @@ namespace MeetingRoomBooking.Services.Managers
                     Projector = model.Projector,
                     Loudspeaker = model.Loudspeaker,
                     Image = imageData,
-                    Available = true,
                 };
 
                 _context.Rooms.Add(room);
