@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Http;
 
-namespace MeetingRoomBooking.Services.ServiceModels {
-	public class CreateRoomModel {
+namespace MeetingRoomBooking.Services.ServiceModels
+{
+	public class CreateRoomModel
+	{
 		public string RoomName { get; set; }
 		public string RoomLocation { get; set; }
 		public int RoomCapacity { get; set; }
@@ -12,5 +14,21 @@ namespace MeetingRoomBooking.Services.ServiceModels {
 		public bool Loudspeaker { get; set; }
 		public IFormFile? ImageFile { get; set; } // Updated to IFormFile
 		public bool Available { get; set; }
+	}
+
+	public class EditRoomModel
+	{
+		public int RoomId { get; set; }
+		public string RoomName { get; set; }
+		public string RoomLocation { get; set; }
+		public int RoomCapacity { get; set; }
+		public bool Audio { get; set; }
+		public bool Video { get; set; }
+		public bool WhiteBoard { get; set; }
+		public bool Projector { get; set; }
+		public bool Loudspeaker { get; set; }
+		public byte[]? Image { get; set; }
+		public bool Available { get; set; }
+		public bool Deleted { get; set; }
 	}
 }

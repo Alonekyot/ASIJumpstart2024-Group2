@@ -47,10 +47,24 @@ namespace MeetingRoomBooking.WebApp.Controllers {
 
         [HttpPost]
         public IActionResult SearchUser(string filter) {
-            var users = _context.Users
-                .Where(u => u.FirstName.ToLower().Contains(filter.ToLower()) || u.LastName.ToLower().Contains(filter.ToLower()))
-                .ToList();
-            return RedirectToAction("Index", users);
+            if (!string.IsNullOrEmpty(filter)) {
+                var users = _context.Users
+                    .Where(u => u.FirstName.ToLower().Contains(filter.ToLower()) || u.LastName.ToLower().Contains(filter.ToLower()))
+                    .ToList();
+                var userViewModels = users.Select(u => new UserViewModel
+                {
+                    FirstName = u.FirstName,
+                    LastName = u.LastName,
+                    Email = u.Email
+                }).ToList();
+
+                var model = new UserListViewModel
+                {
+                    dataList = userViewModels
+                };
+                return View("Index", users);
+            }
+            return RedirectToAction("Index");
         }
 
         public IActionResult Details(int? id)
@@ -108,6 +122,7 @@ namespace MeetingRoomBooking.WebApp.Controllers {
             }
             return View(user);
         }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(int UserId) {

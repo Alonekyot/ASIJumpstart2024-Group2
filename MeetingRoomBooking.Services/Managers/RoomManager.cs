@@ -67,14 +67,24 @@ namespace MeetingRoomBooking.Services.Managers
             return !string.IsNullOrEmpty(extension) && permittedExtensions.Contains(extension);
         }
 
-        public async Task<bool> Delete(int RoomId) {
-            var room = await _context.Rooms.FindAsync(RoomId);
-            if (room == null) {
-                return false;
-            }
-            _context.Rooms.Remove(room);
-            await _context.SaveChangesAsync(); 
-            return true;
-        }
-    }
+			return room;
+		}
+
+		public Room Edit(EditRoomModel model, Room room)
+		{
+			room.RoomName = model.RoomName;
+			room.RoomLocation = model.RoomLocation;
+			room.RoomCapacity = model.RoomCapacity;
+			room.Audio = model.Audio;
+			room.Video = model.Video;
+			room.WhiteBoard = model.WhiteBoard;
+			room.Projector = model.Projector;
+			room.Loudspeaker = model.Loudspeaker;
+			room.Image = model.Image;
+
+
+			return room;
+		}
+
+	}
 }
