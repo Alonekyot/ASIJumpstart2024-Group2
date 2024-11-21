@@ -94,7 +94,6 @@ namespace MeetingRoomBooking.WebApp.Controllers
                     Projector = newRoom.Projector,
                     Loudspeaker = newRoom.Loudspeaker,
                     Image = imageData,
-                    Available = true,
                 };
 
                 _context.Rooms.Add(room);
