@@ -1,0 +1,85 @@
+﻿@using MeetingRoomBooking.Resources.Constants
+@model MeetingRoomBooking.Services.ServiceModels.CreateBooking
+@{
+    Layout = "_HomeLayout";
+}
+@section style {
+    <link rel="stylesheet" href="~/css/CreateBooking.css" />
+}
+@section script {
+    <script src="~/js/CreateBooking.js"></script>
+}
+
+<link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/main.min.css" rel="stylesheet" />
+
+
+<div class="form-container">
+    <div id="calendar"></div>
+    <form asp-action="CreateBooking">
+        @Html.AntiForgeryToken()
+        <input type="hidden" id="roomId" name="roomId" value="@ViewBag.roomId" />
+        <div class="input-group input-group-sm mb-3">
+            <span class="input-group-text" id="inputGroup-sizing-sm">Meeting Title</span>
+            <input type="text"
+                   asp-for="MeetingTitle"
+                   class="form-control"
+                   aria-label="Sizing example input"
+                   aria-describedby="inputGroup-sizing-sm">
+        </div>
+        <div class="input-group input-group-sm mb-3">
+            <span class="input-group-text" id="inputGroup-sizing-sm">Meeting date</span>
+            <input type="date" value="@DateTime.Now.ToString("yyyy-MM-dd")"
+                   asp-for="MeetingDate"
+                   class="form-control"
+                   aria-label="Sizing example input"
+                   aria-describedby="inputGroup-sizing-sm">
+        </div>
+        <div class="input-group input-group-sm mb-3">
+            <span class="input-group-text" id="inputGroup-sizing-sm">Starts at</span>
+            <input type="time" value="@DateTime.Now.AddHours(1).ToString("HH:00")"
+                asp-for="TimeStart"
+                   class="form-control"
+                   aria-label="Sizing example input"
+                   aria-describedby="inputGroup-sizing-sm">
+        </div>
+        <div class="input-group input-group-sm mb-3">
+            <span class="input-group-text" id="inputGroup-sizing-sm">Ends at</span>
+            <input type="time" value="@DateTime.Now.AddHours(2).ToString("HH:00")"
+                asp-for="TimeEnd"
+                   class="form-control"
+                   aria-label="Sizing example input"
+                   aria-describedby="inputGroup-sizing-sm">
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" asp-for="IsRecurring" />
+            <label class="form-check-label" for="flexCheckDefault" >
+                Recurring?
+            </label>
+        </div>
+        <div id="recurring-form">
+            <select class="form-select mb-3" aria-label="Default select example" asp-for="RecurringPattern">
+                <option value="">Pick a pattern</option>
+                @foreach (var pattern in Enum.GetValues(typeof(Enums.RecurringPatterns))) {
+                    <option value="@pattern.ToString()">@pattern</option>
+                }
+            </select>
+            <div class="input-group input-group-sm mb-3">
+                <span class="input-group-text" id="inputGroup-sizing-sm">Number of recurrence</span>
+                <input type="date"
+                    asp-for="RecurringEnd"
+                       class="form-control"
+                       aria-label="Sizing example input"
+                       aria-describedby="inputGroup-sizing-sm mb-3">
+            </div>
+        </div>
+        <button class="primary-btn" type="submit">
+            Book
+        </button>
+    </form>
+</div>
+
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/main.min.js"></script>
+

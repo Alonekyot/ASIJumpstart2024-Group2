@@ -11,7 +11,7 @@ namespace MeetingRoomBooking.Services.Managers {
             Arguments = new object[] { allowedRoles };
         }
 
-        private class RoleAuthorizeFilter : IAuthorizationFilter {
+        public class RoleAuthorizeFilter : IAuthorizationFilter {
             private readonly int[] _allowedRoles;
             public RoleAuthorizeFilter(int[] allowedRoles) {
                 _allowedRoles = allowedRoles;

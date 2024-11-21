@@ -1,10 +1,9 @@
 ﻿@using System.Security.Claims
 <header>
     <div class="flex-center left-header">
-        <a class="sidebar-toggle burger" id="navbar-toggle">
-            <i class="bi bi-list"></i>
-        </a>
-        <img src="~/assets/meetingRoomLogo.png" class="logo" />
+        <span class="page">
+            @ViewBag.ActivePage
+        </span> 
     </div>
     <div class="middle-header"></div>
     <div class="right-header">

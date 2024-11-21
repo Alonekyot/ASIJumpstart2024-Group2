@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace MeetingRoomBooking.Data.Models
 {
@@ -20,5 +15,7 @@ namespace MeetingRoomBooking.Data.Models
 		public bool Projector { get; set; }
 		public bool Loudspeaker { get; set; }
 		public byte[]? Image { get; set; }
+		public bool Available { get; set; }
+		public ICollection<Booking> booking { get; set; }
 	}
 }

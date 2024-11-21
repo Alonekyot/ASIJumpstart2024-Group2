@@ -24,5 +24,6 @@ namespace MeetingRoomBooking.Data.Models {
         public int Role { get; set; }
         public string? Remarks { get; set; }
         public bool Deleted { get; set; }
+        public ICollection<Booking> booking { get; set; }
     }
 }
