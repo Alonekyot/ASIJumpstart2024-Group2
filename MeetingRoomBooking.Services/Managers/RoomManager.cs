@@ -16,7 +16,7 @@ namespace MeetingRoomBooking.Services.Managers
 {
 	public class RoomManager
 	{
-		private MeetingRoomBookingDbContext _context;
+		private readonly MeetingRoomBookingDbContext _context;
 
 		public RoomManager(MeetingRoomBookingDbContext context) {
 			_context = context;
@@ -28,16 +28,16 @@ namespace MeetingRoomBooking.Services.Managers
                 byte[]? imageData = null;
 
                 if (model.ImageFile != null) {
-                    // Validate file type and size
-                    if (!IsImageFile(model.ImageFile)) {
-                        return false; // Invalid file type
+                    if (model.ImageFile.Length > 4 * 1024 * 1024) { // 4MB size limit
+                        throw new InvalidOperationException("File size exceeds the allowed limit.");
                     }
 
                     using (var memoryStream = new MemoryStream()) {
-                        await model.ImageFile.CopyToAsync(memoryStream); 
+                        await model.ImageFile.CopyToAsync(memoryStream);
                         imageData = memoryStream.ToArray();
                     }
                 }
+
                 var room = new Room
                 {
                     RoomName = model.RoomName,
@@ -51,26 +51,26 @@ namespace MeetingRoomBooking.Services.Managers
                     Image = imageData,
                     Available = true,
                 };
+
                 _context.Rooms.Add(room);
+                await _context.SaveChangesAsync();
 
                 return true;
             }
             catch (Exception ex) {
-                Console.Error.WriteLine($"Error while adding room: {ex.Message}");
-                return false; 
+                // Log full exception details for troubleshooting
+                Console.Error.WriteLine($"Error while adding room: {ex}");
+                return false;
             }
         }
 
-        private bool IsImageFile(IFormFile file) {
-            var permittedExtensions = new[] { ".jpg", ".jpeg", ".png", ".gif" };
-            var extension = Path.GetExtension(file.FileName).ToLowerInvariant();
-            return !string.IsNullOrEmpty(extension) && permittedExtensions.Contains(extension);
-        }
+        //private bool IsImageFile(IFormFile file) {
+        //    var permittedExtensions = new[] { ".jpg", ".jpeg", ".png", ".gif" };
+        //    var extension = Path.GetExtension(file.FileName).ToLowerInvariant();
+        //    return !string.IsNullOrEmpty(extension) && permittedExtensions.Contains(extension);
+        //}
 
-			return room;
-		}
-
-		public Room Edit(EditRoomModel model, Room room)
+        public Room Edit(EditRoomModel model, Room room)
 		{
 			room.RoomName = model.RoomName;
 			room.RoomLocation = model.RoomLocation;
@@ -85,6 +85,17 @@ namespace MeetingRoomBooking.Services.Managers
 
 			return room;
 		}
+
+        public async Task<bool> Delete(int roomId) {
+            var room = _context.Rooms
+                .FirstOrDefault(r => r.RoomId == roomId);
+            if (room != null) {
+                _context.Rooms.Remove(room);
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            return false;
+        }
 
 	}
 }

@@ -47,25 +47,32 @@ namespace MeetingRoomBooking.WebApp.Controllers {
 
         [HttpPost]
         public IActionResult SearchUser(string filter) {
+            // Check if filter is empty
             if (!string.IsNullOrEmpty(filter)) {
                 var users = _context.Users
-                    .Where(u => u.FirstName.ToLower().Contains(filter.ToLower()) || u.LastName.ToLower().Contains(filter.ToLower()))
+                    .Where(u => !u.Deleted &&
+                                (u.FirstName.ToLower().Contains(filter.ToLower()) ||
+                                 u.LastName.ToLower().Contains(filter.ToLower())))
+                    .OrderBy(u => u.FirstName)
                     .ToList();
-                var userViewModels = users.Select(u => new UserViewModel
-                {
-                    FirstName = u.FirstName,
-                    LastName = u.LastName,
-                    Email = u.Email
-                }).ToList();
 
-                var model = new UserListViewModel
+                // Use the same UserModel to pass data
+                var userModel = new UserModel
                 {
-                    dataList = userViewModels
+                    Users = users,
+                    CreateUser = new UserViewModel()
                 };
-                return View("Index", users);
+
+                ViewBag.ActivePage = "UserManagement"; // Keep consistent with Index
+                ViewBag.CurrentPage = 1; // Reset to first page for search results
+                ViewBag.TotalPages = 1; // Search results are not paginated
+                return View("Index", userModel);
             }
+
+            // If no filter, redirect back to the main Index
             return RedirectToAction("Index");
         }
+
 
         public IActionResult Details(int? id)
         {
@@ -83,7 +90,7 @@ namespace MeetingRoomBooking.WebApp.Controllers {
 
             var newUser = model.CreateUser;
 
-            if(_context.Users.Any(u => u.Email == newUser.Email)) {
+            if (_context.Users.Any(u => u.Email == newUser.Email)) {
                 ModelState.AddModelError("Email", "Email is already in use.");
             }
 

@@ -25,6 +25,9 @@
 .search-btn {
     align-content: center;
     text-decoration: none;
+    background-color: transparent;
+    border: none;
+    border-left: 1px solid #555555;
 }
 .under-title{
     display: flex;

@@ -38,6 +38,29 @@ namespace MeetingRoomBooking.WebApp.Controllers
 			return View(roomModel);
         }
 
+        public IActionResult Edit(int id) {
+            var room = _context.Rooms.FirstOrDefault(u => u.RoomId == id);
+            if (room != null) {
+                return View(room);
+            }
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(EditRoomModel editedRoom) {
+            var room = await _context.Rooms.FindAsync(editedRoom.RoomId);
+            Console.WriteLine(editedRoom.RoomId + "---------------------------------------");
+
+            if (ModelState.IsValid) {
+                room = _roomManager.Edit(editedRoom, room);
+                _context.Update(room);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            return View(room);
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(RoomModel model) {
@@ -47,8 +70,35 @@ namespace MeetingRoomBooking.WebApp.Controllers
                 return RedirectToAction("Index");
             }
 
-            var success = _roomManager.AddAsync(newRoom);
-            await _context.SaveChangesAsync();
+            byte[]? imageData = null;
+
+                if (newRoom.ImageFile != null) {
+                    if (newRoom.ImageFile.Length > 4 * 1024 * 1024) { // 4MB size limit
+                        throw new InvalidOperationException("File size exceeds the allowed limit.");
+                    }
+
+                    using (var memoryStream = new MemoryStream()) {
+                        await newRoom.ImageFile.CopyToAsync(memoryStream);
+                        imageData = memoryStream.ToArray();
+                    }
+                }
+
+                var room = new Room
+                {
+                    RoomName = newRoom.RoomName,
+                    RoomLocation = newRoom.RoomLocation,
+                    RoomCapacity = newRoom.RoomCapacity,
+                    Audio = newRoom.Audio,
+                    Video = newRoom.Video,
+                    WhiteBoard = newRoom.WhiteBoard,
+                    Projector = newRoom.Projector,
+                    Loudspeaker = newRoom.Loudspeaker,
+                    Image = imageData,
+                    Available = true,
+                };
+
+                _context.Rooms.Add(room);
+                await _context.SaveChangesAsync();
 
             return RedirectToAction("Index");
         }
