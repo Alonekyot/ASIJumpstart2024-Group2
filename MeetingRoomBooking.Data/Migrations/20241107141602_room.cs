@@ -34,7 +34,6 @@ namespace MeetingRoomBooking.Data.Migrations
                     Loudspeaker = table.Column<bool>(type: "bit", nullable: false),
                     Image = table.Column<byte[]>(type: "varbinary(max)", nullable: true),
                     Available = table.Column<bool>(type: "bit", nullable: false),
-                    Deleted = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
