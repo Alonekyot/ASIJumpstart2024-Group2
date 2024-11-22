@@ -89,7 +89,7 @@ namespace MeetingRoomBooking.WebApp.Controllers {
                                room => room.RoomId,
                                (booking, room) => new CalendarEvent
                                {
-                                   Title = booking.MeetingTitle + " - " + room.RoomName,
+                                   Title = booking.MeetingTitle + " - " + room.RoomName + " (" + room.RoomLocation + ")",
                                    Start = booking.MeetingDate.ToDateTime(booking.StartTime),
                                    End = booking.MeetingDate.ToDateTime(booking.StartTime),
                                    Description = room.RoomLocation

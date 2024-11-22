@@ -1,4 +1,5 @@
 ﻿using MeetingRoomBooking.Data;
+using MeetingRoomBooking.Services.Interfaces;
 using MeetingRoomBooking.Services.Managers;
 using MeetingRoomBooking.Services.ServiceModels;
 using MeetingRoomBooking.WebApp.Models;
@@ -11,11 +12,11 @@ namespace MeetingRoomBooking.WebApp.Controllers {
     [Authorize]
     public class BookingManagementController : Controller {
 		private readonly MeetingRoomBookingDbContext _context;
-		private readonly RoomManager _roomManager;
-        private readonly BookingManager _bookingManager;
+		private readonly IRoomServices _roomManager;
+        private readonly IBookingManager _bookingManager;
 		public BookingManagementController(MeetingRoomBookingDbContext context,
-										RoomManager roomManager,
-                                        BookingManager bookingManager)
+										IRoomServices roomManager,
+                                        IBookingManager bookingManager)
 		{
 			_context = context;
 			_roomManager = roomManager;

@@ -1,10 +1,11 @@
 ﻿using MeetingRoomBooking.Data;
 using MeetingRoomBooking.Data.Models;
+using MeetingRoomBooking.Services.Interfaces;
 using MeetingRoomBooking.Services.ServiceModels;
 using System.Linq;
 
 namespace MeetingRoomBooking.Services.Managers {
-    public class BookingManager {
+    public class BookingManager: IBookingManager{
         private readonly MeetingRoomBookingDbContext _context;
 
         public BookingManager(MeetingRoomBookingDbContext context) {
