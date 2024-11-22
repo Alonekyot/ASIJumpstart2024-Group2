@@ -10,6 +10,7 @@ using MeetingRoomBooking.Resources.Constants;
 using MeetingRoomBooking.Services.ServiceModels;
 using MeetingRoomBooking.Services.ServiceModels;
 using Microsoft.EntityFrameworkCore;
+using MeetingRoomBooking.Services.Managers;
 
 namespace MeetingRoomBooking.WebApp.Controllers {
 
@@ -19,10 +20,12 @@ namespace MeetingRoomBooking.WebApp.Controllers {
 
         private readonly ILogger<HomeController> _logger;
         private readonly MeetingRoomBookingDbContext _context;
+        private readonly ChartDataManager _chartDataManager;
 
-        public HomeController(ILogger<HomeController> logger, MeetingRoomBookingDbContext context) {
+        public HomeController(ILogger<HomeController> logger, MeetingRoomBookingDbContext context, ChartDataManager chartDataManager) {
             _logger = logger;
             _context = context;
+            _chartDataManager = chartDataManager;
         }
 
         public IActionResult Index() {
@@ -90,6 +93,7 @@ namespace MeetingRoomBooking.WebApp.Controllers {
 
         [HttpGet]
         public JsonResult GetChartData() {
+            var dataSet = _chartDataManager.GetBarChartData();
             var data = new
             {
                 labels = Chart.Months,
@@ -98,7 +102,7 @@ namespace MeetingRoomBooking.WebApp.Controllers {
                 new
                 {
                     label = "Bookings",
-                    data = new[] { 65, 59, 80, 81, 56, 80, 22, 48,100, 56, 32, 88 },
+                    data = dataSet,
                     backgroundColor = Chart.BackgroundColor,
                     borderColor = Chart.BorderColor,
                     borderWidth = 1
