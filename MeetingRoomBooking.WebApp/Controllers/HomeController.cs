@@ -50,7 +50,10 @@ namespace MeetingRoomBooking.WebApp.Controllers {
                                  RoomLocation = room.RoomLocation,
                                  BookingStatus = booking.BookingStatus,
                                  MeetingTitle = booking.MeetingTitle
-                             }).ToList();
+                             })
+                             .OrderBy(b => b.MeetingDate)
+                             .ThenBy(c => c.StartTime)
+                             .ToList();
 
                 
                 return View("AdminDashboard", bookings); // Pass the bookings to the Admin view
@@ -70,8 +73,10 @@ namespace MeetingRoomBooking.WebApp.Controllers {
                                     RoomLocation = room.RoomLocation,
                                     BookingStatus = booking.BookingStatus,
                                     MeetingTitle = booking.MeetingTitle
-                                }).ToList();
-
+                                })
+                                .OrderBy(b => b.MeetingDate)
+                                .ThenBy(c => c.StartTime)
+                                .ToList();
                 return View("UserDashboard", bookings); // Pass the bookings to the User view
             }
             return View();

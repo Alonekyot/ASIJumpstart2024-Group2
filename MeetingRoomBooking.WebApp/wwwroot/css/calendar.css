@@ -1,3 +1,6 @@
-﻿.fc{
-
+﻿.fc *{
+    color: #1a252f;
+}
+.fc-button-primary span{
+    color: white;
 }

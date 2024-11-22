@@ -14,16 +14,54 @@
 @section style {
     <link rel="stylesheet" href="~/css/calendar.css" />
     <link rel="stylesheet" href="~/css/dashboard.css" />
+    <link rel="stylesheet" href="~/css/UserDashboard.css" />
 
 }
 <link rel="stylesheet" href="~/css/calendar.css" />
 <link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/main.min.css" rel="stylesheet" />
 
-<div style="display: flex; flex: 1; justify-content: center;">
-    <div id="calendar" style="width: 90%;"></div>
-    <div class="booking-card">
-        <div class="book-card">
-
+<div style="display: flex; flex: 1; flex-direction: column; justify-content: center; margin: 10px;">
+    <div id="calendar" style="width: 93%;"></div>
+    <div class="booking-table">
+        <div class="table-header">
+            <h3>Your Bookings</h3>
+        </div>
+        <div class="table-data">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Meeting Agenda</th>
+                        <th>Room Name</th>
+                        <th>Meeting Date</th>
+                        <th>Start Time</th>
+                        <th>End Time</th>
+                        <th>Booking Status</th>
+                        <th>Location</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody class="table-group-divider">
+                    @foreach (var booking in Model) {
+                        <tr>
+                            <td>@booking.MeetingTitle</td>
+                            <td>@booking.RoomName</td>
+                            <td>@booking.MeetingDate</td>
+                            <td>@booking.StartTime</td>
+                            <td>@booking.EndTime</td>
+                            <td>@booking.BookingStatus</td>
+                            <td>@booking.RoomLocation</td>
+                            <td class="icons-area">
+                                <a href="#" class="table-icon">
+                                    <i class="bi bi-pencil-square"></i>
+                                </a>
+                                <a href="#" class="table-icon">
+                                    <i class="bi bi-trash"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
         </div>
     </div>
 </div>
@@ -53,43 +91,3 @@
         calendar.render();
     });
 </script>
-
-<table class="table">
-    <thead>
-        <tr>
-            <th>Meeting Title</th>           
-            <th>Room Name</th>
-            <th>Meeting Date</th>
-            <th>Start Time</th>
-            <th>End Time</th>
-            <th>Booking Status</th>
-            <th>Location</th>
-            <th>...</th>
-            <th>Settings</th>
-        </tr>
-    </thead>
-    <tbody class="table-group-divider">
-        @foreach (var booking in Model)
-        {
-            <tr>
-                <td>@booking.MeetingTitle</td>
-                <td>@booking.RoomName</td>
-                <td>@booking.MeetingDate</td>
-                <td>@booking.StartTime</td>
-                <td>@booking.EndTime</td>
-                <td>@booking.BookingStatus</td>
-                <td>@booking.RoomLocation</td>
-                <td>
-                    <a href="#">
-                        Cancel
-                    </a>
-                </td>
-                <td>
-                    <a href="#">
-                        Edit
-                    </a>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
