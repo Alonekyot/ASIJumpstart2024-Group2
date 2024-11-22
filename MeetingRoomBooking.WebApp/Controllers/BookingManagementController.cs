@@ -4,6 +4,7 @@ using MeetingRoomBooking.Services.ServiceModels;
 using MeetingRoomBooking.WebApp.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 
@@ -79,23 +80,21 @@ namespace MeetingRoomBooking.WebApp.Controllers {
             return RedirectToAction("Create", new { roomId });
         }
 
+        public JsonResult GetEvents() {
+       
+            var events = _context.Bookings
+                    .Join(_context.Rooms,
+                               booking => booking.RoomId,
+                               room => room.RoomId,
+                               (booking, room) => new CalendarEvent
+                               {
+                                   Title = booking.MeetingTitle + " - " + room.RoomName + "  (" + room.RoomLocation + ")",
+                                   Start = booking.MeetingDate.ToDateTime(booking.StartTime),
+                                   End = booking.MeetingDate.ToDateTime(booking.StartTime),
+                                   Description = room.RoomLocation
+                               })
+                         .ToList();
 
-
-        public JsonResult GetEvents(int roomId) {
-
-            //var bookings = _bookingManager.GetBookings(roomId);
-
-            //var events = bookings.Select(b => new
-            //{
-            //    title = b.MeetingTitle,
-            //    start = b.MeetingDate.ToDateTime(b.StartTime),
-            //    end = b.MeetingDate.ToDateTime(b.EndTime),
-            //}).ToList();
-            var events = new List<CalendarEvent>
-            {
-                new CalendarEvent { Title = "Event 1", Start = DateTime.Today, End = DateTime.Today.AddDays(1) },
-                new CalendarEvent { Title = "Event 2", Start = new DateTime(2024, 11, 22, 8,0,0), End = new DateTime(2024, 11, 22, 12,0,0) },
-            };
             return new JsonResult(events);
         }
     }

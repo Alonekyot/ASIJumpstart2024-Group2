@@ -8,6 +8,8 @@ using System.Security.Claims;
 using MeetingRoomBooking.Data;
 using MeetingRoomBooking.Resources.Constants;
 using MeetingRoomBooking.Services.ServiceModels;
+using MeetingRoomBooking.Services.ServiceModels;
+using Microsoft.EntityFrameworkCore;
 
 namespace MeetingRoomBooking.WebApp.Controllers {
 
@@ -24,24 +26,53 @@ namespace MeetingRoomBooking.WebApp.Controllers {
         }
 
         public IActionResult Index() {
-            ViewBag.ActivePage = "Dashboard";
 
-            var bookings = (from booking in _context.Bookings
-                         join room in _context.Rooms on booking.RoomId equals room.RoomId
-                         join user in _context.Users on booking.UserId equals user.UserId
-                         select new BookingModel
-                         {
-                             UserName = user.FirstName + " " + user.LastName,
-                             RoomName = room.RoomName,
-                             MeetingDate = booking.MeetingDate,
-                             StartTime = booking.StartTime,
-                             EndTime = booking.EndTime,
-                             RoomLocation = room.RoomLocation,
-                             BookingStatus = booking.BookingStatus,
-                             MeetingTitle = booking.MeetingTitle
-                         }).ToList();
 
+            var userId = int.Parse(User.FindFirstValue("UserId"));
+            var role = int.Parse(User.FindFirstValue("Role"));
+
+            if (role == 1 || role == 2)
+            {
+                // For Admin: fetch all bookings (both admin and user)
+                var bookings = (from booking in _context.Bookings
+                             join room in _context.Rooms on booking.RoomId equals room.RoomId
+                             join user in _context.Users on booking.UserId equals user.UserId
+                             select new BookingModel
+                             {
+                                 UserName = user.FirstName + " " + user.LastName,
+                                 RoomName = room.RoomName,
+                                 MeetingDate = booking.MeetingDate,
+                                 StartTime = booking.StartTime,
+                                 EndTime = booking.EndTime,
+                                 RoomLocation = room.RoomLocation,
+                                 BookingStatus = booking.BookingStatus,
+                                 MeetingTitle = booking.MeetingTitle
+                             }).ToList();
+
+                
+                return View("AdminDashboard", bookings); // Pass the bookings to the Admin view
+            }
+            else if (role == 0)
+            {
+                // For User: fetch bookings only for the logged-in user
+                var bookings = (from booking in _context.Bookings
+                                join room in _context.Rooms on booking.RoomId equals room.RoomId
+                                where booking.UserId == userId
+                                select new BookingModel
+                                {                                  
+                                    RoomName = room.RoomName,
+                                    MeetingDate = booking.MeetingDate,
+                                    StartTime = booking.StartTime,
+                                    EndTime = booking.EndTime,
+                                    RoomLocation = room.RoomLocation,
+                                    BookingStatus = booking.BookingStatus,
+                                    MeetingTitle = booking.MeetingTitle
+                                }).ToList();
+
+                return View("UserDashboard", bookings); // Pass the bookings to the User view
+            }
             return View();
+
         }
         public IActionResult ReportAnalytics() {
             ViewBag.ActivePage = "Report & Analytics";
@@ -84,6 +115,21 @@ namespace MeetingRoomBooking.WebApp.Controllers {
                 new CalendarEvent { Title = "Event 1", Start = DateTime.Today, End = DateTime.Today.AddDays(1) },
                 new CalendarEvent { Title = "Event 2", Start = new DateTime(2024, 11, 22, 8,0,0), End = new DateTime(2024, 11, 22, 12,0,0) },
             };
+        public JsonResult GetEvents() {
+            var userId = int.Parse(User.FindFirstValue("UserId"));
+
+            var events = _context.Bookings.Where(booking => booking.UserId == userId)
+                    .Join(_context.Rooms,
+                               booking => booking.RoomId,
+                               room => room.RoomId,
+                               (booking, room) => new CalendarEvent
+                               {
+                                   Title = booking.MeetingTitle + " - " + room.RoomName,
+                                   Start = booking.MeetingDate.ToDateTime(booking.StartTime),
+                                   End = booking.MeetingDate.ToDateTime(booking.StartTime),
+                                   Description = room.RoomLocation
+                               })   
+                         .ToList();
 
             return new JsonResult(events);
         }
@@ -97,6 +143,28 @@ namespace MeetingRoomBooking.WebApp.Controllers {
         public IActionResult Error() {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
+
+        public IActionResult SearchBooking(string filter) {
+           
+            var bookings = (from booking in _context.Bookings
+                            join room in _context.Rooms on booking.RoomId equals room.RoomId
+                            join user in _context.Users on booking.UserId equals user.UserId
+                            where string.IsNullOrEmpty(filter) || booking.MeetingTitle.ToLower().Contains(filter) ||
+                            room.RoomName.ToLower().Contains(filter)
+                            select new BookingModel
+                            {
+                                UserName = user.FirstName + " " + user.LastName,
+                                RoomName = room.RoomName,
+                                MeetingDate = booking.MeetingDate,
+                                StartTime = booking.StartTime,
+                                EndTime = booking.EndTime,
+                                RoomLocation = room.RoomLocation,
+                                BookingStatus = booking.BookingStatus,
+                                MeetingTitle = booking.MeetingTitle
+                            }).ToList();
+
+            return View("AdminDashboard", bookings);
+        }          
         
     }
 }

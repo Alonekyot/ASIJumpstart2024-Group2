@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MeetingRoomBooking.Data.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,6 +16,7 @@ namespace MeetingRoomBooking.Services.ServiceModels {
         public string BookingStatus { get; set; }
         public string MeetingTitle { get; set; }
     }
+    
     public class CreateBooking {
         public string MeetingTitle { get; set; }
         public DateTime MeetingDate { get; set; }

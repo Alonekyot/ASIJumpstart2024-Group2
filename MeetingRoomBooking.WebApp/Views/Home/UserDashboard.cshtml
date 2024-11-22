@@ -1,4 +1,11 @@
-﻿<style>
+﻿@model IEnumerable<MeetingRoomBooking.Services.ServiceModels.BookingModel>
+
+@{
+    Layout = "_HomeLayout";
+    ViewData["Title"] = "Dashboard";
+}
+
+<style>
     .fc-daygrid-day {
         max-width: 30px !important; /* Set desired width */
         max-height: 30px !important; /* Set desired height */
@@ -6,6 +13,8 @@
 </style>
 @section style {
     <link rel="stylesheet" href="~/css/calendar.css" />
+    <link rel="stylesheet" href="~/css/dashboard.css" />
+
 }
 <link rel="stylesheet" href="~/css/calendar.css" />
 <link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/main.min.css" rel="stylesheet" />
@@ -30,9 +39,51 @@
                 center: 'title',
                 right: 'dayGridMonth,timeGridWeek,timeGridDay'
             },
+            eventClick: function (info) {
+                alert('Event: ' + info.event.title + '\nLocation: ' + info.event.extendedProps.description);
+            }
         });
 
         calendar.render();
     });
 </script>
 
+<table class="table">
+    <thead>
+        <tr>
+            <th>Meeting Title</th>           
+            <th>Room Name</th>
+            <th>Meeting Date</th>
+            <th>Start Time</th>
+            <th>End Time</th>
+            <th>Booking Status</th>
+            <th>Location</th>
+            <th>...</th>
+            <th>Settings</th>
+        </tr>
+    </thead>
+    <tbody class="table-group-divider">
+        @foreach (var booking in Model)
+        {
+            <tr>
+                <td>@booking.MeetingTitle</td>
+                <td>@booking.RoomName</td>
+                <td>@booking.MeetingDate</td>
+                <td>@booking.StartTime</td>
+                <td>@booking.EndTime</td>
+                <td>@booking.BookingStatus</td>
+                <td>@booking.RoomLocation</td>
+                <td>
+                    <a href="#">
+                        Cancel
+                    </a>
+                </td>
+                <td>
+                    <a href="#">
+                        Edit
+                    </a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
