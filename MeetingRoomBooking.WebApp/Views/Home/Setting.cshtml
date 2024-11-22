@@ -1,4 +1,6 @@
-﻿@section style {
+﻿@model MeetingRoomBooking.Services.ServiceModels.ForgotPasswordViewModel
+
+@section style {
     <link rel="stylesheet" href="/css/Setting.css" />
 }
 
@@ -7,7 +9,7 @@
 }
 
 <div class="form-container">
-    <form>
+    <form method="post" asp-controller="Account" asp-action="SubmitPassword">
         <div class="form-group">
             <label for="about">About yourself</label>
             <textarea id="about" name="about" placeholder="Add bio..."></textarea>
@@ -43,10 +45,13 @@
         <div class="form-group password-section">
             <span class="pass">Change Password</span>
             <p>Your password must be at least 6 characters and should include a combination of numbers, letters, and special characters. (<span>&#33;&#36;&#64;&#37;</span>)</p>
+            <label for="new-password">Email</label>
+            <input asp-for="Email" type="text" class="input-text">
             <label for="new-password">New Password</label>
-            <input type="password" id="new-password" name="new-password">
+            <input asp-for="NewPassword" type="password" id="password">
             <label for="retype-password">Re-type New Password</label>
-            <input type="password" id="retype-password" name="retype-password">
+            <input input asp-for="ConfirmNewPassword" type="password" id="confirm-password">
+            <span asp-validation-for="ConfirmNewPassword" class="error-message"></span>
         </div>
         <div class="button-group">
             <button type="button" class="cancel-btn">Cancel</button>
