@@ -8,19 +8,21 @@ using System.Security.Claims;
 using MeetingRoomBooking.Data;
 using MeetingRoomBooking.Services.ServiceModels;
 using Microsoft.EntityFrameworkCore;
+using MeetingRoomBooking.Services.Managers;
 
 namespace MeetingRoomBooking.WebApp.Controllers {
 
     [Authorize]
     public class HomeController : Controller {
 
-
+        private readonly BookingManager _bookingManager;
         private readonly ILogger<HomeController> _logger;
         private readonly MeetingRoomBookingDbContext _context;
 
-        public HomeController(ILogger<HomeController> logger, MeetingRoomBookingDbContext context) {
+        public HomeController(ILogger<HomeController> logger, MeetingRoomBookingDbContext context, BookingManager bookingManager) {
             _logger = logger;
             _context = context;
+            _bookingManager = bookingManager;
         }
 
         public IActionResult Index() {
@@ -44,7 +46,8 @@ namespace MeetingRoomBooking.WebApp.Controllers {
                                  EndTime = booking.EndTime,
                                  RoomLocation = room.RoomLocation,
                                  BookingStatus = booking.BookingStatus,
-                                 MeetingTitle = booking.MeetingTitle
+                                 MeetingTitle = booking.MeetingTitle,
+                                 BookingID = booking.BookingId
                              }).ToList();
 
                 
@@ -56,6 +59,7 @@ namespace MeetingRoomBooking.WebApp.Controllers {
                 var bookings = (from booking in _context.Bookings
                                 join room in _context.Rooms on booking.RoomId equals room.RoomId
                                 where booking.UserId == userId
+                                where booking.BookingStatus != "Canceled"
                                 select new BookingModel
                                 {                                  
                                     RoomName = room.RoomName,
@@ -64,7 +68,8 @@ namespace MeetingRoomBooking.WebApp.Controllers {
                                     EndTime = booking.EndTime,
                                     RoomLocation = room.RoomLocation,
                                     BookingStatus = booking.BookingStatus,
-                                    MeetingTitle = booking.MeetingTitle
+                                    MeetingTitle = booking.MeetingTitle,
+                                    BookingID = booking.BookingId
                                 }).ToList();
 
                 return View("UserDashboard", bookings); // Pass the bookings to the User view
@@ -136,7 +141,28 @@ namespace MeetingRoomBooking.WebApp.Controllers {
                             }).ToList();
 
             return View("AdminDashboard", bookings);
-        }          
-        
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CancelBooking(int bookingId)
+        {
+            if (bookingId <= 0)
+            {
+                return BadRequest("Invalid booking ID.");
+            }
+
+            bool success = await _bookingManager.CancelBooking(bookingId);
+
+            if (!success)
+            {
+                return NotFound("Booking not found or already canceled.");
+            }
+
+            TempData["SuccessMessage"] = "Booking canceled successfully.";
+            return RedirectToAction("Index");
+        }
+
+
     }
 }
