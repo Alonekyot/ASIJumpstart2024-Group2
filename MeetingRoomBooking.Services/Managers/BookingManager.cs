@@ -29,6 +29,11 @@ namespace MeetingRoomBooking.Services.Managers {
                 RecurringEnd = newbook.RecurringEnd.HasValue ? DateOnly.FromDateTime(newbook.RecurringEnd.Value) : (DateOnly?)null
             };
 
+            bool isConflict = IsMeetingConflict(booking);
+            if (isConflict) {
+                await _context.DisposeAsync();
+                return false;
+            }
             _context.Bookings.Add(booking);
             _context.SaveChanges();
             await _context.DisposeAsync();
@@ -41,5 +46,23 @@ namespace MeetingRoomBooking.Services.Managers {
                 .Where(b => b.RoomId == roomId)
                 .ToList();
         }
+
+        public bool IsMeetingConflict(Booking book) {
+            var existingBookings = _context.Bookings
+                .Where(b => b.MeetingDate == book.MeetingDate)
+                .Where(o => o.RoomId == book.RoomId)
+                .ToList();
+
+            foreach (var existingBooking in existingBookings) {
+                // Check if there is a time overlap
+                if ((book.StartTime >= existingBooking.StartTime && book.StartTime < existingBooking.EndTime) ||
+                    (book.EndTime > existingBooking.StartTime && book.EndTime <= existingBooking.EndTime) ||
+                    (book.StartTime <= existingBooking.StartTime && book.EndTime >= existingBooking.EndTime)) {
+                    return true; // Conflict found
+                }
+            }
+            return false; // No conflict
+        }
+
     }
 }

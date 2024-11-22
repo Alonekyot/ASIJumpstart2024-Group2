@@ -46,9 +46,14 @@ namespace MeetingRoomBooking.WebApp.Controllers {
         public IActionResult ReportAnalytics() {
             ViewBag.ActivePage = "Report & Analytics";
 
+            int todaysBooking = _context.Bookings
+                .Where(b => b.MeetingDate == DateOnly.FromDateTime(DateTime.Now))
+                .Count();
             int roomCount = _context.Rooms
                 .Count();
+
             ViewBag.RoomCount = roomCount;
+            ViewBag.TodaysBooking = todaysBooking;
             return View();
         }
 
