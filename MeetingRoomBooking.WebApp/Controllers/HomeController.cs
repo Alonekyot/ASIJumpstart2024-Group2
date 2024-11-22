@@ -90,9 +90,13 @@ namespace MeetingRoomBooking.WebApp.Controllers {
                 .Count();
             int roomCount = _context.Rooms
                 .Count();
+            int recurring = _context.Bookings
+                .Where(b => b.Recurring)
+                .Count();
 
             ViewBag.RoomCount = roomCount;
             ViewBag.TodaysBooking = todaysBooking;
+            ViewBag.Recurrings = recurring;
             return View();
         }
 
