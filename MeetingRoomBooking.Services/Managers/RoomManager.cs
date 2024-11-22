@@ -14,7 +14,7 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace MeetingRoomBooking.Services.Managers
 {
-	public class RoomManager
+	public class RoomManager : IRoomServices
 	{
 		private readonly MeetingRoomBookingDbContext _context;
 
