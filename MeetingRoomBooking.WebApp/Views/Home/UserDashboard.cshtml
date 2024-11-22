@@ -19,8 +19,13 @@
 <link rel="stylesheet" href="~/css/calendar.css" />
 <link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/main.min.css" rel="stylesheet" />
 
-<div style="display: flex; flex: 1;">
-    <div id="calendar"></div>
+<div style="display: flex; flex: 1; justify-content: center;">
+    <div id="calendar" style="width: 90%;"></div>
+    <div class="booking-card">
+        <div class="book-card">
+
+        </div>
+    </div>
 </div>
 
 
@@ -34,6 +39,7 @@
         var calendar = new FullCalendar.Calendar(calendarEl, {
             initialView: 'dayGridMonth',
             events: '/Home/GetEvents', // Call the controller action
+            aspectRatio: 2,
             headerToolbar: {
                 left: 'prev,next today',
                 center: 'title',
