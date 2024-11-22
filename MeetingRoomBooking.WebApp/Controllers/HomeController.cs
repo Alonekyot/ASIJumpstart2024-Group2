@@ -27,7 +27,7 @@ namespace MeetingRoomBooking.WebApp.Controllers {
 
         public IActionResult Index() {
 
-
+            ViewBag.ActivePage = "Dashboard";
             var userId = int.Parse(User.FindFirstValue("UserId"));
             var role = int.Parse(User.FindFirstValue("Role"));
 
@@ -109,12 +109,6 @@ namespace MeetingRoomBooking.WebApp.Controllers {
             return Json(data);
         }
 
-    public JsonResult GetEvents() {
-            var events = new List<CalendarEvent>
-            {
-                new CalendarEvent { Title = "Event 1", Start = DateTime.Today, End = DateTime.Today.AddDays(1) },
-                new CalendarEvent { Title = "Event 2", Start = new DateTime(2024, 11, 22, 8,0,0), End = new DateTime(2024, 11, 22, 12,0,0) },
-            };
         public JsonResult GetEvents() {
             var userId = int.Parse(User.FindFirstValue("UserId"));
 

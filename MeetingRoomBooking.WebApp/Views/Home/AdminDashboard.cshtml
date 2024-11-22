@@ -2,6 +2,7 @@
 
 @section style {
     <link rel="stylesheet" href="~/css/dashboard.css" />
+    <link rel="stylesheet" href="~/css/SearchBars.css" />
 }
 
 @{
@@ -70,9 +71,9 @@
             List of bookings
         </h4>
         <div class="search-group">
-            <form class="search-group" asp-action="SearchBooking" method="post">
-                <input type="text" placeholder="Search" class="search" name="filter" />
-                <button class="search-btn" type="submit"><i class="bi bi-search"></i></button>
+            <form class="dashboard-search-group" asp-action="SearchBooking" method="post">
+                <input type="text" placeholder="Search" class="dashboard-search" name="filter" />
+                <button class="dashboard-search-btn" type="submit"><i class="bi bi-search"></i></button>
             </form>
         </div>
     </div>
