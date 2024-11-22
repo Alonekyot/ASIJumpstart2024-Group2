@@ -15,9 +15,9 @@ namespace MeetingRoomBooking.WebApp.Controllers
 	public class RoomManagementController : Controller
 	{
 		private readonly MeetingRoomBookingDbContext _context;
-		private readonly RoomManager _roomManager;
+		private readonly IRoomServices _roomManager;
 		public RoomManagementController(MeetingRoomBookingDbContext context,
-										RoomManager roomManager)
+										IRoomServices roomManager)
 		{
 			_context = context;
 			_roomManager = roomManager;

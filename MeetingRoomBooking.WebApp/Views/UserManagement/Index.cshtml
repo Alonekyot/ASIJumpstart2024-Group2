@@ -35,10 +35,12 @@
                 <th>Last Name</th>
                 <th>Email</th>
                 <th>Phone No.</th>
-                @if (int.TryParse(User.FindFirstValue("Role"), out int role) && role == 2) {
+                @* @if (int.TryParse(User.FindFirstValue("Role"), out int role) && role == 2) {
                         <th>Password</th>
-                }
+                } *@
+                <th>Roles</th>
                 <th>Actions</th>
+                
             </tr>
         </thead>
         <tbody>
@@ -48,14 +50,16 @@
                         <td>@user.LastName</td>
                         <td>@user.Email</td>
                         <td>@user.Phone</td>
-                    @if (int.TryParse(User.FindFirstValue("Role"), out int role2) && role2 == 2) {
+                    @* @if (int.TryParse(User.FindFirstValue("Role"), out int role2) && role2 == 2) {
                                 <td>@PasswordManager.DecryptPassword(user.Password)</td>
-                    }
+                    } *@
+                    <td>@user.Remarks</td>
                         <td>
                             <a asp-action="Details" asp-route-id="@user.UserId" style="text-decoration:none">
                                 Details<i class="bi bi-person-fill-gear" style="color:#37A3E0; font-size:20px"></i>
                             </a>
                         </td>
+                        
                     </tr>
             }
         </tbody>
