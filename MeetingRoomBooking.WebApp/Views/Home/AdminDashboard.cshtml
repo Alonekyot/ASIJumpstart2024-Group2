@@ -2,7 +2,6 @@
 
 @section style {
     <link rel="stylesheet" href="~/css/dashboard.css" />
-
 }
 
 @{
@@ -71,11 +70,10 @@
             List of bookings
         </h4>
         <div class="search-group">
-            <input type="text" name="name" value="" placeholder="Search here" class="search-bar" />
-            <button type="button" class="filter-button" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                <i class="bi bi-funnel"></i>
-                Filter
-            </button>
+            <form class="search-group" asp-action="SearchBooking" method="post">
+                <input type="text" placeholder="Search" class="search" name="filter" />
+                <button class="search-btn" type="submit"><i class="bi bi-search"></i></button>
+            </form>
         </div>
     </div>
 
@@ -91,6 +89,7 @@
                 <th>Booking Status</th>
                 <th>Location</th>               
                 <th>...</th>
+                <th>Settings</th>
             </tr>
         </thead>
         <tbody class="table-group-divider">
@@ -110,7 +109,11 @@
                             Cancel
                         </a>
                     </td>
-                    <!-- Display other booking details -->
+                    <td>
+                        <a href="#">
+                            Edit
+                        </a>
+                    </td>
                 </tr>
             }
         </tbody>
