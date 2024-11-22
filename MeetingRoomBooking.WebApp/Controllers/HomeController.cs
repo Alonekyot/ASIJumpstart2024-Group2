@@ -118,6 +118,13 @@ namespace MeetingRoomBooking.WebApp.Controllers {
             return Json(data);
         }
 
+
+        public IActionResult Setting()
+        {
+            ViewBag.ActivePage = "Setting";
+            return View();
+        }
+
         public JsonResult GetEvents() {
             var userId = int.Parse(User.FindFirstValue("UserId"));
 
