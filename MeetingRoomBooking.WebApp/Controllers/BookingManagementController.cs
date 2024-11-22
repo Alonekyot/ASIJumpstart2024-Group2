@@ -91,7 +91,7 @@ namespace MeetingRoomBooking.WebApp.Controllers {
                                {
                                    Title = booking.MeetingTitle + " - " + room.RoomName + "  (" + room.RoomLocation + ")",
                                    Start = booking.MeetingDate.ToDateTime(booking.StartTime),
-                                   End = booking.MeetingDate.ToDateTime(booking.StartTime),
+                                   End = booking.MeetingDate.ToDateTime(booking.EndTime),
                                    Description = room.RoomLocation
                                })
                          .ToList();
