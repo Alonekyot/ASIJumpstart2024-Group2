@@ -17,15 +17,17 @@ namespace MeetingRoomBooking.WebApp.Controllers {
     [Authorize]
     public class HomeController : Controller {
 
-
+        private readonly BookingManager _bookingManager;
         private readonly ILogger<HomeController> _logger;
         private readonly MeetingRoomBookingDbContext _context;
         private readonly ChartDataManager _chartDataManager;
 
         public HomeController(ILogger<HomeController> logger, MeetingRoomBookingDbContext context, ChartDataManager chartDataManager) {
+        public HomeController(ILogger<HomeController> logger, MeetingRoomBookingDbContext context, BookingManager bookingManager) {
             _logger = logger;
             _context = context;
             _chartDataManager = chartDataManager;
+            _bookingManager = bookingManager;
         }
 
         public IActionResult Index() {
@@ -49,11 +51,9 @@ namespace MeetingRoomBooking.WebApp.Controllers {
                                  EndTime = booking.EndTime,
                                  RoomLocation = room.RoomLocation,
                                  BookingStatus = booking.BookingStatus,
-                                 MeetingTitle = booking.MeetingTitle
-                             })
-                             .OrderBy(b => b.MeetingDate)
-                             .ThenBy(c => c.StartTime)
-                             .ToList();
+                                 MeetingTitle = booking.MeetingTitle,
+                                 BookingID = booking.BookingId
+                             }).ToList();
 
                 
                 return View("AdminDashboard", bookings); // Pass the bookings to the Admin view
@@ -64,6 +64,7 @@ namespace MeetingRoomBooking.WebApp.Controllers {
                 var bookings = (from booking in _context.Bookings
                                 join room in _context.Rooms on booking.RoomId equals room.RoomId
                                 where booking.UserId == userId
+                                where booking.BookingStatus != "Canceled"
                                 select new BookingModel
                                 {                                  
                                     RoomName = room.RoomName,
@@ -72,11 +73,10 @@ namespace MeetingRoomBooking.WebApp.Controllers {
                                     EndTime = booking.EndTime,
                                     RoomLocation = room.RoomLocation,
                                     BookingStatus = booking.BookingStatus,
-                                    MeetingTitle = booking.MeetingTitle
-                                })
-                                .OrderBy(b => b.MeetingDate)
-                                .ThenBy(c => c.StartTime)
-                                .ToList();
+                                    MeetingTitle = booking.MeetingTitle,
+                                    BookingID = booking.BookingId
+                                }).ToList();
+
                 return View("UserDashboard", bookings); // Pass the bookings to the User view
             }
             return View();
@@ -178,7 +178,28 @@ namespace MeetingRoomBooking.WebApp.Controllers {
                             }).ToList();
 
             return View("AdminDashboard", bookings);
-        }          
-        
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CancelBooking(int bookingId)
+        {
+            if (bookingId <= 0)
+            {
+                return BadRequest("Invalid booking ID.");
+            }
+
+            bool success = await _bookingManager.CancelBooking(bookingId);
+
+            if (!success)
+            {
+                return NotFound("Booking not found or already canceled.");
+            }
+
+            TempData["SuccessMessage"] = "Booking canceled successfully.";
+            return RedirectToAction("Index");
+        }
+
+
     }
 }
