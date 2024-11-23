@@ -8,22 +8,20 @@ using System.Security.Claims;
 using MeetingRoomBooking.Data;
 using MeetingRoomBooking.Resources.Constants;
 using MeetingRoomBooking.Services.ServiceModels;
-using MeetingRoomBooking.Services.ServiceModels;
 using Microsoft.EntityFrameworkCore;
 using MeetingRoomBooking.Services.Managers;
+using MeetingRoomBooking.Services.Interfaces;
 
 namespace MeetingRoomBooking.WebApp.Controllers {
 
     [Authorize]
     public class HomeController : Controller {
 
-        private readonly BookingManager _bookingManager;
+        private readonly IBookingManager _bookingManager;
         private readonly ILogger<HomeController> _logger;
         private readonly MeetingRoomBookingDbContext _context;
         private readonly ChartDataManager _chartDataManager;
-
-        public HomeController(ILogger<HomeController> logger, MeetingRoomBookingDbContext context, ChartDataManager chartDataManager) {
-        public HomeController(ILogger<HomeController> logger, MeetingRoomBookingDbContext context, BookingManager bookingManager) {
+        public HomeController(ILogger<HomeController> logger, MeetingRoomBookingDbContext context, IBookingManager bookingManager, ChartDataManager chartDataManager) {
             _logger = logger;
             _context = context;
             _chartDataManager = chartDataManager;

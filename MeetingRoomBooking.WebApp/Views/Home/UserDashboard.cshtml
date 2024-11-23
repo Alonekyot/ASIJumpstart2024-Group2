@@ -54,7 +54,7 @@
                                 <a href="#" class="table-icon">
                                     <i class="bi bi-pencil-square"></i>
                                 </a>
-                                <a href="#" class="table-icon">
+                                <a href="#" class="table-icon" data-id="@booking.BookingID" data-bs-toggle="modal" data-bs-target="#exampleModal">
                                     <i class="bi bi-trash"></i>
                                 </a>
                             </td>
@@ -120,45 +120,6 @@
     });
 </script>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>Meeting Title</th>           
-            <th>Room Name</th>
-            <th>Meeting Date</th>
-            <th>Start Time</th>
-            <th>End Time</th>
-            <th>Booking Status</th>
-            <th>Location</th>
-            <th>...</th>
-            <th>Settings</th>
-        </tr>
-    </thead>
-    <tbody class="table-group-divider">
-        @foreach (var booking in Model)
-        {
-            <tr>
-                <td>@booking.MeetingTitle</td>
-                <td>@booking.RoomName</td>
-                <td>@booking.MeetingDate</td>
-                <td>@booking.StartTime</td>
-                <td>@booking.EndTime</td>
-                <td>@booking.BookingStatus</td>
-                <td>@booking.RoomLocation</td>
-                <td>
-                    <a href="#" data-id="@booking.BookingID" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                        Cancel
-                    </a>
-                </td>
-                <td>
-                    <a href="#">
-                        Edit
-                    </a>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
 
 <!--MODAL CLASS-->
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
