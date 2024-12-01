@@ -59,6 +59,7 @@ namespace MeetingRoomBooking.Services.Managers {
 
             foreach (var existingBooking in existingBookings) {
                 // Check if there is a time overlap
+
                 if ((book.StartTime >= existingBooking.StartTime && book.StartTime < existingBooking.EndTime) ||
                     (book.EndTime > existingBooking.StartTime && book.EndTime <= existingBooking.EndTime) ||
                     (book.StartTime <= existingBooking.StartTime && book.EndTime >= existingBooking.EndTime)) {
@@ -66,6 +67,13 @@ namespace MeetingRoomBooking.Services.Managers {
                 }
             }
             return false; // No conflict
+        }
+
+        private bool IsTimeOverlap(Booking book, Booking existingBooking) {
+            return (book.StartTime >= existingBooking.StartTime && book.StartTime < existingBooking.EndTime) ||
+                (book.EndTime > existingBooking.StartTime && book.EndTime <= existingBooking.EndTime) ||
+                (book.StartTime <= existingBooking.StartTime && book.EndTime >= existingBooking.EndTime);
+
         }
 
         public async Task<bool> CancelBooking(int bookingId)

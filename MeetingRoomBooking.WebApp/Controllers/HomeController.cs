@@ -92,10 +92,34 @@ namespace MeetingRoomBooking.WebApp.Controllers {
                 .Where(b => b.Recurring)
                 .Count();
 
+            var roomLeaderboard = _context.Rooms
+                .Select(room => new RoomLeaderBoard {
+                    RoomName = room.RoomName,
+                    BookedTimes = room.booking.Count()
+                })
+                .OrderByDescending(x => x.BookedTimes)
+                .ToList();
+
+            var userLeaderboard = _context.Users
+                .Where(u => !u.Deleted)
+                .Select(user => new UserLeaderBoard
+                {
+                    Username = user.FirstName + " " + user.LastName,
+                    BookedTimes = user.booking.Count()
+                })
+                .Where(s => s.BookedTimes > 0)
+                .OrderByDescending(u => u.BookedTimes)
+                .ToList();
+            var leaderboards = new LeaderBoardLists()
+            {
+                RoomLeaders = roomLeaderboard,
+                UserLeaders = userLeaderboard
+            };
+
             ViewBag.RoomCount = roomCount;
             ViewBag.TodaysBooking = todaysBooking;
             ViewBag.Recurrings = recurring;
-            return View();
+            return View(leaderboards);
         }
 
         [HttpGet]

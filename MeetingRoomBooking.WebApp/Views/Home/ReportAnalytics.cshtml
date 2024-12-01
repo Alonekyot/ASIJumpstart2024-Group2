@@ -1,4 +1,5 @@
-﻿@{
+﻿@model MeetingRoomBooking.Services.ServiceModels.LeaderBoardLists
+@{
     Layout = "_HomeLayout";
 }
 @section style {
@@ -27,9 +28,41 @@
             <span class="data">@ViewBag.RoomCount</span>
         </div>
     </div>
-    <div>
+    <div class="shadow-sm report-card">
         <canvas id="myChart"></canvas>
     </div>
-    <div></div>
-    <div></div>
+    <div class="shadow-sm report-card leaderboard">
+        <div class="leaderboard-header">
+            <h6>Top Rooms</h6>
+        </div>
+        <div class="leaderboard-data-list">
+            <hr style="margin: 0.25rem 0;" />
+            @foreach(var room in Model.RoomLeaders) {
+                
+                <div class="leaderboard-data">
+                    <h6>@room.RoomName</h6>
+                    <span>@room.BookedTimes Booked</span>
+                </div>
+                <hr style="margin: 0.25rem 0;" />
+            }
+            
+        </div>
+    </div>
+    <div class="shadow-sm report-card leaderboard">
+        <div class="leaderboard-header">
+            <h6>Top Users</h6>
+        </div>
+        <div class="leaderboard-data-list">
+            <hr style="margin: 0.25rem 0;" />
+            @foreach (var user in Model.UserLeaders) {
+
+                <div class="leaderboard-data">
+                    <h6>@user.Username</h6>
+                    <span>@user.BookedTimes Booked</span>
+                </div>
+                <hr style="margin: 0.25rem 0;" />
+            }
+
+        </div>
+    </div>
 </div>
