@@ -14,7 +14,7 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace MeetingRoomBooking.Services.Managers
 {
-	public class RoomManager
+	public class RoomManager : IRoomServices
 	{
 		private readonly MeetingRoomBookingDbContext _context;
 
@@ -49,7 +49,6 @@ namespace MeetingRoomBooking.Services.Managers
                     Projector = model.Projector,
                     Loudspeaker = model.Loudspeaker,
                     Image = imageData,
-                    Available = true,
                 };
 
                 _context.Rooms.Add(room);

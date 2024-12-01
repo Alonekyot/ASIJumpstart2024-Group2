@@ -11,5 +11,6 @@ namespace MeetingRoomBooking.Services.Interfaces {
         //void Update(UserViewModel model);
         //void Delete(int id);
         //LoginResult AuthenticateUser(string userCode, string password, ref User user);
+        public User Edit(EditUserModel editedUser, User user);
     }
 }

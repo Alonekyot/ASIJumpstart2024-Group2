@@ -8,10 +8,10 @@ using System.Threading.Tasks;
 
 namespace MeetingRoomBooking.Services.Interfaces
 {
-	public interface IRoomServices	{
-		public Task<bool> AddAsync(CreateRoomModel model);
-        public Room Edit(EditRoomModel model, Room room);
-        public Task<bool> Delete(int roomId);
-
+    public interface IBookingManager
+    {
+        public Task<bool> CreateBook(CreateBooking newbook, int userId, int roomId);
+        public List<Booking> GetBookings(int roomId);
+        public Task<bool> CancelBooking(int bookingId);
     }
 }

@@ -1,4 +1,11 @@
-﻿<style>
+﻿@model IEnumerable<MeetingRoomBooking.Services.ServiceModels.BookingModel>
+
+@{
+    Layout = "_HomeLayout";
+    ViewData["Title"] = "Dashboard";
+}
+
+<style>
     .fc-daygrid-day {
         max-width: 30px !important; /* Set desired width */
         max-height: 30px !important; /* Set desired height */
@@ -6,10 +13,84 @@
 </style>
 @section style {
     <link rel="stylesheet" href="~/css/calendar.css" />
+    <link rel="stylesheet" href="~/css/dashboard.css" />
+    <link rel="stylesheet" href="~/css/UserDashboard.css" />
+
 }
 <link rel="stylesheet" href="~/css/calendar.css" />
 <link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/main.min.css" rel="stylesheet" />
 
+<div style="display: flex; flex: 1; flex-direction: column; justify-content: center; margin: 10px;">
+    <div id="calendar" style="width: 93%;"></div>
+    <div class="booking-table">
+        <div class="table-header">
+            <h3>Your Bookings</h3>
+        </div>
+        <div class="table-data">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Meeting Agenda</th>
+                        <th>Room Name</th>
+                        <th>Meeting Date</th>
+                        <th>Start Time</th>
+                        <th>End Time</th>
+                        <th>Booking Status</th>
+                        <th>Location</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody class="table-group-divider">
+                    @foreach (var booking in Model) {
+                        <tr>
+                            <td>@booking.MeetingTitle</td>
+                            <td>@booking.RoomName</td>
+                            <td>@booking.MeetingDate</td>
+                            <td>@booking.StartTime</td>
+                            <td>@booking.EndTime</td>
+                            <td>@booking.BookingStatus</td>
+                            <td>@booking.RoomLocation</td>
+                            <td class="icons-area">
+                                <a href="#" class="table-icon">
+                                    <i class="bi bi-pencil-square"></i>
+                                </a>
+                                <a href="#" class="table-icon" data-id="@booking.BookingID" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                                    <i class="bi bi-trash"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+@* Reference the FullCalendar script *@
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/main.min.js"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var calendarEl = document.getElementById('calendar');
+
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+            initialView: 'dayGridMonth',
+            events: '/Home/GetEvents', // Call the controller action
+            aspectRatio: 2,
+            headerToolbar: {
+                left: 'prev,next today',
+                center: 'title',
+                right: 'dayGridMonth,timeGridWeek,timeGridDay'
+            },
+            eventClick: function (info) {
+                alert('Event: ' + info.event.title + '\nLocation: ' + info.event.extendedProps.description);
+            }
+        });
+
+        calendar.render();
+    });
+</script>
 <div style="display: flex; flex: 1;">
     <div id="calendar"></div>
 </div>
@@ -30,9 +111,48 @@
                 center: 'title',
                 right: 'dayGridMonth,timeGridWeek,timeGridDay'
             },
+            eventClick: function (info) {
+                alert('Event: ' + info.event.title + '\nLocation: ' + info.event.extendedProps.description);
+            }
         });
 
         calendar.render();
     });
 </script>
 
+
+<!--MODAL CLASS-->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Cancel Booking</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to cancel this room?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <form asp-action="CancelBooking" method="post">
+                    @Html.AntiForgeryToken()
+                    @Html.Hidden("BookingID")
+                    <input type="hidden" name="BookingID" id="BookingID" />
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    var exampleModal = document.getElementById('exampleModal');
+    exampleModal.addEventListener('show.bs.modal', function (event) {
+        var button = event.relatedTarget; // Button that triggered the modal
+        var bookingId = button.getAttribute('data-id'); // Extract RoomId from data-* attribute
+        var modalForm = exampleModal.querySelector('form'); // Get the modal form
+
+        // Set the hidden RoomId input field with the roomId
+        modalForm.querySelector('input[name="BookingID"]').value = bookingId;
+    });
+</script>

@@ -13,6 +13,7 @@
 
 .rooms-content {
     display: flex;
+    justify-content: space-between;
 }
 .room-info *{
     font-size: 12px;

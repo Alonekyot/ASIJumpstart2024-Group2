@@ -1,4 +1,14 @@
-﻿
+﻿@model IEnumerable<MeetingRoomBooking.Services.ServiceModels.BookingModel>
+
+@section style {
+    <link rel="stylesheet" href="~/css/dashboard.css" />
+    <link rel="stylesheet" href="~/css/SearchBars.css" />
+}
+
+@{
+    Layout = "_HomeLayout";
+    ViewData["Title"] = "Dashboard";
+}
 
 <div class="use-font">
     <h5>Dashboard</h5>
@@ -61,42 +71,52 @@
             List of bookings
         </h4>
         <div class="search-group">
-            <input type="text" name="name" value="" placeholder="Search here" class="search-bar" />
-            <button type="button" class="filter-button" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                <i class="bi bi-funnel"></i>
-                Filter
-            </button>
+            <form class="dashboard-search-group" asp-action="SearchBooking" method="post">
+                <input type="text" placeholder="Search" class="dashboard-search" name="filter" />
+                <button class="dashboard-search-btn" type="submit"><i class="bi bi-search"></i></button>
+            </form>
         </div>
     </div>
 
     <table class="table">
         <thead>
             <tr>
-                <th scope="col">Room Name</th>
-                <th scope="col">Start Date</th>
-                <th scope="col">End Date</th>
-                <th scope="col">Start Time</th>
-                <th scope="col">End Time</th>
-                <th scope="col">Booking Date</th>
-                <th scope="col">Meeting Agenda</th>
+                <th>Meeting Title</th>
+                <th>User</th>
+                <th>Room Name</th>
+                <th>Meeting Date</th>
+                <th>Start Time</th>
+                <th>End Time</th>
+                <th>Booking Status</th>
+                <th>Location</th>
+                <th>Action</th>
             </tr>
         </thead>
         <tbody class="table-group-divider">
-            @for (int i = 0; i < 5; i++) {
+            @foreach (var booking in Model)
+            {
                 <tr>
-                    <td>CPE LAB</td>
-                    <td>9/11/24</td>
-                    <td>9/11/24</td>
-                    <td>1:30 pm</td>
-                    <td>3:30 pm</td>
-                    <td>9/10/24</td>
-                    <td>Discussion</td>
+                    <td>@booking.MeetingTitle</td>
+                    <td>@booking.UserName</td>
+                    <td>@booking.RoomName</td>
+                    <td>@booking.MeetingDate</td>
+                    <td>@booking.StartTime</td>
+                    <td>@booking.EndTime</td>                 
+                    <td>@booking.BookingStatus</td>
+                    <td>@booking.RoomLocation</td>  
+                    <td class="icons-area">
+                        <a href="#" class="table-icon">
+                            <i class="bi bi-pencil-square"></i>
+                        </a>
+                        <a href="#" class="table-icon" data-id="@booking.BookingID" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                            <i class="bi bi-trash"></i>
+                        </a>
+                    </td>
                 </tr>
             }
-
-
         </tbody>
     </table>
+</div>
     <ul class="pagination">
         <li class="page-item"><a class="page-link" href="#">Prev</a></li>
         <li class="page-item"><a class="page-link" href="#">1</a></li>
@@ -105,3 +125,49 @@
         <li class="page-item"><a class="page-link" href="#">Next</a></li>
     </ul>
 </div>
+
+<!--MODAL CLASS-->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Cancel Booking</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to cancel this room?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <form asp-action="CancelBooking" method="post">
+                    @Html.AntiForgeryToken()
+                    @Html.Hidden("BookingID")
+                    <input type="hidden" name="BookingID" id="BookingID" />
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    var exampleModal = document.getElementById('exampleModal');
+    exampleModal.addEventListener('show.bs.modal', function (event) {
+        var button = event.relatedTarget; // Button that triggered the modal
+        var bookingId = button.getAttribute('data-id'); // Extract RoomId from data-* attribute
+        var modalForm = exampleModal.querySelector('form'); // Get the modal form
+
+        // Set the hidden RoomId input field with the roomId
+        modalForm.querySelector('input[name="BookingID"]').value = bookingId;
+    });
+</script>
+<style>
+    .table-icon i {
+        color: black;
+    }
+
+    .icons-area {
+        display: flex;
+        justify-content: space-evenly;
+    }
+</style>

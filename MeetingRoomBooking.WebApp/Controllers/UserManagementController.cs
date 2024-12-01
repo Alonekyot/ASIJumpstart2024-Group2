@@ -6,6 +6,7 @@ using MeetingRoomBooking.Services.Managers;
 using MeetingRoomBooking.WebApp.Models;
 using MeetingRoomBooking.Services.ServiceModels;
 using Microsoft.EntityFrameworkCore;
+using MeetingRoomBooking.Services.Interfaces;
 namespace MeetingRoomBooking.WebApp.Controllers {
 
     [Authorize]
@@ -14,9 +15,9 @@ namespace MeetingRoomBooking.WebApp.Controllers {
 
 
         private readonly MeetingRoomBookingDbContext _context;
-        private readonly UserManager _userManager;
+        private readonly IUserService _userManager;
         public UserManagementController(MeetingRoomBookingDbContext context,
-                                        UserManager userManager) {
+                                        IUserService userManager) {
             _context = context;
             _userManager = userManager;
             

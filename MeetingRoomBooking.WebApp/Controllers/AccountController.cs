@@ -12,14 +12,15 @@ using Microsoft.AspNetCore.Authentication;
 using MeetingRoomBooking.Services.Manager;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using MeetingRoomBooking.Services.Managers;
+using MeetingRoomBooking.Services.Interfaces;
 
 namespace MeetingRoomBooking.WebApp.Controllers {
     public class AccountController : Controller {
 
         private readonly MeetingRoomBookingDbContext _context;
-        private readonly LoginManager _loginManager;
+        private readonly ILoginManager _loginManager;
 
-        public AccountController(MeetingRoomBookingDbContext meetingRoomBookingDbContext, LoginManager loginManager)
+        public AccountController(MeetingRoomBookingDbContext meetingRoomBookingDbContext, ILoginManager loginManager)
         {
             _context = meetingRoomBookingDbContext;
             _loginManager = loginManager;
