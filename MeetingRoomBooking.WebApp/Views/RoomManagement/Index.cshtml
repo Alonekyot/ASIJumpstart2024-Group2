@@ -120,10 +120,11 @@
                         </label>
                     </div>
                     <div class="drop-area">
+                    <label class="room-label " style="margin-bottom: 10px;">Upload Image:</label>
                         <div id="dropArea" class="drag-drop-box">
-                            <p id="uploadText">Drag & Drop an image here or click to upload</p>
+                         <label class="room-label" id="uploadText">Drag & Drop an image here or click to upload</label>
                         <input type="file" id="imageUpload" accept="image/*" onchange="displayImage()" asp-for="NewRoom.ImageFile" hidden />
-                            <img id="previewImage" src="" alt="Uploaded Image" style="display:none;" />
+                        <img id="previewImage" src="" alt="Uploaded Image" class="uploaded-image" style="display:none;" />
                         </div>
                     </div>
                 

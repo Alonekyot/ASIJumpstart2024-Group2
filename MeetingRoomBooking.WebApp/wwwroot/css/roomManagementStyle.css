@@ -5,7 +5,7 @@
     flex: 3;
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 5px;
+    gap: 20px;
     padding: 10px;
     place-items: center;
 }
@@ -25,16 +25,17 @@ h2.title {
     justify-content: center;
     align-items: center;
 }
-.create-room form {
-    font-family: "Inclusive sans", sans-serif;
-    background-color: white;
-    padding: 5px;
-    box-shadow: 1px 4px 14px 3px rgba(25,25,25,0.5);
-    height: fit-content;
-    width: 100%;
-    max-width: 400px;
-    border-radius: 5px;
-}
+    .create-room form {
+        font-family: "Inclusive sans", sans-serif;
+        background-color: white;
+        padding: 20px;
+        box-shadow: 1px 5px 20px 2px rgba(28, 28, 28,0.10);
+        height: fit-content;
+        width: 100%;
+        max-width: 400px;
+        border-radius: 5px;
+        
+    }
 .input-area {
     display: flex;
     flex-direction: column;
@@ -100,10 +101,10 @@ h2.title {
     margin-top: 20px;
 }
 .drag-drop-box {
-    max-width:  250px;
-    width: fit-content;
-    height: fit-content;
-    border: 2px dashed #ccc;
+    max-width: 600px;
+    width: 350px;
+    height: 175px;
+    border: 2px dashed #add8ff;
     border-radius: 10px;
     display: flex;
     align-items: center;
@@ -111,17 +112,28 @@ h2.title {
     text-align: center;
     cursor: pointer;
     position: relative;
+    overflow: hidden; 
 }
 
     .drag-drop-box.dragover {
         border-color: #6c6;
         background-color: #f8f8f8;
     }
+
+.uploaded-image {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    display: block; 
+}
+
 .drop-area {
     width: 100%;
     display: flex;
-    align-items: center;
+    align-items: baseline;
     justify-content: center;
+    flex-direction: column;
+    margin-top: 20px;
 }
 #uploadText{
     margin: 30px 0;;
