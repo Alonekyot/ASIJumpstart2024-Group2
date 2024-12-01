@@ -6,26 +6,31 @@ using System.Diagnostics;
 using System.Collections.Generic;
 using System.Security.Claims;
 using MeetingRoomBooking.Data;
+using MeetingRoomBooking.Resources.Constants;
 using MeetingRoomBooking.Services.ServiceModels;
 using Microsoft.EntityFrameworkCore;
+using MeetingRoomBooking.Services.Managers;
+using MeetingRoomBooking.Services.Interfaces;
 
 namespace MeetingRoomBooking.WebApp.Controllers {
 
     [Authorize]
     public class HomeController : Controller {
 
-
+        private readonly IBookingManager _bookingManager;
         private readonly ILogger<HomeController> _logger;
         private readonly MeetingRoomBookingDbContext _context;
-
-        public HomeController(ILogger<HomeController> logger, MeetingRoomBookingDbContext context) {
+        private readonly ChartDataManager _chartDataManager;
+        public HomeController(ILogger<HomeController> logger, MeetingRoomBookingDbContext context, IBookingManager bookingManager, ChartDataManager chartDataManager) {
             _logger = logger;
             _context = context;
+            _chartDataManager = chartDataManager;
+            _bookingManager = bookingManager;
         }
 
         public IActionResult Index() {
 
-
+            ViewBag.ActivePage = "Dashboard";
             var userId = int.Parse(User.FindFirstValue("UserId"));
             var role = int.Parse(User.FindFirstValue("Role"));
 
@@ -44,7 +49,8 @@ namespace MeetingRoomBooking.WebApp.Controllers {
                                  EndTime = booking.EndTime,
                                  RoomLocation = room.RoomLocation,
                                  BookingStatus = booking.BookingStatus,
-                                 MeetingTitle = booking.MeetingTitle
+                                 MeetingTitle = booking.MeetingTitle,
+                                 BookingID = booking.BookingId
                              }).ToList();
 
                 
@@ -56,6 +62,7 @@ namespace MeetingRoomBooking.WebApp.Controllers {
                 var bookings = (from booking in _context.Bookings
                                 join room in _context.Rooms on booking.RoomId equals room.RoomId
                                 where booking.UserId == userId
+                                where booking.BookingStatus != "Canceled"
                                 select new BookingModel
                                 {                                  
                                     RoomName = room.RoomName,
@@ -64,7 +71,8 @@ namespace MeetingRoomBooking.WebApp.Controllers {
                                     EndTime = booking.EndTime,
                                     RoomLocation = room.RoomLocation,
                                     BookingStatus = booking.BookingStatus,
-                                    MeetingTitle = booking.MeetingTitle
+                                    MeetingTitle = booking.MeetingTitle,
+                                    BookingID = booking.BookingId
                                 }).ToList();
 
                 return View("UserDashboard", bookings); // Pass the bookings to the User view
@@ -75,11 +83,50 @@ namespace MeetingRoomBooking.WebApp.Controllers {
         public IActionResult ReportAnalytics() {
             ViewBag.ActivePage = "Report & Analytics";
 
+            int todaysBooking = _context.Bookings
+                .Where(b => b.MeetingDate == DateOnly.FromDateTime(DateTime.Now))
+                .Count();
             int roomCount = _context.Rooms
                 .Count();
+            int recurring = _context.Bookings
+                .Where(b => b.Recurring)
+                .Count();
+
             ViewBag.RoomCount = roomCount;
+            ViewBag.TodaysBooking = todaysBooking;
+            ViewBag.Recurrings = recurring;
             return View();
         }
+
+        [HttpGet]
+        public JsonResult GetChartData() {
+            var dataSet = _chartDataManager.GetBarChartData();
+            var data = new
+            {
+                labels = Chart.Months,
+                datasets = new[]
+                {
+                new
+                {
+                    label = "Bookings",
+                    data = dataSet,
+                    backgroundColor = Chart.BackgroundColor,
+                    borderColor = Chart.BorderColor,
+                    borderWidth = 1
+                }
+            }
+            };
+
+            return Json(data);
+        }
+
+
+        public IActionResult Setting()
+        {
+            ViewBag.ActivePage = "Setting";
+            return View();
+        }
+
         public JsonResult GetEvents() {
             var userId = int.Parse(User.FindFirstValue("UserId"));
 
@@ -129,7 +176,28 @@ namespace MeetingRoomBooking.WebApp.Controllers {
                             }).ToList();
 
             return View("AdminDashboard", bookings);
-        }          
-        
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CancelBooking(int bookingId)
+        {
+            if (bookingId <= 0)
+            {
+                return BadRequest("Invalid booking ID.");
+            }
+
+            bool success = await _bookingManager.CancelBooking(bookingId);
+
+            if (!success)
+            {
+                return NotFound("Booking not found or already canceled.");
+            }
+
+            TempData["SuccessMessage"] = "Booking canceled successfully.";
+            return RedirectToAction("Index");
+        }
+
+
     }
 }

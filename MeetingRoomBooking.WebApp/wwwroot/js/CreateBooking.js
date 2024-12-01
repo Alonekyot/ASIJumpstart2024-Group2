@@ -13,12 +13,15 @@ document.addEventListener('DOMContentLoaded', function () {
         initialView: 'dayGridMonth',
         events: '/BookingManagement/GetEvents',
         data: { roomId: roomId },
+        dayMaxEvents: true, // will apply the max number of events 
+        datMaxEventsRows: 3,
         headerToolbar: {
             left: 'prev,next today',
             center: 'title',
             right: 'dayGridMonth,timeGridWeek,timeGridDay'
         },
-        aspectRatio: 1.3
+  
+        aspectRatio: 2
     });
 
     calendar.render();

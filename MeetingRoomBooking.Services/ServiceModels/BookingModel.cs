@@ -15,6 +15,7 @@ namespace MeetingRoomBooking.Services.ServiceModels {
         public TimeOnly EndTime { get; set; }
         public string BookingStatus { get; set; }
         public string MeetingTitle { get; set; }
+        public int BookingID { get; set; }
     }
     
     public class CreateBooking {

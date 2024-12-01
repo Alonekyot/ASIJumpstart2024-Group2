@@ -6,6 +6,8 @@ using MeetingRoomBooking.WebApp.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
+using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 
 namespace MeetingRoomBooking.WebApp.Controllers {
 
@@ -29,9 +31,7 @@ namespace MeetingRoomBooking.WebApp.Controllers {
 			return View(rooms);
         }
 
-        [Route("Book/{roomName}")]
         public IActionResult Create(int? roomId) {
-
             ViewBag.ActivePage = "BookingManagement";
             ViewBag.RoomId = roomId;
             return View();
@@ -40,17 +40,45 @@ namespace MeetingRoomBooking.WebApp.Controllers {
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CreateBooking(CreateBooking newBook, int roomId) {
+            if (string.IsNullOrWhiteSpace(newBook.MeetingTitle)) {
+                ModelState.AddModelError("MeetingTitle", "Provide meeting title");
+                TempData["Model"] = JsonConvert.SerializeObject(newBook);
+                return RedirectToAction("Create", new { roomId });
+            }
+
+            DateOnly meetingDate = DateOnly.FromDateTime(newBook.MeetingDate);
+            TimeOnly startTime = TimeOnly.FromDateTime(newBook.TimeStart);
+            TimeOnly endTime = TimeOnly.FromDateTime(newBook.TimeEnd);
+            DateTime meetingTimeStart = meetingDate.ToDateTime(startTime);
+            DateTime meetingTimeEnd = meetingDate.ToDateTime(endTime);
+
+            if (meetingTimeStart > meetingTimeEnd) {
+                ModelState.AddModelError("TimeEnd", "A meeting can't end before it starts");
+                TempData["Model"] = JsonConvert.SerializeObject(newBook);
+                return RedirectToAction("Create", new { roomId });
+            }
+            else if (DateTime.Now > meetingTimeStart) {
+                ModelState.AddModelError("TimeEnd", "The meeting is already starting or it has finished");
+                TempData["Model"] = JsonConvert.SerializeObject(newBook);
+                return RedirectToAction("Create", new { roomId });
+            }
+
             int userId = int.Parse(User.FindFirst("UserId")?.Value);
 
             if (ModelState.IsValid) {
+                var success = await _bookingManager.CreateBook(newBook, userId, roomId);
 
-                var success = _bookingManager.CreateBook(newBook, userId, roomId);
+                if (!success) {
+                    ModelState.AddModelError("MeetingDate", "There might be some conflict with the bookings");
+                    TempData["Model"] = JsonConvert.SerializeObject(newBook);
+                    return RedirectToAction("Create", new { roomId });
+                }
+
                 return RedirectToAction("Index");
             }
 
-            ViewBag.ActivePage = "BookingManagement";
-            ViewBag.RoomId = roomId;
-            return View("Create", newBook);
+            TempData["Model"] = JsonConvert.SerializeObject(newBook);
+            return RedirectToAction("Create", new { roomId });
         }
 
         public JsonResult GetEvents() {

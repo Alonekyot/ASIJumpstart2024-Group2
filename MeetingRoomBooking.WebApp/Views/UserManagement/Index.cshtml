@@ -4,6 +4,7 @@
 
 @section style {
         <link rel="stylesheet" href="~/css/userList.css" />
+    <link rel="stylesheet" href="~/css/SearchBars.css" />
 }
 
 @{
@@ -16,14 +17,14 @@
 
 </div>
 <div class="under-title">
-    <form class="search-group" asp-action="SearchUser" method="post">
-        <input type="text" placeholder="Search" class="search" name="filter" />
-        <button class="search-btn" type="submit" ><i class="bi bi-search"></i></button>
+    <form class="dashboard-search-group" asp-action="SearchUser" method="post">
+        <input type="text" placeholder="Search" class="dashboard-search" name="filter" />
+        <button class="dashboard-search-btn" type="submit"><i class="bi bi-search"></i></button>
     </form>
     <a class="create-user-button" style="align-content:center" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">
         <i class="bi bi-plus"></i>
         Add User
-        </a>
+    </a>
 </div>
 
 <div class="flex table-container">
@@ -148,6 +149,6 @@
         justify-content: center;
     }
     .flex {
-        flex: 1;
+        flex: 1;    
     }
 </style>

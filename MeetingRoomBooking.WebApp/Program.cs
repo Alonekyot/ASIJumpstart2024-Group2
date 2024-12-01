@@ -24,6 +24,7 @@ builder.Services.AddScoped<IUserService, UserManager>();
 builder.Services.AddScoped<ILoginManager, LoginManager>();
 builder.Services.AddScoped<IRoomServices, RoomManager>();
 builder.Services.AddScoped<IBookingManager, BookingManager>();
+builder.Services.AddScoped<ChartDataManager>();
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie();
 builder.Services.AddControllersWithViews();
 
