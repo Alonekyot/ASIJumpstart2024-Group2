@@ -120,12 +120,12 @@ h2.title {
         background-color: #f8f8f8;
     }
 
-.uploaded-image {
-    width: 100%;
-    height: auto;
-    object-fit: cover;
-    display: block; 
-}
+    .uploaded-image {
+        width: 100%;
+        height: auto;
+        object-fit: cover;
+        display: block; 
+    }
 
 .drop-area {
     width: 100%;
