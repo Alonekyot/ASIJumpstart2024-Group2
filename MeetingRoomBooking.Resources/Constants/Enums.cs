@@ -1,24 +1,17 @@
 ﻿namespace MeetingRoomBooking.Resources.Constants 
 {
     public class Enums {
-
-        public enum Status {
-            Success,
-            Error,
-            CustomErr,
+        public enum RecurringPatterns {
+            Daily,
+            Weekly,
+            Monthly
         }
-
-        public enum LoginResult {
-            Success = 0,
-            Failed = 1,
-        }
-
-        public enum  Roles
+        public enum BookStatus
         {
-            User = 0,
-            Admin = 1,
-            SuperAdmin = 2,
+            Scheduled,
+            InProgress,
+            Cancelled,
+            Completed
         }
-
     }
 }

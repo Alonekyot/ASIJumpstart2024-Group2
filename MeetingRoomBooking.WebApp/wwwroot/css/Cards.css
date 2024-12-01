@@ -1,0 +1,137 @@
+﻿@import url('https://fonts.googleapis.com/css2?family=Inclusive+Sans:ital@0;1&family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap');
+
+
+/*Room*/
+.room-card {
+    padding: 10px;
+    min-width: 200px;
+    max-width: 250px;
+    border-radius: 5px;
+    box-shadow: 0px 6px 4px 0px rgba(0,0,0,0.25);
+    background-color: white;
+}
+
+.rooms-content {
+    display: flex;
+}
+.room-info *{
+    font-size: 12px;
+    font-family: "Poppins", sans-serif;
+}
+.image-container {
+    width: 100%;
+    height: 150px;
+    overflow: hidden;
+    display: flex; /* Use flexbox for centering */
+    justify-content: center; /* Center horizontally */
+    align-items: center;
+    margin-bottom: 15px;
+}
+.image-container img {
+    width: 100%; /* Image takes full width of the container */
+    height: auto; /* Maintain aspect ratio */
+    display: block; /* Remove bottom space */
+    object-fit: contain;
+}
+.info-top p span {
+    font-weight: bold;
+}
+.info-top h6 {
+    font-weight: bold;
+}
+.edit-details {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;  
+}
+.edit-details a {
+    text-decoration: none;
+}
+p span {
+    font-weight: bold;
+}
+.amenities {
+    display: flex;
+    align-items: center;
+}
+.amenities p {
+    margin: 0;
+}
+
+/*Booking*/
+
+.book-card {
+    box-shadow: 0px 5px 4px 0px rgba(0,0,0,0.25);
+    padding: 20px;
+    border-radius: 10px;
+    background-color: white;
+}
+.room-name {
+    font: bold 1.2rem "Lato", sans-serif;
+    margin: 0;
+}
+.room-info {
+    display: flex;
+    flex-direction: column;
+    margin: 0 10px;
+}
+.room-info div div{
+    font: normal 0.65rem "Open sans", sans-serif;
+    color: #888888;
+}
+.room-info div div span{
+    color: black;
+}
+.room-details {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    flex: 1;
+}
+.book-btn {
+    background-color: #437DD6;
+    color: white;
+    text-decoration: none;
+    font: bold 0.6rem "Open sans", sans-serif;
+    padding: 10px 20px;
+    border-radius: 6px;
+}
+
+.amenities {
+    display: flex;
+    align-items: center;
+}
+
+.amenities p {
+    margin: 0;
+}
+.icons-list {
+    display: flex;
+    align-items: center;
+}
+
+.circle {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    border: 1px solid #37A3E0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 3px;
+}
+    
+.circle i {
+    font-size: 12px;
+    color: #37A3E0;
+}
+.book-image-container {
+    height: 100px;
+    width: 160px;
+    background-size: cover;
+    overflow: hidden;
+}
+.book-image-container img {
+    height: 100%;
+}

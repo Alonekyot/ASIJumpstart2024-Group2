@@ -3,7 +3,7 @@
     --primary-font-style: "Poppins", sans-serif;
     --secondary-font-style: "Mulish", sans-serif;
 
-    --header-height: 72px;
+    --header-height: 4.5rem;
 }
 
 html, body {
@@ -26,9 +26,9 @@ body {
 li a {
     text-decoration: none;
     color: var(--primary-fg-color);
-    margin: 0 20px;
-    font-size: 16px;
-    line-height: 24px;
+    margin: 0 1.25rem;
+    font-size: 1rem;
+    line-height: 1.5rem;
     font-family: var(--primary-font-style);
     font-weight: 600;
 }
@@ -36,7 +36,7 @@ li a {
 .head {
     width: 100%;
     display: flex;
-    padding: 10px 20px;
+    padding: 0.625rem 1.25rem;
     justify-content: space-between;
     align-items: center;
     height: var(--header-height);
@@ -44,7 +44,7 @@ li a {
 .title {
     font-family: var(--primary-font-style);
     font-weight: bold;
-    font-size: 21px;
+    font-size: 1.3125rem;
 }
 .content {
     flex: 1;
@@ -64,26 +64,27 @@ li a {
     align-items: center;
 }
 .left-header img {
-    height: 30px;
+    height: 1.875rem;
     width: auto;
-    margin-right: 10px;
+    margin-right: 0.625rem;
 }
 
 .intro-content {
     position: relative;
-    top: calc(185px - var(--header-height));
-    left: 50px;
+    top: 50%;
+    transform: translateY(-50%);
+    left: 3.125rem;
     background-color: transparent;
-    width: 648px;
+    width: 40.5rem;
 }
-.intro-content h2{
+.intro-content h2 {
     font-family: var(--primary-font-style);
     font-weight: 600;
-    font-size: 67px;
+    font-size: 4.1875rem;
 }
 .intro-content p {
     font-family: var(--secondary-font-style);
-    font-size: 24px;
+    font-size: 1.5rem;
 }
 span {
     color: var(--primary-fg-color);
@@ -108,7 +109,7 @@ span {
     padding: 10px 0;
     font-family: var(--primary-font-style);
     font-weight: 400;
-    font-size: 16px;
+    font-size: 1rem;
     box-shadow: 0px -38px 55px 11px rgba(255,255,255,0.75);
 }
 
@@ -128,15 +129,16 @@ span {
         display: none;
     }
     .intro-content {
-        position: static;
+        width: 100%;
         padding: 15px;
-        margin-top: 150px;
+        left: 0;
+        transform: translateY(-70%);
     }
     .intro-content h2 {
-        font-size: 48px;
+        font-size: 3.6875rem;
     }
     .intro-content p {
-        font-size: 18px;
+        font-size: 1rem;
     }
     .intro-content * {
         margin : 20px auto;

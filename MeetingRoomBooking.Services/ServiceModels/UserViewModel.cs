@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MeetingRoomBooking.Data.Models;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
@@ -8,6 +9,12 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace MeetingRoomBooking.Services.ServiceModels {
+
+    public class UserModel {
+        public IEnumerable<User>? Users { get; set; }
+        public UserViewModel CreateUser { get; set; }
+    }
+
     public class UserViewModel {
 
         [Required(ErrorMessage = "Firstname is required")]

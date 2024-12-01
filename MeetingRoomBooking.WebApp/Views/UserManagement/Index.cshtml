@@ -1,9 +1,9 @@
-﻿@using System.Security.Claims
+﻿﻿@using System.Security.Claims
 @using MeetingRoomBooking.Services.Manager
-@model IEnumerable<MeetingRoomBooking.Data.Models.User>
+@model MeetingRoomBooking.Services.ServiceModels.UserModel;
 
 @section style {
-    <link rel="stylesheet" href="~/css/userList.css" />
+        <link rel="stylesheet" href="~/css/userList.css" />
 }
 
 @{
@@ -13,21 +13,20 @@
 <div style="display:flex;">
     <h2>User List</h2>
     <div style="flex: 1;"></div>
-    
+
 </div>
 <div class="under-title">
-    <div class="search-group">
-        <input type="text" placeholder="Search" class="search" />
-        <a class="search-btn"><i class="bi bi-search"></i></a>
- 
-    </div>
-    <a class="create-user-button" style="align-content:center" asp-action="Create">
+    <form class="search-group" asp-action="SearchUser" method="post">
+        <input type="text" placeholder="Search" class="search" name="filter" />
+        <button class="search-btn" type="submit" ><i class="bi bi-search"></i></button>
+    </form>
+    <a class="create-user-button" style="align-content:center" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">
         <i class="bi bi-plus"></i>
         Add User
     </a>
 </div>
 
-<div class="flex">
+<div class="flex table-container">
     <table class="table">
         <thead>
             <tr>
@@ -36,27 +35,27 @@
                 <th>Email</th>
                 <th>Phone No.</th>
                 @if (int.TryParse(User.FindFirstValue("Role"), out int role) && role == 2) {
-                    <th>Password</th>
+                        <th>Password</th>
                 }
                 <th>Actions</th>
             </tr>
         </thead>
         <tbody>
-            @foreach (var user in Model) {
-                <tr>
-                    <td>@user.FirstName</td>
-                    <td>@user.LastName</td>
-                    <td>@user.Email</td>
-                    <td>@user.Phone</td>
+            @foreach (var user in Model.Users) {
+                    <tr>
+                        <td>@user.FirstName</td>
+                        <td>@user.LastName</td>
+                        <td>@user.Email</td>
+                        <td>@user.Phone</td>
                     @if (int.TryParse(User.FindFirstValue("Role"), out int role2) && role2 == 2) {
-                        <td>@PasswordManager.DecryptPassword(user.Password)</td>
+                                <td>@PasswordManager.DecryptPassword(user.Password)</td>
                     }
-                    <td>
-                        <a asp-action="Details" asp-route-id="@user.UserId" style="text-decoration:none">
-                            Details<i class="bi bi-person-fill-gear" style="color:#37A3E0; font-size:20px"></i>
-                        </a>
-                    </td>
-                </tr>
+                        <td>
+                            <a asp-action="Details" asp-route-id="@user.UserId" style="text-decoration:none">
+                                Details<i class="bi bi-person-fill-gear" style="color:#37A3E0; font-size:20px"></i>
+                            </a>
+                        </td>
+                    </tr>
             }
         </tbody>
     </table>
@@ -69,15 +68,75 @@
     </li>
 
     @for (int i = 1; i <= ViewBag.TotalPages; i++) {
-        <li class="page-item @(ViewBag.CurrentPage == i ? "active" : "")">
-            <a class="page-link" asp-action="Index" asp-route-pageNumber="@i">@i</a>
-        </li>
+            <li class="page-item @(ViewBag.CurrentPage == i ? "active" : "")">
+                <a class="page-link" asp-action="Index" asp-route-pageNumber="@i">@i</a>
+            </li>
     }
 
     <li class="page-item @(ViewBag.CurrentPage == ViewBag.TotalPages ? "disabled" : "")">
         <a class="page-link" asp-action="Index" asp-route-pageNumber="@(ViewBag.CurrentPage + 1)">Next</a>
     </li>
 </ul>
+
+
+<div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
+    <form class="offcanvas-body" asp-controller="UserManagement" asp-action="CreateUser" method="post">
+        @Html.AntiForgeryToken()
+        <h3>User Information</h3>
+        <div class="create-btn-grp" data-bs-dismiss="offcanvas" aria-label="Close">
+            <a class="cancel-btn">
+                Cancel
+            </a>
+            <button type="submit" class="create-btn">
+                <i class="bi bi-person-plus"></i>
+                Create User
+            </button>
+        </div>
+        <hr />
+        <div class="user-input">
+            <div class="input-section">
+                <span>First Name</span>
+                <input type="text" asp-for="CreateUser.FirstName" />
+            </div>
+        </div>
+        <div class="user-input">
+            <div class="input-section">
+                <span>Last Name</span>
+                <input type="text" asp-for="CreateUser.LastName" />
+            </div>
+        </div>
+        <div class="user-input">
+            <div class="input-section">
+                <span>Email</span>
+                <input type="email" asp-for="CreateUser.Email" />
+            </div>
+        </div>
+        <div class="user-input">
+            <div class="input-section">
+                <span>Phone</span>
+                <input type="text" asp-for="CreateUser.Phone" />
+            </div>
+        </div>
+        <div class="user-input">
+            <div class="input-section">
+                <span>Password</span>
+                <input type="password" asp-for="CreateUser.Password" />
+            </div>
+        </div>
+        <div class="user-input">
+            <div class="input-section">
+                <span>Role</span>
+                <select asp-for="CreateUser.Remarks">
+                    <option disabled selected>Select a role</option>
+                    <option value="User">User</option>
+                    <option value="Admin">Admin</option>
+                    <option value="Super admin">Super admin</option>
+                </select>
+            </div>
+        </div>
+
+    </form>
+</div>
 
 
 <style>

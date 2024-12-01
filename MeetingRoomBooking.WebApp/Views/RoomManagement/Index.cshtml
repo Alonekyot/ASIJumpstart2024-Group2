@@ -1,45 +1,173 @@
-﻿@model IEnumerable<MeetingRoomBooking.Data.Models.Room>
-@using MeetingRoomBooking.Resources.Constants
+﻿@model MeetingRoomBooking.Services.ServiceModels.RoomModel
+@Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
 @{
-	Layout = "_HomeLayout";
+    Layout = "_HomeLayout";
 }
-
+@section script {
+    <script src="~/js/createRoom.js"></script>
+    <script src="~/js/navbar.js"></script>
+}
 @section style {
-	<link rel="stylesheet" href="/css/roomManagementStyle.css" />
+    <link rel="stylesheet" href="/css/roomManagementStyle.css" />
+    <link rel="stylesheet" href="/css/Cards.css" />
 }
 
-<div class="rooms">
-	<div>
-		<h5>Meeting Rooms</h5>
-		<a asp-action="Create">Create</a>
-		</div>
-	<div class="main">
-		<main class="card-grid">
+    <div class="rooms-content">
+        <div>
+            <h2 class="title">Meeting Rooms</h2>
+            <main id="card-grid" class="card-grid">
+                @foreach (var room in Model.Rooms) {
+                    <div class="room-card">
+                        <div class="image-container">
+                            @if (room.Image != null && room.Image.Length > 0) {
+                                // Convert byte[] to base64 string and set it as the image source
+                                var base64Image = Convert.ToBase64String(room.Image);
+                                <img src="data:image/jpeg;base64,@base64Image" alt="Room Image" />
+                            }
+                            else {
+                                // Fallback to a default image if no image is available
+                                <img src="~/assets/login-gb.jpg" alt="Room Image" />
+                            }
+                        </div>
+                        <div class="room-info">
+                            <div class="info-top">
+                                <h6>@room.RoomName</h6>
+                                <p><span>Seating capacity: </span>@room.RoomCapacity</p>
+                            </div>
+                            <p><span>Location: </span>@room.RoomLocation</p>
+                        </div>
+                        <div class="amenities">
+                            <p> <span>Amenities: </span></p>
+                            <div class="icons-list">
+                                @if (room.Audio) {
+                                    <div class="circle" data-bs-toggle="tooltip">
+                                        <i class="bi bi-headset"></i>
+                                    </div>
+                                }
+                                @if (room.Video) {
+                                    <div class="circle">
+                                        <i class="bi bi-camera-video-fill"></i>
+                                    </div>
+                                }
+                                @if (room.WhiteBoard) {
+                                    <div class="circle">
+                                        <i class="bi bi-tv-fill"></i>
+                                    </div>
+                                }
+                                @if (room.Projector) {
+                                    <div class="circle">
+                                        <i class="bi bi-projector-fill"></i>
+                                    </div>
+                                }
+                                @if (room.Loudspeaker) {
+                                    <div class="circle">
+                                        <i class="bi bi-speaker-fill"></i>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                        <div class="edit-details">
+                            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal"
+                                    data-room-id="@room.RoomId">
+                                Delete
+                            </button>
+                            <a asp-action="Edit" asp-route-id="@room.RoomId">Edit details</a>
+                        </div>
+                    </div>
+                }
+            </main>
+        </div> 
+        <div>
+            <h2 class="title">Create New Room</h2>
+            <div class="create-room">
+                <form method="post" asp-action="Create" enctype="multipart/form-data">
+                @Html.AntiForgeryToken()
+                    <span asp-validation-for="NewRoom.RoomCapacity" class="text-danger"></span>
+                    <div class="input-area">
+                        <label class="room-label">Room name:</label>
+                        <input type="text" class="txt-area" asp-for="NewRoom.RoomName"  />
+                    </div>
+                    <div class="input-area">
+                        <label class="room-label">Location:</label>
+                        <input type="text" class="txt-area" asp-for="NewRoom.RoomLocation"  />
+                    </div>
+                    <div class="input-area">
+                        <label class="room-label">Seating capacity:</label>
+                        <input type="number" class="txt-area" asp-for="NewRoom.RoomCapacity"  />
+                        
+                    </div>
+                    <div class="toggle-group">
+                        <label class="toggle-btn" id="audio">
+                            <input type="checkbox" onclick="toggleClass(this, 'audio')" asp-for="NewRoom.Audio" hidden />
+                            <p>Audio</p>
+                        </label>
+                        <label class="toggle-btn" id="video">
+                            <input type="checkbox" onclick="toggleClass(this, 'video')" asp-for="NewRoom.Video" hidden />
+                            <p>Video</p>
+                        </label>
+                        <label class="toggle-btn" id="projector">
+                            <input type="checkbox" onclick="toggleClass(this, 'projector')" asp-for="NewRoom.Projector" hidden />
+                            <p>Projector</p>
+                        </label>
+                        <label class="toggle-btn" id="whiteBoard">
+                            <input type="checkbox" onclick="toggleClass(this, 'whiteBoard')" asp-for="NewRoom.WhiteBoard" hidden />
+                            <p>White Board</p>
+                        </label>
+                        <label class="toggle-btn" id="loudspeaker">
+                            <input type="checkbox" onclick="toggleClass(this, 'loudspeaker')" asp-for="NewRoom.Loudspeaker" hidden />
+                            <p>Loud speaker</p>
+                        </label>
+                    </div>
+                    <div class="drop-area">
+                        <div id="dropArea" class="drag-drop-box">
+                            <p id="uploadText">Drag & Drop an image here or click to upload</p>
+                        <input type="file" id="imageUpload" accept="image/*" onchange="displayImage()" asp-for="NewRoom.ImageFile" hidden />
+                            <img id="previewImage" src="" alt="Uploaded Image" style="display:none;" />
+                        </div>
+                    </div>
+                
+                    <div class="submit-area">
+                        <button type="submit" class="primary-btn">Create room</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+    </div>
 
-			@foreach (var room in Model)
-			{
-				<div class="room-card">
-					<div class="image-container">
-						<img src="~/assets/login-gb.jpg" alt="Alternate Text" />
-					</div>	
-					<div class="room-info">
-						<div class="info-top">
-							<h6>@room.RoomName</h6>
-							<p><span>Seating capacity: </span>@room.RoomCapacity</p>
-						</div>
-						<p><span>Location: </span>@room.RoomLocation</p>
-					</div>
-					<div class="amenities">
-						<p> <span>Amenities: </span></p>
-						Icons
-					</div>
-					<div class="edit-details"><a href="#">Edit details</a></div>
-				</div>
-			}
 
-		</main>
-		
-	</div>
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Delete Room</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to delete this room?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <form asp-action="Delete" method="post">
+                    @Html.AntiForgeryToken()
+                    @Html.Hidden("RoomId")
+                    <input type="hidden" name="RoomId" id="RoomId" />
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                </form>
+            </div>
+        </div>
+    </div>
 </div>
 
+<script>
+    var exampleModal = document.getElementById('exampleModal');
+    exampleModal.addEventListener('show.bs.modal', function (event) {
+        var button = event.relatedTarget; // Button that triggered the modal
+        var roomId = button.getAttribute('data-room-id'); // Extract RoomId from data-* attribute
+        var modalForm = exampleModal.querySelector('form'); // Get the modal form
 
+        // Set the hidden RoomId input field with the roomId
+        modalForm.querySelector('input[name="RoomId"]').value = roomId;
+    });
+</script>

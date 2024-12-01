@@ -1,0 +1,38 @@
+﻿<style>
+    .fc-daygrid-day {
+        max-width: 30px !important; /* Set desired width */
+        max-height: 30px !important; /* Set desired height */
+    }
+</style>
+@section style {
+    <link rel="stylesheet" href="~/css/calendar.css" />
+}
+<link rel="stylesheet" href="~/css/calendar.css" />
+<link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/main.min.css" rel="stylesheet" />
+
+<div style="display: flex; flex: 1;">
+    <div id="calendar"></div>
+</div>
+
+
+@* Reference the FullCalendar script *@
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/main.min.js"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var calendarEl = document.getElementById('calendar');
+
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+            initialView: 'dayGridMonth',
+            events: '/Home/GetEvents', // Call the controller action
+            headerToolbar: {
+                left: 'prev,next today',
+                center: 'title',
+                right: 'dayGridMonth,timeGridWeek,timeGridDay'
+            },
+        });
+
+        calendar.render();
+    });
+</script>
+

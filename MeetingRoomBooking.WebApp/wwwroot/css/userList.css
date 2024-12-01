@@ -1,4 +1,7 @@
-﻿.search-group {
+﻿@import url('https://fonts.googleapis.com/css2?family=Inclusive+Sans:ital@0;1&family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+
+.search-group {
     border: 1px solid #E1E6ED;
     width: fit-content;
     padding: 0 10px;
@@ -15,7 +18,6 @@
 .search {
     border: none;
     background-color: transparent;
-    width: 250px;
 }
 .search:focus {
     outline: none;
@@ -23,6 +25,9 @@
 .search-btn {
     align-content: center;
     text-decoration: none;
+    background-color: transparent;
+    border: none;
+    border-left: 1px solid #555555;
 }
 .under-title{
     display: flex;
@@ -43,4 +48,58 @@
     color: white !important;
     font-size: 20px;
     font-weight: bold;
+}
+@media (max-width: 800px) {
+    .table {
+        width: 100% !important;
+    }
+    .table-container {
+        overflow-x: scroll;
+    }
+}
+
+
+
+.offcanvas {
+    background-color: #F0F6FB;
+}
+
+.input-section {
+    display: flex;
+    flex-direction: column;
+}
+.input-section {
+    font-family: Rubik, sans-serif;
+}
+.input-section span{
+    color: #0F75AE;
+}
+.input-section input, .input-section select {
+    border: none;
+    outline: none;
+    height:2rem;
+    border-radius: 5px;
+    padding: 5px 10px;
+    font-size: 1rem;
+}
+.cancel-btn {
+    font-family: Rubik, sans-serif;
+    color: #0F75AE;
+    text-decoration: none;
+    cursor: pointer;
+}
+.create-btn {
+    font-family: Rubik, sans-serif;
+    color: white;
+    background-color: #0F75AE;
+    border-radius: 5px;
+    padding: 8px 20px;
+    text-decoration: none;
+    margin-left: 1rem;
+    cursor: pointer;
+}
+.create-btn-grp {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
 }

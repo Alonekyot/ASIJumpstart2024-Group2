@@ -1,8 +1,10 @@
-﻿@{
+﻿@model IEnumerable<MeetingRoomBooking.Data.Models.Room>
+@{
 	Layout = "_HomeLayout";
 }
 @section style {
 	<link href="~/css/bookingManagementStyle.css" rel="stylesheet" />
+	<link href="~/css/Cards.css" rel="stylesheet" />
 }
 <p class="title font-lato">Booking Management</p>
 <div class="flex">
@@ -14,23 +16,6 @@
 				<button class="filter-button"><i class="bi bi-funnel"></i></button>
 			</div>
 			<div class="font-lato">
-				<section>
-					<p class="category">Room Availability</p>
-					<ul>
-						<li>
-							<label>
-								<input type="checkbox" />
-								Available
-							</label>
-						</li>
-						<li>
-							<label>
-								<input type="checkbox" />
-								Not Available
-							</label>
-						</li>
-					</ul>
-				</section>
 				<section>
 					<p class="category">Room capacity</p>
 					<ul>
@@ -87,6 +72,12 @@
 								White Board
 							</label>
 						</li>
+						<li>
+							<label>
+								<input type="checkbox" />
+								Loud Speaker
+							</label>
+						</li>
 					</ul>
 				</section>
 			</div>
@@ -98,25 +89,67 @@
 			<a href="#">View Bookings</a>
 		</div>
 		<div class="card-grid">
-			@for(int i=0; i < 5 ; i++) {
+			@foreach (var room in Model)
+			{
 				<div class="flex book-card">
-					<div class="image-container">
-						<img src="~/assets/login-gb.jpg" alt="Alternate Text" />
+					<div class="book-image-container">
+						@if (room.Image != null && room.Image.Length > 0) {
+							// Convert byte[] to base64 string and set it as the image source
+							var base64Image = Convert.ToBase64String(room.Image);
+							<img src="data:image/jpeg;base64,@base64Image" alt="Room Image" />
+						}
+						else {
+							// Fallback to a default image if no image is available
+							<img src="~/assets/login-gb.jpg" alt="Room Image" />
+						}
 					</div>
 					<div class="room-info flex-grow-1">
-						<h4 class="room-name">Meeting Room</h4>
+						<h4 class="room-name">@room.RoomName</h4>
 						<div class="room-details">
-							<div><span>Seating capacity: </span>90</div>
-							<div><span>Location: </span>bisan asa</div>
-							<div><span>Facilities: </span>daghan</div>
+							<div><span>Seating capacity: </span>@room.RoomCapacity</div>
+							<div><span>Location: </span>@room.RoomLocation</div>
+							<div class="amenities">
+								<p> <span>Amenities: </span></p>
+								<div class="icons-list">
+									@if (room.Audio)
+									{
+										<div class="circle">
+											<i class="bi bi-headset"></i>
+										</div>
+									}
+									@if (room.Video)
+									{
+										<div class="circle">
+											<i class="bi bi-camera-video-fill"></i>
+										</div>
+									}
+									@if (room.WhiteBoard)
+									{
+										<div class="circle">
+											<i class="bi bi-tv-fill"></i>
+										</div>
+									}
+									@if (room.Projector)
+									{
+										<div class="circle">
+											<i class="bi bi-projector-fill"></i>
+										</div>
+									}
+									@if (room.Loudspeaker)
+									{
+										<div class="circle">
+											<i class="bi bi-speaker-fill"></i>
+										</div>
+									}
+								</div>
+							</div>
 						</div>
 					</div>
 					<div>
-						<a class="book-btn">Book</a>
+						<a class="book-btn" asp-action="Create" asp-route-roomName="@room.RoomName" asp-route-roomId="@room.RoomId">Book</a>
 					</div>
 				</div>
 			}
-			
 		</div>
 	</main>
 </div>
