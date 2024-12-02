@@ -9,6 +9,22 @@ aside p {
 .font-lato {
     font-family: "Lato", sans-serif;
 }
+
+.info-book-manage{
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    display: inline;
+
+}
+
+.card-title{ 
+    font-weight: bold;
+    font-size: large;
+}
+
+.icons-list{
+    margin-left: 5px;
+}
+
 .filter-section {
     background-color: white;
     border-radius: 10px;
@@ -17,6 +33,7 @@ aside p {
 }
 .flex {
     display: flex;
+    justify-content: center;
 }
 .flex-center1 {
     display: flex;
@@ -52,7 +69,7 @@ aside p {
     padding: 0.3rem 0.5rem;
 }
 main{
-    max-width:750px;
+    max-width:900px;
 }
 .search:active, .search:focus{
     outline: none;

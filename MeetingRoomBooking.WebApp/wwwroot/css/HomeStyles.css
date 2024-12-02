@@ -69,14 +69,20 @@ i {
     font-size: 14px;
 }
 
+.group {
+    display: flex;
+    gap: 10px;
+    flex-direction: column;
+}
+
 .sidebar {
     display: flex !important;
     flex-direction: column !important;
-
 }
 .navbar-list{
     list-style-type: none;
     padding: 0;
+    margin-top: 5px;
 }
 .list-item {
     width: 100% !important;
@@ -88,7 +94,7 @@ i {
     color: black;
     font-size: 1.25em;
     font-family: 'Poppins', sans-serif;
-    margin: 5px 0;
+    margin: 10px 0;
     padding: 5px 10px;
     border-radius: 3px;
 }
@@ -119,12 +125,13 @@ li.active i{
 .aside {
     height: 100%;
     width: 3.125rem;
-    transition: 0.5s;
+    transition:  0.5s;
     padding: 0 5px;
     background: rgb(187,229,255);
     background: linear-gradient(180deg, rgba(19,59,81,1) 60%,rgba(103,144,168,1) 120%);
     justify-content: space-between;
 }
+
 .navbar-active {
     width: 15.625rem !important;
 }
@@ -182,3 +189,4 @@ li.active i{
         white-space: nowrap;
     }
 }
+

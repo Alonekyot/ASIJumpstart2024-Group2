@@ -120,7 +120,7 @@ h2.title {
         background-color: #f8f8f8;
     }
 
-    .uploaded-image {
+   .uploaded-image {
         width: 100%;
         height: auto;
         object-fit: cover;
