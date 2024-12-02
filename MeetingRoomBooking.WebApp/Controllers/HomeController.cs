@@ -36,6 +36,20 @@ namespace MeetingRoomBooking.WebApp.Controllers {
 
             if (role == 1 || role == 2)
             {
+
+                int todaysBooking = _context.Bookings
+                    .Where(b => b.MeetingDate == DateOnly.FromDateTime(DateTime.Now))
+                    .Count();
+                int roomCount = _context.Rooms
+                    .Count();
+                int recurring = _context.Bookings
+                    .Where(b => b.Recurring)
+                    .Count();
+
+                ViewBag.RoomCount = roomCount;
+                ViewBag.TodaysBooking = todaysBooking;
+                ViewBag.Recurrings = recurring;
+
                 // For Admin: fetch all bookings (both admin and user)
                 var bookings = (from booking in _context.Bookings
                              join room in _context.Rooms on booking.RoomId equals room.RoomId
@@ -181,7 +195,21 @@ namespace MeetingRoomBooking.WebApp.Controllers {
         }
 
         public IActionResult SearchBooking(string filter) {
-           
+
+            int todaysBooking = _context.Bookings
+                    .Where(b => b.MeetingDate == DateOnly.FromDateTime(DateTime.Now))
+                    .Count();
+            int roomCount = _context.Rooms
+                .Count();
+            int recurring = _context.Bookings
+                .Where(b => b.Recurring)
+                .Count();
+
+            ViewBag.RoomCount = roomCount;
+            ViewBag.TodaysBooking = todaysBooking;
+            ViewBag.Recurrings = recurring;
+            ViewBag.ActivePage = "Dashboard";
+
             var bookings = (from booking in _context.Bookings
                             join room in _context.Rooms on booking.RoomId equals room.RoomId
                             join user in _context.Users on booking.UserId equals user.UserId

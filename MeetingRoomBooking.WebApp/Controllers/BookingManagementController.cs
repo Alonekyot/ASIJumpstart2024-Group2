@@ -76,8 +76,8 @@ namespace MeetingRoomBooking.WebApp.Controllers {
                     ViewBag.RoomId = roomId;
                     return View("Create");
                 }
-
-                return RedirectToAction("Index");
+				TempData["SuccessMessage"] = "Booked Successfully!";
+				return RedirectToAction("Index");
             }
             else {
                 foreach (var entry in ModelState) {

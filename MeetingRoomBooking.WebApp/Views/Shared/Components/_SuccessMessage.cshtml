@@ -1,0 +1,54 @@
+﻿
+
+@if (TempData["SuccessMessage"] != null) {
+    <dialog id="success-dialog">
+        <i class="bi bi-check-circle-fill check-icon"></i>
+        <h5>Success</h5>
+        <p>You successfully booked a room!</p>
+        <button id="close-btn">close</button>
+    </dialog>
+}
+
+<style>
+    #success-dialog {
+        top: 50%;
+        transform: translateY(-50%);
+        border: 1px solid #666;
+        border-radius: 5px;
+        background-color: #fff;
+        padding: 1rem;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        max-width: 300px;
+        text-align: center;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        z-index: 1000;
+    }
+
+    .check-icon {
+        color: #82ce34;
+        font-size: 4rem;
+        margin-bottom: 0.5rem;
+    }
+
+    h5 {
+        margin: 0.5rem 0;
+    }
+
+    p {
+        margin: 0;
+    }
+</style>
+<script>
+    const dialog = document.getElementById("success-dialog");
+    if (dialog) {
+        setTimeout(() => {
+            if (typeof dialog.close === "function") {
+                console.log("hello");
+                dialog.open = false; // Close the dialog after 3 seconds
+            }
+
+        }, 3000);
+    }
+</script>
