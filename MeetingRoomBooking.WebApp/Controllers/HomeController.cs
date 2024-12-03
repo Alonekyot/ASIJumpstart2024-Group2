@@ -42,25 +42,64 @@ namespace MeetingRoomBooking.WebApp.Controllers {
 
             if (role == 1 || role == 2)
             {
-                // For Admin: fetch all bookings (both admin and user)
-                var bookings = (from booking in _context.Bookings
-                             join room in _context.Rooms on booking.RoomId equals room.RoomId
-                             join user in _context.Users on booking.UserId equals user.UserId
-							where !user.Deleted
-								select new BookingModel
-                             {
-                                 UserName = user.FirstName + " " + user.LastName,
-                                 RoomName = room.RoomName,
-                                 MeetingDate = booking.MeetingDate,
-                                 StartTime = booking.StartTime,
-                                 EndTime = booking.EndTime,
-                                 RoomLocation = room.RoomLocation,
-                                 BookingStatus = booking.BookingStatus,
-                                 MeetingTitle = booking.MeetingTitle,
-                                 BookingID = booking.BookingId
-                             }).ToList();
 
-                
+                int todaysBooking = _context.Bookings
+                    .Where(b => b.MeetingDate == DateOnly.FromDateTime(DateTime.Now))
+                    .Count();
+                int roomCount = _context.Rooms
+                    .Count();
+                int recurring = _context.Bookings
+                    .Where(b => b.Recurring)
+                    .Count();
+
+                ViewBag.RoomCount = roomCount;
+                ViewBag.TodaysBooking = todaysBooking;
+                ViewBag.Recurrings = recurring;
+
+                // For Admin: fetch all bookings (both admin and user)
+                var currentDate = DateOnly.FromDateTime(DateTime.Now);
+                var currentTime = TimeOnly.FromDateTime(DateTime.Now);
+
+                var bookings = (from booking in _context.Bookings
+                                join room in _context.Rooms on booking.RoomId equals room.RoomId
+                                join user in _context.Users on booking.UserId equals user.UserId
+                                select new
+                                {
+                                    UserName = user.FirstName + " " + user.LastName,
+                                    RoomName = room.RoomName,
+                                    MeetingDate = booking.MeetingDate,
+                                    StartTime = booking.StartTime,
+                                    EndTime = booking.EndTime,
+                                    RoomLocation = room.RoomLocation,
+                                    BookingStatus = booking.BookingStatus,
+                                    MeetingTitle = booking.MeetingTitle,
+                                    BookingID = booking.BookingId
+                                })
+                                .AsEnumerable() // Switch to LINQ-to-Objects for date and time logic
+                                .Select(b => new BookingModel
+                                {
+                                    UserName = b.UserName,
+                                    RoomName = b.RoomName,
+                                    MeetingDate = b.MeetingDate,
+                                    StartTime = b.StartTime,
+                                    EndTime = b.EndTime,
+                                    RoomLocation = b.RoomLocation,
+                                    BookingStatus = b.BookingStatus == "Scheduled" &&
+                                                    b.MeetingDate == currentDate
+                                                    ? (currentTime >= b.StartTime && currentTime <= b.EndTime
+                                                        ? "Ongoing"
+                                                        : currentTime > b.EndTime
+                                                            ? "Finished"
+                                                            : "Scheduled")
+                                                    : b.BookingStatus,
+                                    MeetingTitle = b.MeetingTitle,
+                                    BookingID = b.BookingID
+                                })
+                                .OrderBy(d => d.MeetingDate)
+                                .ThenBy(t => t.StartTime)
+                                .ToList();
+
+
                 return View("AdminDashboard", bookings); // Pass the bookings to the Admin view
             }
             else if (role == 0)
@@ -88,6 +127,7 @@ namespace MeetingRoomBooking.WebApp.Controllers {
             return View();
 
         }
+
         public IActionResult ReportAnalytics() {
             ViewBag.ActivePage = "Report & Analytics";
 
@@ -100,10 +140,34 @@ namespace MeetingRoomBooking.WebApp.Controllers {
                 .Where(b => b.Recurring)
                 .Count();
 
+            var roomLeaderboard = _context.Rooms
+                .Select(room => new RoomLeaderBoard {
+                    RoomName = room.RoomName,
+                    BookedTimes = room.booking.Count()
+                })
+                .OrderByDescending(x => x.BookedTimes)
+                .ToList();
+
+            var userLeaderboard = _context.Users
+                .Where(u => !u.Deleted)
+                .Select(user => new UserLeaderBoard
+                {
+                    Username = user.FirstName + " " + user.LastName,
+                    BookedTimes = user.booking.Count()
+                })
+                .Where(s => s.BookedTimes > 0)
+                .OrderByDescending(u => u.BookedTimes)
+                .ToList();
+            var leaderboards = new LeaderBoardLists()
+            {
+                RoomLeaders = roomLeaderboard,
+                UserLeaders = userLeaderboard
+            };
+
             ViewBag.RoomCount = roomCount;
             ViewBag.TodaysBooking = todaysBooking;
             ViewBag.Recurrings = recurring;
-            return View();
+            return View(leaderboards);
         }
 
         [HttpGet]
@@ -173,7 +237,21 @@ namespace MeetingRoomBooking.WebApp.Controllers {
         }
 
         public IActionResult SearchBooking(string filter) {
-           
+
+            int todaysBooking = _context.Bookings
+                    .Where(b => b.MeetingDate == DateOnly.FromDateTime(DateTime.Now))
+                    .Count();
+            int roomCount = _context.Rooms
+                .Count();
+            int recurring = _context.Bookings
+                .Where(b => b.Recurring)
+                .Count();
+
+            ViewBag.RoomCount = roomCount;
+            ViewBag.TodaysBooking = todaysBooking;
+            ViewBag.Recurrings = recurring;
+            ViewBag.ActivePage = "Dashboard";
+
             var bookings = (from booking in _context.Bookings
                             join room in _context.Rooms on booking.RoomId equals room.RoomId
                             join user in _context.Users on booking.UserId equals user.UserId

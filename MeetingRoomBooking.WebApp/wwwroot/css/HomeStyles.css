@@ -190,3 +190,28 @@ li.active i{
     }
 }
 
+
+
+
+/* Style for the entire scrollbar */
+::-webkit-scrollbar {
+    width: 12px; /* Width of the vertical scrollbar */
+    background-color: transparent;
+}
+
+/* Style for the scrollbar track */
+::-webkit-scrollbar-track {
+    background-color: transparent;
+    border-radius: 10px;
+}
+
+/* Style for the scrollbar thumb */
+::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 10px;
+}
+
+    /* Hover effect for the scrollbar thumb */
+    ::-webkit-scrollbar-thumb:hover {
+        background: #555;
+    }

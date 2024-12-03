@@ -32,19 +32,87 @@ namespace MeetingRoomBooking.Services.Managers {
                 RecurringEnd = newbook.RecurringEnd.HasValue ? DateOnly.FromDateTime(newbook.RecurringEnd.Value) : (DateOnly?)null
             };
 
-            bool isConflict = IsMeetingConflict(booking);
-            if (isConflict) {
-                await _context.DisposeAsync();
-                return false;
+            // Handle recurring bookings
+            if (newbook.IsRecurring && newbook.RecurringPattern != null && booking.RecurringEnd.HasValue) {
+                // Generate recurring instances
+                var recurringInstances = GenerateRecurrence(booking);
+
+                // Check for conflicts
+                foreach (var instance in recurringInstances) {
+                    if (IsMeetingConflict(instance)) {
+                        await _context.DisposeAsync();
+                        return false; // Conflict detected, stop processing
+                    }
+                }
+
+                // Add all valid instances to the database
+                _context.Bookings.AddRange(recurringInstances);
             }
-            _context.Bookings.Add(booking);
-            _context.SaveChanges();
+            else {
+                // Handle non-recurring bookings
+                if (IsMeetingConflict(booking)) {
+                    await _context.DisposeAsync();
+                    return false; // Conflict detected
+                }
+
+                _context.Bookings.Add(booking);
+            }
+
+            await _context.SaveChangesAsync();
             await _context.DisposeAsync();
 
             return true;
         }
 
-        
+        private List<Booking> GenerateRecurrence(Booking booking) {
+            var bookings = new List<Booking>();
+            DateOnly current = booking.MeetingDate;
+            while(current <= booking.RecurringEnd) {
+                bookings.Add(new Booking
+                {
+                    UserId = booking.UserId,
+                    RoomId = booking.RoomId,
+                    MeetingTitle = booking.MeetingTitle,
+                    MeetingDate = current,
+                    StartTime = booking.StartTime,
+                    EndTime = booking.EndTime,
+                    BookingStatus = booking.BookingStatus,
+                    Recurring = false, // Individual instances are not marked as recurring
+                });
+                current = booking.RecurringPattern switch
+                {
+                    "Daily" => current.AddDays(1),
+                    "Weekly" => current.AddDays(7),
+                    "Monthly" => current.AddMonths(1),
+                    _ => throw new InvalidOperationException("Invalid Recurring Pattern")
+                };
+            }
+            return bookings;
+        }
+        private bool IsOverlap(List<Booking> existingBookings, Booking newBooking) {
+            foreach (var booking in existingBookings) {
+                if (booking.RoomId == newBooking.RoomId &&
+                    booking.MeetingDate == newBooking.MeetingDate &&
+                    booking.StartTime < newBooking.EndTime &&
+                    newBooking.StartTime < booking.EndTime) {
+                    return true; // Overlap detected
+                }
+            }
+            return false;
+        }
+
+        public bool ValidateRecurringBooking(List<Booking> existingBookings, Booking recurring) {
+            var newBookings = GenerateRecurrence(recurring);
+
+            foreach (var newBooking in newBookings) {
+                if (IsOverlap(existingBookings, newBooking)) {
+                    return false; // Conflict detected
+                }
+            }
+
+            return true; // No conflicts
+        }
+
         public List<Booking> GetBookings(int roomId) {
             return _context.Bookings
                 .Where(b => b.RoomId == roomId)
@@ -59,6 +127,7 @@ namespace MeetingRoomBooking.Services.Managers {
 
             foreach (var existingBooking in existingBookings) {
                 // Check if there is a time overlap
+
                 if ((book.StartTime >= existingBooking.StartTime && book.StartTime < existingBooking.EndTime) ||
                     (book.EndTime > existingBooking.StartTime && book.EndTime <= existingBooking.EndTime) ||
                     (book.StartTime <= existingBooking.StartTime && book.EndTime >= existingBooking.EndTime)) {
@@ -66,6 +135,13 @@ namespace MeetingRoomBooking.Services.Managers {
                 }
             }
             return false; // No conflict
+        }
+
+        private bool IsTimeOverlap(Booking book, Booking existingBooking) {
+            return (book.StartTime >= existingBooking.StartTime && book.StartTime < existingBooking.EndTime) ||
+                (book.EndTime > existingBooking.StartTime && book.EndTime <= existingBooking.EndTime) ||
+                (book.StartTime <= existingBooking.StartTime && book.EndTime >= existingBooking.EndTime);
+
         }
 
         public async Task<bool> CancelBooking(int bookingId)
