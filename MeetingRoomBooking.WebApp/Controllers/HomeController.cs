@@ -51,23 +51,49 @@ namespace MeetingRoomBooking.WebApp.Controllers {
                 ViewBag.Recurrings = recurring;
 
                 // For Admin: fetch all bookings (both admin and user)
-                var bookings = (from booking in _context.Bookings
-                             join room in _context.Rooms on booking.RoomId equals room.RoomId
-                             join user in _context.Users on booking.UserId equals user.UserId
-                             select new BookingModel
-                             {
-                                 UserName = user.FirstName + " " + user.LastName,
-                                 RoomName = room.RoomName,
-                                 MeetingDate = booking.MeetingDate,
-                                 StartTime = booking.StartTime,
-                                 EndTime = booking.EndTime,
-                                 RoomLocation = room.RoomLocation,
-                                 BookingStatus = booking.BookingStatus,
-                                 MeetingTitle = booking.MeetingTitle,
-                                 BookingID = booking.BookingId
-                             }).ToList();
+                var currentDate = DateOnly.FromDateTime(DateTime.Now);
+                var currentTime = TimeOnly.FromDateTime(DateTime.Now);
 
-                
+                var bookings = (from booking in _context.Bookings
+                                join room in _context.Rooms on booking.RoomId equals room.RoomId
+                                join user in _context.Users on booking.UserId equals user.UserId
+                                select new
+                                {
+                                    UserName = user.FirstName + " " + user.LastName,
+                                    RoomName = room.RoomName,
+                                    MeetingDate = booking.MeetingDate,
+                                    StartTime = booking.StartTime,
+                                    EndTime = booking.EndTime,
+                                    RoomLocation = room.RoomLocation,
+                                    BookingStatus = booking.BookingStatus,
+                                    MeetingTitle = booking.MeetingTitle,
+                                    BookingID = booking.BookingId
+                                })
+                                .AsEnumerable() // Switch to LINQ-to-Objects for date and time logic
+                                .Select(b => new BookingModel
+                                {
+                                    UserName = b.UserName,
+                                    RoomName = b.RoomName,
+                                    MeetingDate = b.MeetingDate,
+                                    StartTime = b.StartTime,
+                                    EndTime = b.EndTime,
+                                    RoomLocation = b.RoomLocation,
+                                    BookingStatus = b.BookingStatus == "Scheduled" &&
+                                                    b.MeetingDate == currentDate
+                                                    ? (currentTime >= b.StartTime && currentTime <= b.EndTime
+                                                        ? "Ongoing"
+                                                        : currentTime > b.EndTime
+                                                            ? "Finished"
+                                                            : "Scheduled")
+                                                    : b.BookingStatus,
+                                    MeetingTitle = b.MeetingTitle,
+                                    BookingID = b.BookingID
+                                })
+                                .OrderBy(d => d.MeetingDate)
+                                .ThenBy(t => t.StartTime)
+                                .ToList();
+
+
                 return View("AdminDashboard", bookings); // Pass the bookings to the Admin view
             }
             else if (role == 0)
@@ -94,6 +120,7 @@ namespace MeetingRoomBooking.WebApp.Controllers {
             return View();
 
         }
+
         public IActionResult ReportAnalytics() {
             ViewBag.ActivePage = "Report & Analytics";
 
