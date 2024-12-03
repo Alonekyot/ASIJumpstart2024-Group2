@@ -46,7 +46,8 @@ namespace MeetingRoomBooking.WebApp.Controllers {
                 var bookings = (from booking in _context.Bookings
                              join room in _context.Rooms on booking.RoomId equals room.RoomId
                              join user in _context.Users on booking.UserId equals user.UserId
-                             select new BookingModel
+							where !user.Deleted
+								select new BookingModel
                              {
                                  UserName = user.FirstName + " " + user.LastName,
                                  RoomName = room.RoomName,

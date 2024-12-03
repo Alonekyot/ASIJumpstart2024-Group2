@@ -18,6 +18,11 @@
 }
 h2.title {
     color: #0F75AE;
+    font-family: Rubik;
+    text-transform: uppercase;
+    font-size: 30px;
+    font-weight: 600;
+    margin-left: 10px;
 }
 .create-room {
     padding: 10px;
