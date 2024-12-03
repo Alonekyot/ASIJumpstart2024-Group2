@@ -1,7 +1,7 @@
 ﻿const toggle = document.getElementById("flexCheckDefault");
 const form = document.getElementById("recurring-form");
 
-toggle.addEventListener('change',() => {
+toggle.addEventListener('change', () => {
     form.classList.toggle("show", toggle.checked);
 });
 
@@ -13,15 +13,12 @@ document.addEventListener('DOMContentLoaded', function () {
         initialView: 'dayGridMonth',
         events: '/BookingManagement/GetEvents',
         data: { roomId: roomId },
-        dayMaxEvents: true, // will apply the max number of events 
-        datMaxEventsRows: 3,
         headerToolbar: {
             left: 'prev,next today',
             center: 'title',
             right: 'dayGridMonth,timeGridWeek,timeGridDay'
         },
-  
-        aspectRatio: 2
+        aspectRatio: 1.3
     });
 
     calendar.render();

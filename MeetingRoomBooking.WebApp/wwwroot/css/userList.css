@@ -67,54 +67,62 @@
     }
 }
 
-
-
-.offcanvas {
-    background-color: #F0F6FB;
+.custom-modal-content {
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    border: 1px solid #ddd;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
 }
 
-.input-section {
-    display: flex;
-    flex-direction: column;
-}
 
-.input-section {
-    font-family: Rubik, sans-serif;
-}
-
-    .input-section span {
-        color: #0F75AE;
-    }
-
-    .input-section input, .input-section select {
-        border: none;
-        outline: none;
-        height: 2rem;
-        border-radius: 5px;
-        padding: 5px 10px;
-        font-size: 1rem;
-    }
-
-.cancel-btn {
-    font-family: Rubik, sans-serif;
-    color: #0F75AE;
-    text-decoration: none;
-    cursor: pointer;
-}
-
-.create-btn {
-    font-family: Rubik, sans-serif;
+.custom-modal-header {
+    background-color: #007bff;
     color: white;
-    background-color: #0F75AE;
-    border-radius: 5px;
-    padding: 8px 20px;
-    text-decoration: none;
-    margin-left: 1rem;
-    cursor: pointer;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    padding: 1rem;
 }
 
-.create-btn-grp {
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
+.custom-modal-title {
+    font-size: 1.5rem;
+    font-weight: 600;
 }
+
+.custom-modal-footer {
+    background-color: #f1f1f1;
+    border-top: 1px solid #ddd;
+}
+
+
+.custom-submit-btn {
+    background-color: #28a745;
+    border-color: #28a745;
+    color: white;
+}
+
+    .custom-submit-btn:hover {
+        background-color: #218838;
+        border-color: #1e7e34;
+    }
+
+.input-section label {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.input-section input,
+.input-section select {
+    margin-bottom: 15px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+    .input-section input:focus,
+    .input-section select:focus {
+        border-color: #007bff;
+        outline: none;
+    }
+
+
+
