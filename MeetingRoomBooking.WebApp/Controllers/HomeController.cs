@@ -77,6 +77,7 @@ namespace MeetingRoomBooking.WebApp.Controllers {
 
                 return View("UserDashboard", bookings); // Pass the bookings to the User view
             }
+
             return View();
 
         }
@@ -129,16 +130,17 @@ namespace MeetingRoomBooking.WebApp.Controllers {
 
         public JsonResult GetEvents() {
             var userId = int.Parse(User.FindFirstValue("UserId"));
+            
 
-            var events = _context.Bookings.Where(booking => booking.UserId == userId)
+            var events = _context.Bookings.Where(booking => booking.UserId == userId && booking.BookingStatus != "Canceled")
                     .Join(_context.Rooms,
                                booking => booking.RoomId,
                                room => room.RoomId,
                                (booking, room) => new CalendarEvent
                                {
-                                   Title = booking.MeetingTitle + " - " + room.RoomName + " (" + room.RoomLocation + ")",
+                                   Title = booking.MeetingTitle + " - " + room.RoomName,
                                    Start = booking.MeetingDate.ToDateTime(booking.StartTime),
-                                   End = booking.MeetingDate.ToDateTime(booking.StartTime),
+                                   End = booking.MeetingDate.ToDateTime(booking.EndTime),
                                    Description = room.RoomLocation
                                })   
                          .ToList();

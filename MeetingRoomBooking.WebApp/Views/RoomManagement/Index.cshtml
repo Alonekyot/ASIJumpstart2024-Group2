@@ -68,7 +68,7 @@
                             </div>
                         </div>
                         <div class="edit-details">
-                            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal"
+                            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteRoomModal"
                                     data-room-id="@room.RoomId">
                                 Delete
                             </button>
@@ -138,8 +138,8 @@
     </div>
 
 
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
+<div class="modal fade" id="deleteRoomModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
                 <h1 class="modal-title fs-5" id="exampleModalLabel">Delete Room</h1>
@@ -161,12 +161,25 @@
     </div>
 </div>
 
+<style>
+    #deleteRoomModal .modal-dialog {
+        opacity: 0;
+        transform: translateY(-20px);
+        transition: opacity 0.5s ease, transform 0.1s ease;
+    }
+
+    #deleteRoomModal.show .modal-dialog {
+        opacity: 1;
+        transform: translateY(0);
+    }
+</style>
+
 <script>
-    var exampleModal = document.getElementById('exampleModal');
-    exampleModal.addEventListener('show.bs.modal', function (event) {
+    var deleteRoomModal = document.getElementById('deleteRoomModal');
+    deleteRoomModal.addEventListener('show.bs.modal', function (event) {
         var button = event.relatedTarget; // Button that triggered the modal
         var roomId = button.getAttribute('data-room-id'); // Extract RoomId from data-* attribute
-        var modalForm = exampleModal.querySelector('form'); // Get the modal form
+        var modalForm = deleteRoomModal.querySelector('form'); // Get the modal form
 
         // Set the hidden RoomId input field with the roomId
         modalForm.querySelector('input[name="RoomId"]').value = roomId;
