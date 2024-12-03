@@ -11,6 +11,10 @@ using MeetingRoomBooking.Services.ServiceModels;
 using Microsoft.EntityFrameworkCore;
 using MeetingRoomBooking.Services.Managers;
 using MeetingRoomBooking.Services.Interfaces;
+using NuGet.Protocol.Plugins;
+using Microsoft.CodeAnalysis.Scripting;
+using MeetingRoomBooking.Services.Manager;
+using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages.Manage;
 
 namespace MeetingRoomBooking.WebApp.Controllers {
 
@@ -21,7 +25,9 @@ namespace MeetingRoomBooking.WebApp.Controllers {
         private readonly ILogger<HomeController> _logger;
         private readonly MeetingRoomBookingDbContext _context;
         private readonly ChartDataManager _chartDataManager;
-        public HomeController(ILogger<HomeController> logger, MeetingRoomBookingDbContext context, IBookingManager bookingManager, ChartDataManager chartDataManager) {
+
+        public HomeController(ILogger<HomeController> logger, MeetingRoomBookingDbContext context, IBookingManager bookingManager, ChartDataManager chartDataManager)
+        {
             _logger = logger;
             _context = context;
             _chartDataManager = chartDataManager;
@@ -189,6 +195,13 @@ namespace MeetingRoomBooking.WebApp.Controllers {
         public IActionResult Setting()
         {
             ViewBag.ActivePage = "Setting";
+
+            var userId = int.Parse(User.FindFirstValue("UserId"));
+            var user = _context.Users.Where(u => u.UserId == userId).FirstOrDefault();
+            var password = PasswordManager.DecryptPassword(user.Password);
+
+            ViewBag.Password = password;
+
             return View();
         }
 
@@ -278,5 +291,35 @@ namespace MeetingRoomBooking.WebApp.Controllers {
         }
 
 
+        [HttpPost]
+        public async Task<IActionResult> ChangePassword(ChangePasswordModel model)
+        {
+            var userId = int.Parse(User.FindFirstValue("UserId"));
+            var user = _context.Users.Where(u => u.UserId == userId).FirstOrDefault();
+            var password = PasswordManager.DecryptPassword(user.Password);
+
+            if (model.CurrentPassword != password)
+            {
+                ModelState.AddModelError("CurrentPassword", "The current password is incorrect.");
+                return View("Setting", model);
+            }
+
+            // Prevent reuse of the same password
+            if (model.NewPassword == model.CurrentPassword)
+            {
+                ModelState.AddModelError("NewPassword", "The new password cannot be the same as the current password.");
+                return View("Setting", model);
+            }
+
+            // Encrypt and save the new password
+            user.Password = PasswordManager.EncryptPassword(model.NewPassword);
+            _context.SaveChanges();
+
+            // Set the success message for TempData
+            TempData["SuccessMessage"] = "Your password has been successfully updated.";
+
+            // Redirect to the "Setting" view to display the success message and reset the page state
+            return RedirectToAction("Setting");
+        }
     }
 }
