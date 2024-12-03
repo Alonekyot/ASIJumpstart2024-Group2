@@ -276,19 +276,21 @@ namespace MeetingRoomBooking.WebApp.Controllers {
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CancelBooking(int bookingId)
         {
-            if (bookingId <= 0)
-            {
-                return BadRequest("Invalid booking ID.");
-            }
+            var bookingStatus = _context.Bookings.Where(u => u.BookingId == bookingId).FirstOrDefault();
 
             bool success = await _bookingManager.CancelBooking(bookingId);
 
-            if (!success)
+            if (bookingStatus.BookingStatus != "Scheduled")
             {
-                return NotFound("Booking not found or already canceled.");
+                TempData["CanceledSucess"] = "Booking is already canceled.";
             }
 
-            TempData["SuccessMessage"] = "Booking canceled successfully.";
+            /*if (!success)
+            {
+                return NotFound("Booking not found or already canceled.");
+            }*/
+
+            TempData["CanceledSucess"] = "Booking canceled successfully.";
             return RedirectToAction("Index");
         }
 

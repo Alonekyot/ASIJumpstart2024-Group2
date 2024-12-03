@@ -5,7 +5,7 @@
 @section style {
 	<link href="~/css/bookingManagementStyle.css" rel="stylesheet" />
 	<link href="~/css/Cards.css" rel="stylesheet" />
-	<link href="" />
+	<link href="~/css/notificationBox.css" rel="stylesheet" />
 }
 <div class="flex">
 	<aside class="filter">
@@ -156,3 +156,23 @@
 		</div>
 	</main>
 </div>
+
+@if (TempData["bookedSuccess"] != null)
+{
+	<div id="notification" class="alert alert-success notification">
+		@TempData["bookedSuccess"]
+	</div>
+}
+
+<script>
+	// Automatically hide the notification after 2 seconds
+	window.onload = function () {
+		const notification = document.getElementById('notification');
+		if (notification) {
+			setTimeout(() => {
+				notification.style.opacity = '0';
+				setTimeout(() => notification.remove(), 500); // Remove from DOM after fade-out
+			}, 2000); // Display duration in milliseconds
+		}
+	};
+</script>

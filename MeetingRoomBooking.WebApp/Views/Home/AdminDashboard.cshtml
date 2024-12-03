@@ -3,6 +3,7 @@
 @section style {
     <link rel="stylesheet" href="~/css/dashboard.css" />
     <link rel="stylesheet" href="~/css/SearchBars.css" />
+    <link rel="stylesheet" href="~/css/notificationBox.css" />
 }
 
 @{
@@ -149,6 +150,26 @@
         </div>
     </div>
 </div>
+
+@if (TempData["CanceledSucess"] != null)
+{
+    <div id="notification" class="alert alert-success notification">
+        @TempData["CanceledSucess"]
+    </div>
+}
+
+<script>
+    // Automatically hide the notification after 2 seconds
+    window.onload = function () {
+        const notification = document.getElementById('notification');
+        if (notification) {
+            setTimeout(() => {
+                notification.style.opacity = '0';
+                setTimeout(() => notification.remove(), 500); // Remove from DOM after fade-out
+            }, 2000); // Display duration in milliseconds
+        }
+    };
+</script>
 
 <script>
     var exampleModal = document.getElementById('exampleModal');
