@@ -31,9 +31,10 @@ namespace MeetingRoomBooking.WebApp.Controllers {
 			return View(rooms);
         }
 
-        public IActionResult Create(int? roomId) {
+        public IActionResult Create(int? roomId,string? roomName) {
             ViewBag.ActivePage = "BookingManagement";
             ViewBag.RoomId = roomId;
+            ViewBag.RoomName = roomName;
             return View();
         }
 
@@ -81,9 +82,9 @@ namespace MeetingRoomBooking.WebApp.Controllers {
             return RedirectToAction("Create", new { roomId });
         }
 
-        public JsonResult GetEvents() {
-       
-            var events = _context.Bookings
+        public JsonResult GetEvents(int roomId) {
+
+            var events = _context.Bookings.Where(b => b.RoomId == roomId)
                     .Join(_context.Rooms,
                                booking => booking.RoomId,
                                room => room.RoomId,
@@ -94,8 +95,8 @@ namespace MeetingRoomBooking.WebApp.Controllers {
                                    End = booking.MeetingDate.ToDateTime(booking.EndTime),
                                    Description = room.RoomLocation
                                })
-                         .ToList();
 
+                         .ToList();
             return new JsonResult(events);
         }
     }

@@ -40,6 +40,7 @@ namespace MeetingRoomBooking.WebApp.Controllers {
                 var bookings = (from booking in _context.Bookings
                              join room in _context.Rooms on booking.RoomId equals room.RoomId
                              join user in _context.Users on booking.UserId equals user.UserId
+                             where !user.Deleted
                              select new BookingModel
                              {
                                  UserName = user.FirstName + " " + user.LastName,
@@ -184,6 +185,9 @@ namespace MeetingRoomBooking.WebApp.Controllers {
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CancelBooking(int bookingId)
         {
+            var status = _context.Bookings.Where(u => u.BookingId == bookingId).ToList();
+         
+
             if (bookingId <= 0)
             {
                 return BadRequest("Invalid booking ID.");
