@@ -48,7 +48,5 @@ namespace MeetingRoomBooking.Services.Managers
 
             return user;
         }
-
-        
     }
 }
