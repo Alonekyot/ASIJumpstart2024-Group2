@@ -1,4 +1,4 @@
-﻿@model MeetingRoomBooking.Services.ServiceModels.ForgotPasswordViewModel
+﻿@model MeetingRoomBooking.Services.ServiceModels.ChangePasswordModel
 
 @section style {
     <link rel="stylesheet" href="/css/Setting.css" />
@@ -8,8 +8,15 @@
     Layout = "_HomeLayout";
 }
 
+@if (TempData["SuccessMessage"] != null)
+    {
+        <div id="notification" class="alert alert-success notification">
+        @TempData["SuccessMessage"]
+        </div>
+    }
+
 <div class="form-container">
-    <form method="post" asp-controller="Account" asp-action="SubmitPassword">
+    <form method="post" asp-controller="Home" asp-action="ChangePassword">
         <div class="form-group">
             <label for="about">About yourself</label>
             <textarea id="about" name="about" placeholder="Add bio..."></textarea>
@@ -45,17 +52,40 @@
         <div class="form-group password-section">
             <span class="pass">Change Password</span>
             <p>Your password must be at least 6 characters and should include a combination of numbers, letters, and special characters. (<span>&#33;&#36;&#64;&#37;</span>)</p>
-            <label for="new-password">Email</label>
-            <input asp-for="Email" type="text" class="input-text">
+
+            <label for="current-password">Current Password</label>
+            <input asp-for="CurrentPassword" type="password" class="input-text">
+            <span asp-validation-for="CurrentPassword" class="error-message"></span>
+
             <label for="new-password">New Password</label>
             <input asp-for="NewPassword" type="password" id="password">
-            <label for="retype-password">Re-type New Password</label>
-            <input input asp-for="ConfirmNewPassword" type="password" id="confirm-password">
-            <span asp-validation-for="ConfirmNewPassword" class="error-message"></span>
+            <span asp-validation-for="NewPassword" class="error-message"></span>
+
+            <label for="retype-password">Confirm Password</label>
+            <input input asp-for="ConfirmPassword" type="password" id="confirm-password">
+            <span asp-validation-for="ConfirmPassword" class="error-message"></span>
+
+            <p>@ViewBag.Password</p>
+
         </div>
+
+
         <div class="button-group">
             <button type="button" class="cancel-btn">Cancel</button>
             <button type="submit" class="save-btn">Save Changes</button>
         </div>
     </form>
 </div>
+
+<script>
+    // Automatically hide the notification after 2 seconds
+    window.onload = function () {
+        const notification = document.getElementById('notification');
+        if (notification) {
+            setTimeout(() => {
+                notification.style.opacity = '0';
+                setTimeout(() => notification.remove(), 500); // Remove from DOM after fade-out
+            }, 2000); // Display duration in milliseconds
+        }
+    };
+</script>
