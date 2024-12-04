@@ -15,10 +15,19 @@
     <link rel="stylesheet" href="~/css/calendar.css" />
     <link rel="stylesheet" href="~/css/dashboard.css" />
     <link rel="stylesheet" href="~/css/UserDashboard.css" />
+    <link rel="stylesheet" href="~/css/notificationBox.css" />
 
 }
 <link rel="stylesheet" href="~/css/calendar.css" />
 <link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/main.min.css" rel="stylesheet" />
+
+@if (TempData["CanceledSucess"] != null)
+{
+    <div id="notification" class="alert alert-success notification">
+        @TempData["CanceledSucess"]
+    </div>
+    <audio id="notificationSound" src="/sound/notificationSound.mp3"></audio>
+}
 
 <div style="display: flex; flex: 1; flex-direction: column; justify-content: center; margin: 10px;">
     <div id="calendar" style="width: 93%;"></div>
@@ -126,6 +135,29 @@
         </div>
     </div>
 </div>
+
+<script>
+    let notificationPlayed = false; // Ensure the sound is played only once
+
+    window.onload = function () {
+        const notification = document.getElementById('notification');
+        const sound = document.getElementById('notificationSound');
+
+        if (notification && sound && !notificationPlayed) {
+            sound.play().catch(error => {
+                console.error("Notification sound failed to play:", error);
+            });
+            
+            notificationPlayed = true; // Mark as played
+
+            // Optionally fade out the notification after a delay
+            setTimeout(() => {
+                notification.style.opacity = '0';
+                setTimeout(() => notification.remove(), 500); // Remove from DOM after fade-out
+            }, 2000);
+        }
+    };
+</script>
 
 <script>
     var exampleModal = document.getElementById('exampleModal');

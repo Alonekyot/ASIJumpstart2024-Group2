@@ -276,21 +276,40 @@ namespace MeetingRoomBooking.WebApp.Controllers {
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CancelBooking(int bookingId)
         {
-            var bookingStatus = _context.Bookings.Where(u => u.BookingId == bookingId).FirstOrDefault();
+            var status = _context.Bookings.Where(u => u.BookingId == bookingId).FirstOrDefault();
+            var userId = int.Parse(User.FindFirstValue("UserId"));
+            var role = int.Parse(User.FindFirstValue("Role"));
 
-            bool success = await _bookingManager.CancelBooking(bookingId);
 
-            if (bookingStatus.BookingStatus != "Scheduled")
+            if (role == 1 || role == 2)
             {
-                TempData["CanceledSucess"] = "Booking is already canceled.";
+                // Check if the booking is already canceled
+                if (status.BookingStatus == "Canceled")
+                {
+                    TempData["CanceledSucess"] = "Booking is already canceled.";
+                    return RedirectToAction("Index");
+                }
+                bool success = await _bookingManager.CancelBooking(bookingId);
+
+                if (!success)
+                {
+                    return RedirectToAction("Index");
+                }
+                // Success message for cancellation
+                TempData["CanceledSucess"] = "Booking canceled successfully.";
             }
-
-            /*if (!success)
+            else
             {
-                return NotFound("Booking not found or already canceled.");
-            }*/
+                bool success = await _bookingManager.CancelBooking(bookingId);
 
-            TempData["CanceledSucess"] = "Booking canceled successfully.";
+                if (!success)
+                {
+                    TempData["CanceledSucess"] = "Booking cancellation failed.";
+                    return RedirectToAction("Index");
+                }
+                // Success message for cancellation
+                TempData["CanceledSucess"] = "Booking canceled successfully.";
+            }
             return RedirectToAction("Index");
         }
 

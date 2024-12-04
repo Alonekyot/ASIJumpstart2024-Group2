@@ -56,6 +56,7 @@ namespace MeetingRoomBooking.WebApp.Controllers
                 room = _roomManager.Edit(editedRoom, room);
                 _context.Update(room);
                 await _context.SaveChangesAsync();
+                TempData["roomSuccess"] = "Room edited successfully";
                 return RedirectToAction(nameof(Index));
             }
             return View(room);
@@ -94,6 +95,7 @@ namespace MeetingRoomBooking.WebApp.Controllers
                 };
 
                 _context.Rooms.Add(room);
+                TempData["roomSuccess"] = "Room created successfully";
                 await _context.SaveChangesAsync();
 
             return RedirectToAction("Index");
@@ -106,6 +108,7 @@ namespace MeetingRoomBooking.WebApp.Controllers
             if (!success) {
                 return NotFound("Room not found.");
             }
+            TempData["roomSuccess"] = "Room deleted successfully";
             return RedirectToAction("Index");
         }
 

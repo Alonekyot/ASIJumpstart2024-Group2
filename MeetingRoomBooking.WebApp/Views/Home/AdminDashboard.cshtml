@@ -153,20 +153,31 @@
 
 @if (TempData["CanceledSucess"] != null)
 {
-    <div id="notification" class="alert alert-success notification">
+    <div id="notification" class="alert alert-success notification" style="background-color: #f5f093; color: #757015">
         @TempData["CanceledSucess"]
     </div>
+    <audio id="notificationSound" src="/sound/notificationSound.mp3" preload="auto"></audio>
 }
 
 <script>
-    // Automatically hide the notification after 2 seconds
+    let notificationPlayed = false; // Ensure the sound is played only once
+
     window.onload = function () {
         const notification = document.getElementById('notification');
-        if (notification) {
+        const sound = document.getElementById('notificationSound');
+
+        if (notification && sound && !notificationPlayed) {
+            sound.play().catch(error => {
+                console.error("Notification sound failed to play:", error);
+            });
+            
+            notificationPlayed = true; // Mark as played
+
+            // Optionally fade out the notification after a delay
             setTimeout(() => {
                 notification.style.opacity = '0';
                 setTimeout(() => notification.remove(), 500); // Remove from DOM after fade-out
-            }, 2000); // Display duration in milliseconds
+            }, 2000);
         }
     };
 </script>

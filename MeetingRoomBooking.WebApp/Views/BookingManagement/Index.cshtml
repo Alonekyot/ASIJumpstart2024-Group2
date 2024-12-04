@@ -162,17 +162,28 @@
 	<div id="notification" class="alert alert-success notification">
 		@TempData["bookedSuccess"]
 	</div>
+	<audio id="notificationSound" src="/sound/notificationSound.mp3"></audio>
 }
 
 <script>
-	// Automatically hide the notification after 2 seconds
-	window.onload = function () {
-		const notification = document.getElementById('notification');
-		if (notification) {
-			setTimeout(() => {
-				notification.style.opacity = '0';
-				setTimeout(() => notification.remove(), 500); // Remove from DOM after fade-out
-			}, 2000); // Display duration in milliseconds
-		}
-	};
+	let notificationPlayed = false; // Ensure the sound is played only once
+
+	   window.onload = function () {
+		   const notification = document.getElementById('notification');
+			  const sound = document.getElementById('notificationSound');
+
+				 if (notification && sound && !notificationPlayed) {
+				  sound.play().catch(error => {
+				   console.error("Notification sound failed to play:", error);
+			});
+
+			 notificationPlayed = true; // Mark as played
+
+			 // Optionally fade out the notification after a delay
+			 setTimeout(() => {
+				 notification.style.opacity = '0';
+				 setTimeout(() => notification.remove(), 500); // Remove from DOM after fade-out
+			 }, 2000);
+		 }
+	 };
 </script>
