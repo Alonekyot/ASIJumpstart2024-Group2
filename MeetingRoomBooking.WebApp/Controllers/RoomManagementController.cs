@@ -73,9 +73,7 @@ namespace MeetingRoomBooking.WebApp.Controllers
             byte[]? imageData = null;
 
                 if (newRoom.ImageFile != null) {
-                    if (newRoom.ImageFile.Length > 4 * 1024 * 1024) { // 4MB size limit
-                        throw new InvalidOperationException("File size exceeds the allowed limit.");
-                    }
+                    
 
                     using (var memoryStream = new MemoryStream()) {
                         await newRoom.ImageFile.CopyToAsync(memoryStream);

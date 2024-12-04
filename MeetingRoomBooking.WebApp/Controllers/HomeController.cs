@@ -139,10 +139,10 @@ namespace MeetingRoomBooking.WebApp.Controllers {
                                room => room.RoomId,
                                (booking, room) => new CalendarEvent
                                {
-                                   Title = booking.MeetingTitle + " - " + room.RoomName,
+                                   Title = booking.MeetingTitle ,
                                    Start = booking.MeetingDate.ToDateTime(booking.StartTime),
                                    End = booking.MeetingDate.ToDateTime(booking.EndTime),
-                                   Description = room.RoomLocation
+                                   Description = room.RoomLocation + " - " + room.RoomName
                                })   
                          .ToList();
 
