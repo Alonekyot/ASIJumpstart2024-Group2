@@ -28,6 +28,7 @@
 			public bool Recurring { get; set; }
 			public string? RecurringPattern { get; set; }
 			public DateOnly? RecurringEnd { get; set; }
+			public ICollection<BookingInstance> BookingInstances { get; set; }
 
 		}
 	}

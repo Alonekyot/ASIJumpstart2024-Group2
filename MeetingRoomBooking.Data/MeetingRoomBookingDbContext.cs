@@ -13,6 +13,7 @@ namespace MeetingRoomBooking.Data {
         public DbSet<Room> Rooms { get; set; }
 
         public DbSet<Booking> Bookings { get; set; }
+        public DbSet<BookingInstance> BookingInstance { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder) {
             base.OnModelCreating(modelBuilder);
@@ -26,10 +27,12 @@ namespace MeetingRoomBooking.Data {
 				.HasOne(b => b.Room)           // Booking has one Room
 				.WithMany(r => r.booking)     // Room can have many Bookings
 				.HasForeignKey(b => b.RoomId); // The foreign key in Booking is RoomId
+
+            modelBuilder.Entity<BookingInstance>()
+                .HasOne(b => b.Booking)
+                .WithMany(u => u.BookingInstances)
+                .HasForeignKey(b => b.BookingId);
 		}
-
-
-
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) {
             if (!optionsBuilder.IsConfigured) {
                 optionsBuilder.UseSqlServer("Default",
