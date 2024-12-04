@@ -43,7 +43,7 @@
 .btn-danger {
     margin-left: 5px;
     border-radius: 7px;
-    transition: all 0.25s ease-in-out; 
+    transition: background-color 0.3s ease, transform 0.2s ease; /* Smooth transition */
 }
 
 .btn-danger:hover {
@@ -52,13 +52,23 @@
     color: white;
 }
 
+.btn-danger:active{
+    background-color: #ab0f1f;
+    transform: scale(0.95); 
+}
+
 .primary-btn {
-    transition: all 0.25s ease-in-out; 
+    transition: background-color 0.3s ease, transform 0.2s ease; /* Smooth transition */
 }
 
 .primary-btn:hover{
     background-color: #2282ba;
     border-color: #2282ba;
+}
+
+.primary-btn:active{
+    background-color: #14608c;
+    transform: scale(0.95);
 }
 
 
