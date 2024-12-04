@@ -32,13 +32,13 @@
                         </div>
                         <div class="room-info">
                             <div class="info-top">
-                                <h6>@room.RoomName</h6>
-                                <p><span>Seating capacity: </span>@room.RoomCapacity</p>
+                            <h6 class="card-label">@room.RoomName</h6>
+                            <p class="card-label"><span>Seating capacity: </span>@room.RoomCapacity</p>
+                            <p class="card-label"><span>Location: </span>@room.RoomLocation</p>
                             </div>
-                            <p><span>Location: </span>@room.RoomLocation</p>
                         </div>
                         <div class="amenities">
-                            <p> <span>Amenities: </span></p>
+                            <span class="amenities-title"> <span>Amenities:</span></span>
                             <div class="icons-list">
                                 @if (room.Audio) {
                                     <div class="circle" data-bs-toggle="tooltip">

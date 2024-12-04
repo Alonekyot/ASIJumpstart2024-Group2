@@ -14,8 +14,54 @@
 }
 .create-room {
     flex: 1;
-
 }
+
+.info-top {
+    display: flex;
+    flex-direction: column;
+}
+
+.card-label {
+    font-family: Rubik;
+    margin-bottom: 10px;
+}
+
+.amenities-title{
+    font-family: Rubik;
+    font-size: 12px;
+    font-weight: bold;
+    margin-left: 10px;
+}
+
+.amenities {
+    display: flex;
+    align-items: center; 
+    gap: 5px;
+    margin-bottom: 5px;
+}
+
+.btn-danger {
+    margin-left: 5px;
+    border-radius: 7px;
+    transition: all 0.25s ease-in-out; 
+}
+
+.btn-danger:hover {
+    background-color: #ba2937;
+    border-color: #ba2937;
+    color: white;
+}
+
+.primary-btn {
+    transition: all 0.25s ease-in-out; 
+}
+
+.primary-btn:hover{
+    background-color: #2282ba;
+    border-color: #2282ba;
+}
+
+
 h2.title {
     color: #0F75AE;
     font-family: Rubik;
@@ -100,6 +146,7 @@ h2.title {
 .submit-btn {
     background-color: #37A3E0;
     border-radius: 5px;
+    font-weight: 500;
     color: white;
     border: none;
     padding: 5px 10px;
@@ -166,6 +213,7 @@ h2.title {
 .icons-list{
     display: flex;
     align-items: center;
+    margin-bottom: 2px;
 }
 .circle {
     width: 18px;
