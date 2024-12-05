@@ -37,6 +37,34 @@ namespace MeetingRoomBooking.WebApp.Controllers {
             return View();
         }
 
+        public IActionResult Edit(int? id) {
+            var b = _context.BookingInstance
+                .FirstOrDefault(b => b.BookingInstanceId == id);
+            var rooms = _context.Rooms.ToList();
+            var meeting = new EditBooking()
+            {
+                BookingId = b.BookingInstanceId,
+                MeetingTitle = b.MeetingTitle,
+                MeetingDate = b.MeetingDate,
+                StartTime = b.StartTime,
+                EndTime = b.EndTime,
+                RoomId = b.RoomId,
+                Rooms = rooms
+            };
+            return View(meeting);
+        }
+
+        public IActionResult ViewAll() {
+
+            int id = int.Parse(User.FindFirstValue("UserId"));
+
+            var bookings = _context.Bookings
+                .Where(o => o.BookingStatus != "Canceled" && o.UserId == id)
+                .Include(b => b.BookingInstances.Where(k => k.MeetingStatus != "Canceled"))
+                .ToList();
+            return View(bookings);
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CreateBooking(CreateBooking newBook, int roomId) {
@@ -97,9 +125,33 @@ namespace MeetingRoomBooking.WebApp.Controllers {
             return View("Create");
         }
 
+        [HttpPost]
+        public async Task<IActionResult> CancelRecurring(int? id) {
+            var booking = _context.Bookings
+                .Include(a => a.BookingInstances)
+                .FirstOrDefault(b => b.BookingId == id);
+            if(booking != null) {
+                booking.BookingStatus = "Canceled";
+                foreach(var instance in booking.BookingInstances) {
+                    instance.MeetingStatus = "Canceled";
+                }
+            }
+            await _context.SaveChangesAsync();
+            return RedirectToAction("ViewAll");
+        }
+        [HttpPost]
+        public async Task<IActionResult> CancelBook(int? meetingId) {
+            var meeting = _context.BookingInstance
+                .FirstOrDefault(m => m.BookingInstanceId == meetingId);
+            meeting.MeetingStatus = "Canceled";
+            await _context.SaveChangesAsync();
+            return RedirectToAction("ViewAll");
+        }
+
         public JsonResult GetEvents() {
        
-            var events = _context.Bookings
+            var events = _context.BookingInstance
+                    .Where(b => b.MeetingStatus != "Canceled")
                     .Join(_context.Rooms,
                                booking => booking.RoomId,
                                room => room.RoomId,
@@ -113,5 +165,24 @@ namespace MeetingRoomBooking.WebApp.Controllers {
 
             return new JsonResult(events);
         }
+
+        [HttpPost]
+        public async Task<IActionResult> EditBooking(EditBooking book) {
+            if (!ModelState.IsValid) {
+                Console.WriteLine("Hello");
+                return RedirectToAction("Edit", new { id = book.BookingId });
+            }
+
+            var success = await _bookingManager.EditBooking(book);
+
+            if (!success) {
+                TempData["ErrorMessage"] = "Unable to edit booking due to conflicts.";
+                return RedirectToAction("Edit", new { id = book.BookingId });
+            }
+
+            TempData["SuccessMessage"] = "Booking edited successfully!";
+            return RedirectToAction("Index", "Home");
+        }
+
     }
 }

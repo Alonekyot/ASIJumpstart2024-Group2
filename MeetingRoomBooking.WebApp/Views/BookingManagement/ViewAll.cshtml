@@ -1,0 +1,59 @@
+﻿@model IEnumerable<MeetingRoomBooking.Data.Models.Booking>
+@{
+    Layout = "_HomeLayout";
+}
+@section style{
+    <link rel="stylesheet" href="~/css/ViewBookings.css" />
+}
+
+<div class="accordion-area" id="bookingsAccordion">
+    @foreach (var booking in Model) {
+        <details class="accordion">
+            <summary class="accordion-head">
+                <span>@booking.MeetingTitle</span>
+                <form asp-action="CancelRecurring" method="post" class="d-inline cancel-form">
+                    <input type="hidden" name="id" value="@booking.BookingId" />
+                    <button type="submit">Cancel All</button>
+                </form>
+            </summary>
+            <ul class="meeting-list">
+                @foreach(var instance in booking.BookingInstances) {
+                    <hr style="margin: 0;" />
+                    <li class="meeting">
+                        <span>@instance.MeetingDate</span>
+                        <form class="" method="post" asp-action="CancelBook">
+                            <input type="hidden" name="meetingId" value="@instance.BookingInstanceId" />
+                            <button type="submit">Cancel</button>
+                        </form>
+                        
+                    </li>
+                }
+            </ul>
+        </details>
+
+        @* <div class="accordion-item">
+            <h2 class="accordion-header d-flex justify-content-between align-items-center" id="heading-@booking.BookingId">
+                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-@booking.BookingId" aria-expanded="true" aria-controls="collapse-@booking.BookingId">
+                    @booking.MeetingTitle
+                </button>
+
+                <!-- Cancel All Button aligned with the header -->
+                <form asp-action="CancelRecurring" method="post" class="d-inline">
+                    <input type="hidden" name="id" value="@booking.BookingId" />
+                    <button type="submit" class="btn btn-danger btn-sm">Cancel All</button>
+                </form>
+            </h2>
+
+            <div id="collapse-@booking.BookingId" class="accordion-collapse collapse" aria-labelledby="heading-@booking.BookingId" data-bs-parent="#bookingsAccordion">
+                <div class="accordion-body">
+                    <ul>
+                        @foreach (var instance in booking.BookingInstances) {
+                            <li>@instance.MeetingDate</li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </div> *@
+
+    }
+</div>

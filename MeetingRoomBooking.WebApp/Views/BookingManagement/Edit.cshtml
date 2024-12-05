@@ -1,0 +1,46 @@
+﻿@model MeetingRoomBooking.Services.ServiceModels.EditBooking
+
+@{
+    Layout = "_HomeLayout";
+}
+@section style{
+    <link rel="stylesheet" href="~/css/EditBooking.css" />
+}
+
+<form class="edit-form" method="post" asp-controller="BookingManagement" asp-action="EditBooking">
+    <input type="hidden" asp-for="BookingId" />
+    <div>
+        <p>Title</p>
+        <input class="form-control" asp-for="MeetingTitle" type="text" value="@Model.MeetingTitle" />
+    </div>
+    <div>
+        <p>Date</p>
+        <input class="form-control" type="date" asp-for="MeetingDate" value="@Model.MeetingDate.ToString("yyyy-MM-dd")" />
+    </div>
+    <div>
+        <p>Start</p>
+        <input class="form-control" type="time" asp-for="StartTime" value="@Model.StartTime.ToString("HH:mm")" />
+    </div>
+    <div>
+        <p>End</p>
+        <input class="form-control" type="time" asp-for="EndTime" value="@Model.EndTime.ToString("HH:mm")" />
+    </div>
+    <div>
+        <p>Room</p>
+        <select asp-for="RoomId" class="form-select">
+            @foreach (var room in Model.Rooms) {
+                <option value="@room.RoomId" selected="@(room.RoomId == Model.RoomId)">
+                    @room.RoomName
+                </option>
+            }
+        </select>
+    </div>
+    @if (TempData["ErrorMessage"] != null) {
+        <span>@TempData["ErrorMessage"]</span>
+    }
+    <div>
+        <button asp-controller="Home" asp-action="Index" class="cancel">Cancel</button>
+        <button type="submit">OK</button>
+    </div>
+    
+</form>

@@ -1,0 +1,21 @@
+﻿.accordion{
+    background-color: white;
+    position: relative;
+    margin-bottom: 1rem;
+}
+.accordion-head{
+    padding: 1rem;
+}
+.cancel-form{
+    position: absolute;
+    right: 1rem;
+}
+.meeting-list{
+    list-style-type: none;
+    position: relative;
+}
+.meeting{
+    padding: 0.5rem 1rem;
+    display: flex;
+    justify-content: space-between;
+}

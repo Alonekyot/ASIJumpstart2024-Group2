@@ -60,7 +60,7 @@ namespace MeetingRoomBooking.WebApp.Controllers {
                 var currentDate = DateOnly.FromDateTime(DateTime.Now);
                 var currentTime = TimeOnly.FromDateTime(DateTime.Now);
 
-                var bookings = (from booking in _context.Bookings
+                var bookings = (from booking in _context.BookingInstance
                                 join room in _context.Rooms on booking.RoomId equals room.RoomId
                                 join user in _context.Users on booking.UserId equals user.UserId
                                 select new
@@ -71,9 +71,9 @@ namespace MeetingRoomBooking.WebApp.Controllers {
                                     StartTime = booking.StartTime,
                                     EndTime = booking.EndTime,
                                     RoomLocation = room.RoomLocation,
-                                    BookingStatus = booking.BookingStatus,
+                                    BookingStatus = booking.MeetingStatus,
                                     MeetingTitle = booking.MeetingTitle,
-                                    BookingID = booking.BookingId
+                                    BookingID = booking.BookingInstanceId
                                 })
                                 .AsEnumerable() // Switch to LINQ-to-Objects for date and time logic
                                 .Select(b => new BookingModel
@@ -105,10 +105,10 @@ namespace MeetingRoomBooking.WebApp.Controllers {
             else if (role == 0)
             {
                 // For User: fetch bookings only for the logged-in user
-                var bookings = (from booking in _context.Bookings
+                var bookings = (from booking in _context.BookingInstance
                                 join room in _context.Rooms on booking.RoomId equals room.RoomId
                                 where booking.UserId == userId
-                                where booking.BookingStatus != "Canceled"
+                                where booking.MeetingStatus != "Canceled"
                                 select new BookingModel
                                 {                                  
                                     RoomName = room.RoomName,
@@ -116,9 +116,9 @@ namespace MeetingRoomBooking.WebApp.Controllers {
                                     StartTime = booking.StartTime,
                                     EndTime = booking.EndTime,
                                     RoomLocation = room.RoomLocation,
-                                    BookingStatus = booking.BookingStatus,
+                                    BookingStatus = booking.MeetingStatus,
                                     MeetingTitle = booking.MeetingTitle,
-                                    BookingID = booking.BookingId
+                                    BookingID = booking.BookingInstanceId
                                 }).ToList();
 
                 return View("UserDashboard", bookings); // Pass the bookings to the User view
@@ -210,7 +210,7 @@ namespace MeetingRoomBooking.WebApp.Controllers {
             var userId = int.Parse(User.FindFirstValue("UserId"));
             
 
-            var events = _context.Bookings.Where(booking => booking.UserId == userId && booking.BookingStatus != "Canceled")
+            var events = _context.BookingInstance.Where(booking => booking.UserId == userId && booking.MeetingStatus != "Canceled")
                     .Join(_context.Rooms,
                                booking => booking.RoomId,
                                room => room.RoomId,

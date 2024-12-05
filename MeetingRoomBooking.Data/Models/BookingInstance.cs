@@ -19,5 +19,6 @@ namespace MeetingRoomBooking.Data.Models {
         public DateOnly MeetingDate { get; set; }
         public TimeOnly StartTime { get; set; }
         public TimeOnly EndTime { get; set; }
+        public string MeetingStatus { get; set; }
     }
 }
