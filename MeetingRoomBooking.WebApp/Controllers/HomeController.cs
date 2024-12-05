@@ -277,7 +277,7 @@ namespace MeetingRoomBooking.WebApp.Controllers {
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CancelBooking(int bookingId)
         {
-            var status = _context.Bookings.Where(u => u.BookingId == bookingId).FirstOrDefault();
+            var status = _context.BookingInstance.Where(u => u.BookingInstanceId == bookingId).FirstOrDefault();
             var userId = int.Parse(User.FindFirstValue("UserId"));
             var role = int.Parse(User.FindFirstValue("Role"));
 
@@ -285,7 +285,7 @@ namespace MeetingRoomBooking.WebApp.Controllers {
             if (role == 1 || role == 2)
             {
                 // Check if the booking is already canceled
-                if (status.BookingStatus == "Canceled")
+                if (status.MeetingStatus == "Canceled")
                 {
                     TempData["CanceledSucess"] = "Booking is already canceled.";
                     return RedirectToAction("Index");
