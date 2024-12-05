@@ -5,7 +5,7 @@
 @section style {
 	<link href="~/css/bookingManagementStyle.css" rel="stylesheet" />
 	<link href="~/css/Cards.css" rel="stylesheet" />
-	<link href="" />
+	<link href="~/css/notificationBox.css" rel="stylesheet" />
 }
 <div class="flex">
 	<aside class="filter">
@@ -157,3 +157,34 @@
 		</div>
 	</main>
 </div>
+
+@if (TempData["bookedSuccess"] != null)
+{
+	<div id="notification" class="alert alert-success notification">
+		@TempData["bookedSuccess"]
+	</div>
+	<audio id="notificationSound" src="/sound/notificationSound.mp3"></audio>
+}
+
+<script>
+	let notificationPlayed = false; // Ensure the sound is played only once
+
+	   window.onload = function () {
+		   const notification = document.getElementById('notification');
+			  const sound = document.getElementById('notificationSound');
+
+				 if (notification && sound && !notificationPlayed) {
+				  sound.play().catch(error => {
+				   console.error("Notification sound failed to play:", error);
+			});
+
+			 notificationPlayed = true; // Mark as played
+
+			 // Optionally fade out the notification after a delay
+			 setTimeout(() => {
+				 notification.style.opacity = '0';
+				 setTimeout(() => notification.remove(), 500); // Remove from DOM after fade-out
+			 }, 2000);
+		 }
+	 };
+</script>

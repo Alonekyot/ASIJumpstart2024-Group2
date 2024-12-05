@@ -11,6 +11,7 @@
 @section style {
     <link rel="stylesheet" href="/css/roomManagementStyle.css" />
     <link rel="stylesheet" href="/css/Cards.css" />
+    <link rel="stylesheet" href="/css/notificationBox.css" />
 }
 
     <div class="rooms-content">
@@ -32,13 +33,13 @@
                         </div>
                         <div class="room-info">
                             <div class="info-top">
-                                <h6>@room.RoomName</h6>
-                                <p><span>Seating capacity: </span>@room.RoomCapacity</p>
+                            <h6 class="card-label">@room.RoomName</h6>
+                            <p class="card-label"><span>Seating capacity: </span>@room.RoomCapacity</p>
+                            <p class="card-label"><span>Location: </span>@room.RoomLocation</p>
                             </div>
-                            <p><span>Location: </span>@room.RoomLocation</p>
                         </div>
                         <div class="amenities">
-                            <p> <span>Amenities: </span></p>
+                            <span class="amenities-title"> <span>Amenities:</span></span>
                             <div class="icons-list">
                                 @if (room.Audio) {
                                     <div class="circle" data-bs-toggle="tooltip">
@@ -160,6 +161,38 @@
         </div>
     </div>
 </div>
+
+@if (TempData["roomSuccess"] != null)
+{
+    <div id="notification" class="alert alert-success notification">
+        @TempData["roomSuccess"]
+    </div>
+    <audio id="notificationSound" src="/sound/notificationSound.mp3" preload="auto"></audio>
+}
+
+<script>
+    let notificationPlayed = false; // Ensure the sound is played only once
+
+    window.onload = function () {
+        const notification = document.getElementById('notification');
+        const sound = document.getElementById('notificationSound');
+
+        if (notification && sound && !notificationPlayed) {
+            sound.play().catch(error => {
+                console.error("Notification sound failed to play:", error);
+            });
+
+            notificationPlayed = true; // Mark as played
+
+            // Optionally fade out the notification after a delay
+            setTimeout(() => {
+                notification.style.opacity = '0';
+                setTimeout(() => notification.remove(), 500); // Remove from DOM after fade-out
+            }, 2000);
+        }
+    };
+</script>
+
 
 <style>
     #deleteRoomModal .modal-dialog {

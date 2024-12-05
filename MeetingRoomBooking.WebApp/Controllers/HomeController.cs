@@ -63,7 +63,8 @@ namespace MeetingRoomBooking.WebApp.Controllers {
                 var bookings = (from booking in _context.BookingInstance
                                 join room in _context.Rooms on booking.RoomId equals room.RoomId
                                 join user in _context.Users on booking.UserId equals user.UserId
-                                select new
+								where !user.Deleted
+								select new
                                 {
                                     UserName = user.FirstName + " " + user.LastName,
                                     RoomName = room.RoomName,
@@ -276,19 +277,40 @@ namespace MeetingRoomBooking.WebApp.Controllers {
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CancelBooking(int bookingId)
         {
-            if (bookingId <= 0)
+            var status = _context.Bookings.Where(u => u.BookingId == bookingId).FirstOrDefault();
+            var userId = int.Parse(User.FindFirstValue("UserId"));
+            var role = int.Parse(User.FindFirstValue("Role"));
+
+
+            if (role == 1 || role == 2)
             {
-                return BadRequest("Invalid booking ID.");
+                // Check if the booking is already canceled
+                if (status.BookingStatus == "Canceled")
+                {
+                    TempData["CanceledSucess"] = "Booking is already canceled.";
+                    return RedirectToAction("Index");
+                }
+                bool success = await _bookingManager.CancelBooking(bookingId);
+
+                if (!success)
+                {
+                    return RedirectToAction("Index");
+                }
+                // Success message for cancellation
+                TempData["CanceledSucess"] = "Booking canceled successfully.";
             }
-
-            bool success = await _bookingManager.CancelBooking(bookingId);
-
-            if (!success)
+            else
             {
-                return NotFound("Booking not found or already canceled.");
-            }
+                bool success = await _bookingManager.CancelBooking(bookingId);
 
-            TempData["SuccessMessage"] = "Booking canceled successfully.";
+                if (!success)
+                {
+                    TempData["CanceledSucess"] = "Booking cancellation failed.";
+                    return RedirectToAction("Index");
+                }
+                // Success message for cancellation
+                TempData["CanceledSucess"] = "Booking canceled successfully.";
+            }
             return RedirectToAction("Index");
         }
 

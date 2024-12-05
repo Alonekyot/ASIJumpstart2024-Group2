@@ -99,6 +99,7 @@ namespace MeetingRoomBooking.WebApp.Controllers {
                 var user = _userManager.Add(newUser);
                 _context.Add(user);
                 await _context.SaveChangesAsync();
+                TempData["createSuccess"] = "User created successfully";
                 return RedirectToAction("Index");
             }
             else {
@@ -139,6 +140,7 @@ namespace MeetingRoomBooking.WebApp.Controllers {
             {
                user.Deleted = true;
                await _context.SaveChangesAsync();
+                TempData["createSuccess"] = "User deleted successfully";
             }
 
             return RedirectToAction("Index");
