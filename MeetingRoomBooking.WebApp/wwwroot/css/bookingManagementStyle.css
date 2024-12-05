@@ -35,6 +35,8 @@ form p {
     flex-direction: column;
     height: 500px;
     width: 350px;
+    position: sticky;
+    top : 10px;
 }
 .flex {
     display: flex;

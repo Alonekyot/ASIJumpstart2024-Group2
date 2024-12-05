@@ -12,35 +12,37 @@ using Microsoft.EntityFrameworkCore;
 namespace MeetingRoomBooking.WebApp.Controllers
 {
 
-	public class RoomManagementController : Controller
-	{
-		private readonly MeetingRoomBookingDbContext _context;
-		private readonly IRoomServices _roomManager;
-		public RoomManagementController(MeetingRoomBookingDbContext context,
-										IRoomServices roomManager)
-		{
-			_context = context;
-			_roomManager = roomManager;
-
-		}
-
-		public IActionResult Index()
+    public class RoomManagementController : Controller
+    {
+        private readonly MeetingRoomBookingDbContext _context;
+        private readonly IRoomServices _roomManager;
+        public RoomManagementController(MeetingRoomBookingDbContext context,
+                                        IRoomServices roomManager)
         {
-			ViewBag.ActivePage = "RoomManagement";
-			var rooms = _context.Rooms.ToList();
+            _context = context;
+            _roomManager = roomManager;
 
-			var roomModel = new RoomModel
-			{
-				Rooms = rooms,
-				NewRoom = new CreateRoomModel()
-			};
-
-			return View(roomModel);
         }
 
-        public IActionResult Edit(int id) {
+        public IActionResult Index()
+        {
+            ViewBag.ActivePage = "RoomManagement";
+            var rooms = _context.Rooms.ToList();
+
+            var roomModel = new RoomModel
+            {
+                Rooms = rooms,
+                NewRoom = new CreateRoomModel()
+            };
+
+            return View(roomModel);
+        }
+
+        public IActionResult Edit(int id)
+        {
             var room = _context.Rooms.FirstOrDefault(u => u.RoomId == id);
-            if (room != null) {
+            if (room != null)
+            {
                 return View(room);
             }
             return View();
@@ -48,11 +50,13 @@ namespace MeetingRoomBooking.WebApp.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(EditRoomModel editedRoom) {
+        public async Task<IActionResult> Edit(EditRoomModel editedRoom)
+        {
             var room = await _context.Rooms.FindAsync(editedRoom.RoomId);
             Console.WriteLine(editedRoom.RoomId + "---------------------------------------");
 
-            if (ModelState.IsValid) {
+            if (ModelState.IsValid)
+            {
                 room = _roomManager.Edit(editedRoom, room);
                 _context.Update(room);
                 await _context.SaveChangesAsync();
@@ -64,50 +68,54 @@ namespace MeetingRoomBooking.WebApp.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(RoomModel model) {
+        public async Task<IActionResult> Create(RoomModel model)
+        {
 
             var newRoom = model.NewRoom;
-            if (!ModelState.IsValid) {
+            if (!ModelState.IsValid)
+            {
                 return RedirectToAction("Index");
             }
 
             byte[]? imageData = null;
 
-                if (newRoom.ImageFile != null) {
-                        throw new InvalidOperationException("File size exceeds the allowed limit.");
-                    }
+            if (newRoom.ImageFile != null)
+            {
 
-                    using (var memoryStream = new MemoryStream()) {
-                        await newRoom.ImageFile.CopyToAsync(memoryStream);
-                        imageData = memoryStream.ToArray();
-                    }
-                }
-
-                var room = new Room
+                using (var memoryStream = new MemoryStream())
                 {
-                    RoomName = newRoom.RoomName,
-                    RoomLocation = newRoom.RoomLocation,
-                    RoomCapacity = newRoom.RoomCapacity,
-                    Audio = newRoom.Audio,
-                    Video = newRoom.Video,
-                    WhiteBoard = newRoom.WhiteBoard,
-                    Projector = newRoom.Projector,
-                    Loudspeaker = newRoom.Loudspeaker,
-                    Image = imageData,
-                };
+                    await newRoom.ImageFile.CopyToAsync(memoryStream);
+                    imageData = memoryStream.ToArray();
+                }
+            }
 
-                _context.Rooms.Add(room);
-                TempData["roomSuccess"] = "Room created successfully";
-                await _context.SaveChangesAsync();
+            var room = new Room
+            {
+                RoomName = newRoom.RoomName,
+                RoomLocation = newRoom.RoomLocation,
+                RoomCapacity = newRoom.RoomCapacity,
+                Audio = newRoom.Audio,
+                Video = newRoom.Video,
+                WhiteBoard = newRoom.WhiteBoard,
+                Projector = newRoom.Projector,
+                Loudspeaker = newRoom.Loudspeaker,
+                Image = imageData,
+            };
+
+            _context.Rooms.Add(room);
+            TempData["roomSuccess"] = "Room created successfully";
+            await _context.SaveChangesAsync();
 
             return RedirectToAction("Index");
         }
 
         [HttpPost]
-		[ValidateAntiForgeryToken]
-        public async Task<IActionResult> Delete(int RoomId) {
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Delete(int RoomId)
+        {
             bool success = await _roomManager.Delete(RoomId);
-            if (!success) {
+            if (!success)
+            {
                 return NotFound("Room not found.");
             }
             TempData["roomSuccess"] = "Room deleted successfully";
