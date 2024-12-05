@@ -109,7 +109,7 @@
                         <a class="table-icon" asp-route-id="@booking.BookingID", asp-controller="BookingManagement" asp-action="Edit">
                             <i class="bi bi-pencil-square"></i>
                         </a>
-                        <a class="table-icon" data-id="@booking.BookingID" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                        <a href="#" class="table-icon" data-id="@booking.BookingID" data-bs-toggle="modal" data-bs-target="#exampleModal" data-status="@booking.BookingStatus">
                             <i class="bi bi-trash"></i>
                         </a>
                     </td>
@@ -130,14 +130,13 @@
 
 <!--MODAL CLASS-->
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
                 <h1 class="modal-title fs-5" id="exampleModalLabel">Cancel Booking</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body">
-                Are you sure you want to cancel this room?
+            <div class="modal-body" id="modal-body-text">
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -145,13 +144,24 @@
                     @Html.AntiForgeryToken()
                     @Html.Hidden("BookingID")
                     <input type="hidden" name="BookingID" id="BookingID" />
-                    <button type="submit" class="btn btn-danger">Delete</button>
+                    <button type="submit" class="btn btn-danger" id="modal-confirm-btn"></button>
                 </form>
             </div>
         </div>
     </div>
 </div>
+<style>
+#exampleModal .modal-dialog {
+    opacity: 0;
+    transform: translateY(-10px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+}
 
+#exampleModal.show .modal-dialog {
+    opacity: 1;
+    transform: translateY(0);
+}
+</style>
 @if (TempData["CanceledSucess"] != null)
 {
     <div id="notification" class="alert alert-success notification" style="background-color: #f5f093; color: #757015">
@@ -188,10 +198,21 @@
     exampleModal.addEventListener('show.bs.modal', function (event) {
         var button = event.relatedTarget; // Button that triggered the modal
         var bookingId = button.getAttribute('data-id'); // Extract RoomId from data-* attribute
-        var modalForm = exampleModal.querySelector('form'); // Get the modal form
+        var bookingStatus = button.getAttribute('data-status'); // Extract status from data-* attribute
+        var modalBody = exampleModal.querySelector('#modal-body-text');
+        var confirmButton = exampleModal.querySelector('#modal-confirm-btn');
+        var modalForm = exampleModal.querySelector('form');
 
         // Set the hidden RoomId input field with the roomId
         modalForm.querySelector('input[name="BookingID"]').value = bookingId;
+
+        if (bookingStatus === 'Scheduled') {
+            modalBody.textContent = 'Are you sure you want to cancel this booking?';
+            confirmButton.textContent = 'Cancel';
+        } else if (bookingStatus === 'Canceled') {
+            modalBody.textContent = 'Are you sure you want to delete this canceled booking?';
+            confirmButton.textContent = 'Delete';
+        }
     });
 </script>
 <style>
