@@ -165,6 +165,23 @@ namespace MeetingRoomBooking.Services.Managers {
 
             return true;
         }
+        public async Task<bool> DeleteBooking(int bookingId) {
+
+            if (bookingId <= 0)
+            {
+                return false; // Invalid ID
+            }
+            var booking = await _context.Bookings.FirstOrDefaultAsync(r => r.BookingId == bookingId);
+            if (booking == null)
+            {
+                return false; // Booking not found
+            }
+            booking.BookingStatus = "Canceled";
+            _context.Bookings.Remove(booking);
+            await _context.SaveChangesAsync();
+
+            return true;       
+        }
 
 
     }

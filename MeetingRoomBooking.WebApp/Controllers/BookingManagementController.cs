@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
+using MeetingRoomBooking.Data.Models;
 
 namespace MeetingRoomBooking.WebApp.Controllers {
 
@@ -25,15 +26,17 @@ namespace MeetingRoomBooking.WebApp.Controllers {
             _bookingManager = bookingManager;
 
 		}
+		[HttpGet]
 		public IActionResult Index() {
             ViewBag.ActivePage = "BookingManagement";
-			var rooms = _context.Rooms.ToList();
+			var rooms = _context.Rooms.ToList(); 	
 			return View(rooms);
         }
 
-        public IActionResult Create(int? roomId) {
+        public IActionResult Create(int? roomId,string? roomName) {
             ViewBag.ActivePage = "BookingManagement";
             ViewBag.RoomId = roomId;
+            ViewBag.RoomName = roomName;
             return View();
         }
 
@@ -97,21 +100,71 @@ namespace MeetingRoomBooking.WebApp.Controllers {
             return View("Create");
         }
 
-        public JsonResult GetEvents() {
-       
-            var events = _context.Bookings
+        public JsonResult GetEvents(int roomId) {
+
+            var events = _context.Bookings.Where(b => b.RoomId == roomId)
                     .Join(_context.Rooms,
                                booking => booking.RoomId,
                                room => room.RoomId,
                                (booking, room) => new CalendarEvent
                                {
-                                   Title = booking.MeetingTitle + " - " + room.RoomName + "  (" + room.RoomLocation + ")",
+                                   Title = booking.MeetingTitle ,
                                    Start = booking.MeetingDate.ToDateTime(booking.StartTime),
-                                   End = booking.MeetingDate.ToDateTime(booking.EndTime)
+                                   End = booking.MeetingDate.ToDateTime(booking.EndTime),
+                                   Description = room.RoomLocation + " - " + room.RoomName
                                })
-                         .ToList();
 
+                         .ToList();
             return new JsonResult(events);
         }
-    }
+		[HttpPost]
+		public ActionResult FilterRoom(RoomFilterModel filters)
+		{
+            ViewBag.ActivePage = "BookingManagement";
+            var rooms = _context.Rooms.AsQueryable();
+
+			if (!string.IsNullOrEmpty(filters.SearchText))
+			{
+				rooms = rooms.Where(r => r.RoomName.Contains(filters.SearchText) || r.RoomLocation.Contains(filters.SearchText));
+			}
+			if (!string.IsNullOrEmpty(filters.RoomCapacity))
+			{
+				var range = filters.RoomCapacity.Split(new char[] { '-' }); 
+				if (range.Length == 2 && int.TryParse(range[0], out int minCapacity) && int.TryParse(range[1], out int maxCapacity))
+				{
+					rooms = rooms.Where(r => r.RoomCapacity >= minCapacity && r.RoomCapacity <= maxCapacity);
+				}
+			}
+
+			if (filters.SelectedAmenities != null && filters.SelectedAmenities.Any())
+			{
+				
+				if (filters.SelectedAmenities.Contains("Audio"))
+				{
+					rooms = rooms.Where(r => r.Audio);
+				}
+				if (filters.SelectedAmenities.Contains("Video"))
+				{
+					rooms = rooms.Where(r => r.Video);
+				}
+				if (filters.SelectedAmenities.Contains("Projector"))
+				{
+					rooms = rooms.Where(r => r.Projector);
+				}
+				if (filters.SelectedAmenities.Contains("WhiteBoard"))
+				{
+					rooms = rooms.Where(r => r.WhiteBoard);
+				}
+				if (filters.SelectedAmenities.Contains("LoudSpeaker"))
+				{
+					rooms = rooms.Where(r => r.Loudspeaker);
+				}
+			}
+
+			return View("Index", rooms.ToList());
+		}
+
+
+
+	}
 }
