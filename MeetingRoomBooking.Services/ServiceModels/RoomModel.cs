@@ -6,7 +6,4 @@ namespace MeetingRoomBooking.Services.ServiceModels {
         public CreateRoomModel NewRoom { get; set; }
 
     }
-    public class FilterModel { 
-        public int Capacity { get; set; }
-    }
 }

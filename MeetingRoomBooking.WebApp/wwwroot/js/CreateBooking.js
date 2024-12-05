@@ -6,7 +6,7 @@ toggle.addEventListener('change', () => {
 });
 document.addEventListener('DOMContentLoaded', function () {
     var calendarEl = document.getElementById('calendar');
-    var roomId = document.getElementById('roomId').value; // Dynamically get Room ID
+    var roomId = document.getElementById('roomId').value; 
 
     
 

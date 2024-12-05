@@ -102,10 +102,10 @@ namespace MeetingRoomBooking.WebApp.Controllers {
             return new JsonResult(events);
         }
 		[HttpPost]
-		public ActionResult FilterRoom(RoomFilterViewModel filters)
+		public ActionResult FilterRoom(RoomFilterModel filters)
 		{
-			// Retrieve all rooms from your database or repository
-			var rooms = _context.Rooms.AsQueryable();
+            ViewBag.ActivePage = "BookingManagement";
+            var rooms = _context.Rooms.AsQueryable();
 
 			if (!string.IsNullOrEmpty(filters.SearchText))
 			{

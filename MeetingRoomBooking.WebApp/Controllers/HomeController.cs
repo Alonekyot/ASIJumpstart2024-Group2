@@ -186,18 +186,29 @@ namespace MeetingRoomBooking.WebApp.Controllers {
         public async Task<IActionResult> CancelBooking(int bookingId)
         {
             var status = _context.Bookings.Where(u => u.BookingId == bookingId).ToList();
-         
+            var booking = await _context.Bookings.FindAsync(bookingId);
 
             if (bookingId <= 0)
             {
                 return BadRequest("Invalid booking ID.");
             }
 
-            bool success = await _bookingManager.CancelBooking(bookingId);
-
-            if (!success)
+            if (booking.BookingStatus == "Scheduled")
             {
-                return NotFound("Booking not found or already canceled.");
+                bool success = await _bookingManager.CancelBooking(bookingId);
+
+                if (!success)
+                {
+                    return NotFound("Booking not found or already canceled.");
+                }
+            }
+            else if (booking.BookingStatus == "Canceled") {
+                bool success = await _bookingManager.DeleteBooking(bookingId);
+
+                if (!success)
+                {
+                    return NotFound("Booking not found or already canceled.");
+                }
             }
 
             TempData["SuccessMessage"] = "Booking canceled successfully.";
