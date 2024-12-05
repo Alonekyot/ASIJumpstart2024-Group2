@@ -46,3 +46,59 @@
 .data-card:nth-of-type(4) {
     background-color: #FFB23F;
 }
+
+
+.report-card {
+    background-color: white;
+    
+}
+.leaderboard {
+    overflow-y: scroll;
+}
+.leaderboard-header {
+    padding: 0.5rem 1rem 0 1rem;
+}
+.leaderboard-data-list{
+    padding: 0.5rem 2rem;
+    
+}
+.leaderboard-data{
+    justify-content: space-between;
+    display: flex;
+    align-items: center;
+}
+.leaderboard-data *{
+    margin: 0;
+    text-align: center;
+}
+.leaderboard-data span{
+    color: #555555;
+}
+
+
+
+
+
+/* Style for the entire scrollbar */
+::-webkit-scrollbar {
+  width: 10px; /* Width of the vertical scrollbar */
+  height: 12px; /* Height of the horizontal scrollbar */
+  background-color: transparent;
+}
+
+/* Style for the scrollbar track */
+::-webkit-scrollbar-track {
+  background-color: transparent;
+  border-radius: 10px;
+}
+
+/* Style for the scrollbar thumb */
+::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 10px;
+}
+
+/* Hover effect for the scrollbar thumb */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}

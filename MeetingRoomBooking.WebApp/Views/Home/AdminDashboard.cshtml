@@ -3,6 +3,7 @@
 @section style {
     <link rel="stylesheet" href="~/css/dashboard.css" />
     <link rel="stylesheet" href="~/css/SearchBars.css" />
+    <link rel="stylesheet" href="~/css/notificationBox.css" />
 }
 
 @{
@@ -17,7 +18,7 @@
             <div class="left-color">
             </div>
             <div class="card-text">
-                <h4>05</h4>
+                <h4>@ViewBag.RoomCount</h4>
                 <p>Total Meeting Rooms</p>
             </div>
             <div class="card-icon">
@@ -30,8 +31,8 @@
             <div class="left-color">
             </div>
             <div class="card-text">
-                <h4>05</h4>
-                <p>Total Meeting Rooms</p>
+                <h4>@ViewBag.Recurrings</h4>
+                <p>Recurring Bookings</p>
             </div>
             <div class="card-icon">
                 <div class="card-circle center-flex">
@@ -56,8 +57,8 @@
             <div class="left-color">
             </div>
             <div class="card-text">
-                <h4>05</h4>
-                <p>Total Meeting Rooms</p>
+                <h4>@ViewBag.TodaysBooking</h4>
+                <p>Today's Meetings</p>
             </div>
             <div class="card-icon">
                 <div class="card-circle todays-booking-icon center-flex">
@@ -160,6 +161,37 @@
     transform: translateY(0);
 }
 </style>
+@if (TempData["CanceledSucess"] != null)
+{
+    <div id="notification" class="alert alert-success notification" style="background-color: #f5f093; color: #757015">
+        @TempData["CanceledSucess"]
+    </div>
+    <audio id="notificationSound" src="/sound/notificationSound.mp3" preload="auto"></audio>
+}
+
+<script>
+    let notificationPlayed = false; // Ensure the sound is played only once
+
+    window.onload = function () {
+        const notification = document.getElementById('notification');
+        const sound = document.getElementById('notificationSound');
+
+        if (notification && sound && !notificationPlayed) {
+            sound.play().catch(error => {
+                console.error("Notification sound failed to play:", error);
+            });
+            
+            notificationPlayed = true; // Mark as played
+
+            // Optionally fade out the notification after a delay
+            setTimeout(() => {
+                notification.style.opacity = '0';
+                setTimeout(() => notification.remove(), 500); // Remove from DOM after fade-out
+            }, 2000);
+        }
+    };
+</script>
+
 <script>
     var exampleModal = document.getElementById('exampleModal');
     exampleModal.addEventListener('show.bs.modal', function (event) {

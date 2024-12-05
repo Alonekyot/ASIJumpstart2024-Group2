@@ -5,6 +5,7 @@
 @section style {
 	<link href="~/css/bookingManagementStyle.css" rel="stylesheet" />
 	<link href="~/css/Cards.css" rel="stylesheet" />
+	<link href="~/css/notificationBox.css" rel="stylesheet" />
 }
 <p class="title font-lato">Booking Management</p>
 <div class="flex" >
@@ -100,8 +101,7 @@
 
 	<main class="flex-grow-1 horizontal-margin padding-20">
 		<div class="flex justify-content-between book-title">
-			<h6>Rooms</h6>
-			<a href="#">View Bookings</a>
+			<h6 class="room-title">ROOMS AVAILABLE</h6>
 		</div>
 		<div class="card-grid">
 			@foreach (var room in Model)
@@ -119,10 +119,14 @@
 						}
 					</div>
 					<div class="room-info flex-grow-1">
-						<h4 class="room-name">@room.RoomName</h4>
+						<h4 class="card-title">@room.RoomName</h4>
 						<div class="room-details">
-							<div><span>Seating capacity: </span>@room.RoomCapacity</div>
-							<div><span>Location: </span>@room.RoomLocation</div>
+							<div><span>Seating capacity: </span>
+								<p class="info-book-manage">@room.RoomCapacity</p>
+							</div>
+							<div><span>Location: </span>
+								<p class="info-book-manage">@room.RoomLocation</p>
+							</div>
 							<div class="amenities">
 								<p> <span>Amenities: </span></p>
 								<div class="icons-list">
@@ -168,3 +172,34 @@
 		</div>
 	</main>
 </div>
+
+@if (TempData["bookedSuccess"] != null)
+{
+	<div id="notification" class="alert alert-success notification">
+		@TempData["bookedSuccess"]
+	</div>
+	<audio id="notificationSound" src="/sound/notificationSound.mp3"></audio>
+}
+
+<script>
+	let notificationPlayed = false; // Ensure the sound is played only once
+
+	   window.onload = function () {
+		   const notification = document.getElementById('notification');
+			  const sound = document.getElementById('notificationSound');
+
+				 if (notification && sound && !notificationPlayed) {
+				  sound.play().catch(error => {
+				   console.error("Notification sound failed to play:", error);
+			});
+
+			 notificationPlayed = true; // Mark as played
+
+			 // Optionally fade out the notification after a delay
+			 setTimeout(() => {
+				 notification.style.opacity = '0';
+				 setTimeout(() => notification.remove(), 500); // Remove from DOM after fade-out
+			 }, 2000);
+		 }
+	 };
+</script>

@@ -7,7 +7,7 @@
     min-width: 200px;
     max-width: 250px;
     border-radius: 5px;
-    box-shadow: 0px 6px 4px 0px rgba(0,0,0,0.25);
+    box-shadow: 0px 3px 5px 1px rgba(97, 97, 97, 0.20);
     background-color: white;
 }
 
@@ -23,15 +23,15 @@
     width: 100%;
     height: 150px;
     overflow: hidden;
-    display: flex; /* Use flexbox for centering */
-    justify-content: center; /* Center horizontally */
+    display: flex; 
+    justify-content: center; 
     align-items: center;
     margin-bottom: 15px;
 }
 .image-container img {
-    width: 100%; /* Image takes full width of the container */
-    height: auto; /* Maintain aspect ratio */
-    display: block; /* Remove bottom space */
+    width: 100%; 
+    height: auto; 
+    display: block; 
     object-fit: contain;
 }
 .info-top p span {
@@ -63,7 +63,7 @@ p span {
 /*Booking*/
 
 .book-card {
-    box-shadow: 0px 5px 4px 0px rgba(0,0,0,0.25);
+    box-shadow: 0px 2px 5px 0px rgba(97, 97, 97, 0.05);
     padding: 20px;
     border-radius: 10px;
     background-color: white;
@@ -78,7 +78,7 @@ p span {
     margin: 0 10px;
 }
 .room-info div div{
-    font: normal 0.65rem "Open sans", sans-serif;
+    font: normal 0.85rem "Open sans", sans-serif;
     color: #888888;
 }
 .room-info div div span{
@@ -88,8 +88,9 @@ p span {
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
-    flex: 1;
+    flex: 2;
 }
+
 .book-btn {
     background-color: #437DD6;
     color: white;

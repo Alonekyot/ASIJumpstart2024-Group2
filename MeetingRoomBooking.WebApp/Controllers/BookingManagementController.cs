@@ -43,10 +43,12 @@ namespace MeetingRoomBooking.WebApp.Controllers {
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CreateBooking(CreateBooking newBook, int roomId) {
+
+            Console.WriteLine(newBook);
             if (string.IsNullOrWhiteSpace(newBook.MeetingTitle)) {
                 ModelState.AddModelError("MeetingTitle", "Provide meeting title");
-                TempData["Model"] = JsonConvert.SerializeObject(newBook);
-                return RedirectToAction("Create", new { roomId });
+                ViewBag.RoomId = roomId;
+                return View("Create");
             }
 
             DateOnly meetingDate = DateOnly.FromDateTime(newBook.MeetingDate);
@@ -57,13 +59,13 @@ namespace MeetingRoomBooking.WebApp.Controllers {
 
             if (meetingTimeStart > meetingTimeEnd) {
                 ModelState.AddModelError("TimeEnd", "A meeting can't end before it starts");
-                TempData["Model"] = JsonConvert.SerializeObject(newBook);
-                return RedirectToAction("Create", new { roomId });
+                ViewBag.RoomId = roomId;
+                return View("Create");
             }
             else if (DateTime.Now > meetingTimeStart) {
                 ModelState.AddModelError("TimeEnd", "The meeting is already starting or it has finished");
-                TempData["Model"] = JsonConvert.SerializeObject(newBook);
-                return RedirectToAction("Create", new { roomId });
+                ViewBag.RoomId = roomId;
+                return View("Create");
             }
 
             int userId = int.Parse(User.FindFirst("UserId")?.Value);
@@ -74,14 +76,28 @@ namespace MeetingRoomBooking.WebApp.Controllers {
                 if (!success) {
                     ModelState.AddModelError("MeetingDate", "There might be some conflict with the bookings");
                     TempData["Model"] = JsonConvert.SerializeObject(newBook);
-                    return RedirectToAction("Create", new { roomId });
+                    ViewBag.RoomId = roomId;
+                    return View("Create");
                 }
-
+                TempData["bookedSuccess"] = "Your booking has been successfully confirmed.";
                 return RedirectToAction("Index");
             }
+            else {
+                foreach (var entry in ModelState) {
+                    if (entry.Value.Errors.Count > 0) {
+                        Console.WriteLine($"Key: {entry.Key}");
+                        foreach (var error in entry.Value.Errors) {
+                            Console.WriteLine($"Error: {error.ErrorMessage}");
+                            if (error.Exception != null) {
+                                Console.WriteLine($"Exception: {error.Exception.Message}");
+                            }
+                        }
+                    }
+                }
+            }
 
-            TempData["Model"] = JsonConvert.SerializeObject(newBook);
-            return RedirectToAction("Create", new { roomId });
+            ViewBag.RoomId = roomId;
+            return View("Create");
         }
 
         public JsonResult GetEvents(int roomId) {

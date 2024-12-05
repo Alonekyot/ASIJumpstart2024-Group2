@@ -11,6 +11,10 @@ using MeetingRoomBooking.Services.ServiceModels;
 using Microsoft.EntityFrameworkCore;
 using MeetingRoomBooking.Services.Managers;
 using MeetingRoomBooking.Services.Interfaces;
+using NuGet.Protocol.Plugins;
+using Microsoft.CodeAnalysis.Scripting;
+using MeetingRoomBooking.Services.Manager;
+using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages.Manage;
 
 namespace MeetingRoomBooking.WebApp.Controllers {
 
@@ -21,7 +25,9 @@ namespace MeetingRoomBooking.WebApp.Controllers {
         private readonly ILogger<HomeController> _logger;
         private readonly MeetingRoomBookingDbContext _context;
         private readonly ChartDataManager _chartDataManager;
-        public HomeController(ILogger<HomeController> logger, MeetingRoomBookingDbContext context, IBookingManager bookingManager, ChartDataManager chartDataManager) {
+
+        public HomeController(ILogger<HomeController> logger, MeetingRoomBookingDbContext context, IBookingManager bookingManager, ChartDataManager chartDataManager)
+        {
             _logger = logger;
             _context = context;
             _chartDataManager = chartDataManager;
@@ -36,7 +42,24 @@ namespace MeetingRoomBooking.WebApp.Controllers {
 
             if (role == 1 || role == 2)
             {
+
+                int todaysBooking = _context.Bookings
+                    .Where(b => b.MeetingDate == DateOnly.FromDateTime(DateTime.Now))
+                    .Count();
+                int roomCount = _context.Rooms
+                    .Count();
+                int recurring = _context.Bookings
+                    .Where(b => b.Recurring)
+                    .Count();
+
+                ViewBag.RoomCount = roomCount;
+                ViewBag.TodaysBooking = todaysBooking;
+                ViewBag.Recurrings = recurring;
+
                 // For Admin: fetch all bookings (both admin and user)
+                var currentDate = DateOnly.FromDateTime(DateTime.Now);
+                var currentTime = TimeOnly.FromDateTime(DateTime.Now);
+
                 var bookings = (from booking in _context.Bookings
                              join room in _context.Rooms on booking.RoomId equals room.RoomId
                              join user in _context.Users on booking.UserId equals user.UserId
@@ -53,8 +76,45 @@ namespace MeetingRoomBooking.WebApp.Controllers {
                                  MeetingTitle = booking.MeetingTitle,
                                  BookingID = booking.BookingId
                              }).ToList();
+                                join room in _context.Rooms on booking.RoomId equals room.RoomId
+                                join user in _context.Users on booking.UserId equals user.UserId
+                                select new
+                                {
+                                    UserName = user.FirstName + " " + user.LastName,
+                                    RoomName = room.RoomName,
+                                    MeetingDate = booking.MeetingDate,
+                                    StartTime = booking.StartTime,
+                                    EndTime = booking.EndTime,
+                                    RoomLocation = room.RoomLocation,
+                                    BookingStatus = booking.BookingStatus,
+                                    MeetingTitle = booking.MeetingTitle,
+                                    BookingID = booking.BookingId
+                                })
+                                .AsEnumerable() // Switch to LINQ-to-Objects for date and time logic
+                                .Select(b => new BookingModel
+                                {
+                                    UserName = b.UserName,
+                                    RoomName = b.RoomName,
+                                    MeetingDate = b.MeetingDate,
+                                    StartTime = b.StartTime,
+                                    EndTime = b.EndTime,
+                                    RoomLocation = b.RoomLocation,
+                                    BookingStatus = b.BookingStatus == "Scheduled" &&
+                                                    b.MeetingDate == currentDate
+                                                    ? (currentTime >= b.StartTime && currentTime <= b.EndTime
+                                                        ? "Ongoing"
+                                                        : currentTime > b.EndTime
+                                                            ? "Finished"
+                                                            : "Scheduled")
+                                                    : b.BookingStatus,
+                                    MeetingTitle = b.MeetingTitle,
+                                    BookingID = b.BookingID
+                                })
+                                .OrderBy(d => d.MeetingDate)
+                                .ThenBy(t => t.StartTime)
+                                .ToList();
 
-                
+
                 return View("AdminDashboard", bookings); // Pass the bookings to the Admin view
             }
             else if (role == 0)
@@ -82,6 +142,7 @@ namespace MeetingRoomBooking.WebApp.Controllers {
             return View();
 
         }
+
         public IActionResult ReportAnalytics() {
             ViewBag.ActivePage = "Report & Analytics";
 
@@ -94,10 +155,34 @@ namespace MeetingRoomBooking.WebApp.Controllers {
                 .Where(b => b.Recurring)
                 .Count();
 
+            var roomLeaderboard = _context.Rooms
+                .Select(room => new RoomLeaderBoard {
+                    RoomName = room.RoomName,
+                    BookedTimes = room.booking.Count()
+                })
+                .OrderByDescending(x => x.BookedTimes)
+                .ToList();
+
+            var userLeaderboard = _context.Users
+                .Where(u => !u.Deleted)
+                .Select(user => new UserLeaderBoard
+                {
+                    Username = user.FirstName + " " + user.LastName,
+                    BookedTimes = user.booking.Count()
+                })
+                .Where(s => s.BookedTimes > 0)
+                .OrderByDescending(u => u.BookedTimes)
+                .ToList();
+            var leaderboards = new LeaderBoardLists()
+            {
+                RoomLeaders = roomLeaderboard,
+                UserLeaders = userLeaderboard
+            };
+
             ViewBag.RoomCount = roomCount;
             ViewBag.TodaysBooking = todaysBooking;
             ViewBag.Recurrings = recurring;
-            return View();
+            return View(leaderboards);
         }
 
         [HttpGet]
@@ -126,6 +211,13 @@ namespace MeetingRoomBooking.WebApp.Controllers {
         public IActionResult Setting()
         {
             ViewBag.ActivePage = "Setting";
+
+            var userId = int.Parse(User.FindFirstValue("UserId"));
+            var user = _context.Users.Where(u => u.UserId == userId).FirstOrDefault();
+            var password = PasswordManager.DecryptPassword(user.Password);
+
+            ViewBag.Password = password;
+
             return View();
         }
 
@@ -160,7 +252,21 @@ namespace MeetingRoomBooking.WebApp.Controllers {
         }
 
         public IActionResult SearchBooking(string filter) {
-           
+
+            int todaysBooking = _context.Bookings
+                    .Where(b => b.MeetingDate == DateOnly.FromDateTime(DateTime.Now))
+                    .Count();
+            int roomCount = _context.Rooms
+                .Count();
+            int recurring = _context.Bookings
+                .Where(b => b.Recurring)
+                .Count();
+
+            ViewBag.RoomCount = roomCount;
+            ViewBag.TodaysBooking = todaysBooking;
+            ViewBag.Recurrings = recurring;
+            ViewBag.ActivePage = "Dashboard";
+
             var bookings = (from booking in _context.Bookings
                             join room in _context.Rooms on booking.RoomId equals room.RoomId
                             join user in _context.Users on booking.UserId equals user.UserId
@@ -185,6 +291,20 @@ namespace MeetingRoomBooking.WebApp.Controllers {
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CancelBooking(int bookingId)
         {
+            var status = _context.Bookings.Where(u => u.BookingId == bookingId).FirstOrDefault();
+            var userId = int.Parse(User.FindFirstValue("UserId"));
+            var role = int.Parse(User.FindFirstValue("Role"));
+
+
+            if (role == 1 || role == 2)
+            {
+                // Check if the booking is already canceled
+                if (status.BookingStatus == "Canceled")
+                {
+                    TempData["CanceledSucess"] = "Booking is already canceled.";
+                    return RedirectToAction("Index");
+                }
+                bool success = await _bookingManager.CancelBooking(bookingId);
             var status = _context.Bookings.Where(u => u.BookingId == bookingId).ToList();
             var booking = await _context.Bookings.FindAsync(bookingId);
 
@@ -193,10 +313,44 @@ namespace MeetingRoomBooking.WebApp.Controllers {
                 return BadRequest("Invalid booking ID.");
             }
 
+                if (!success)
+                {
+                    return RedirectToAction("Index");
+                }
+                // Success message for cancellation
+                TempData["CanceledSucess"] = "Booking canceled successfully.";
+            }
+            else
+            {
+                bool success = await _bookingManager.CancelBooking(bookingId);
             if (booking.BookingStatus == "Scheduled")
             {
                 bool success = await _bookingManager.CancelBooking(bookingId);
 
+                if (!success)
+                {
+                    TempData["CanceledSucess"] = "Booking cancellation failed.";
+                    return RedirectToAction("Index");
+                }
+                // Success message for cancellation
+                TempData["CanceledSucess"] = "Booking canceled successfully.";
+            }
+            return RedirectToAction("Index");
+        }
+
+
+        [HttpPost]
+        public async Task<IActionResult> ChangePassword(ChangePasswordModel model)
+        {
+            var userId = int.Parse(User.FindFirstValue("UserId"));
+            var user = _context.Users.Where(u => u.UserId == userId).FirstOrDefault();
+            var password = PasswordManager.DecryptPassword(user.Password);
+
+            if (model.CurrentPassword != password)
+            {
+                ModelState.AddModelError("CurrentPassword", "The current password is incorrect.");
+                return View("Setting", model);
+            }
                 if (!success)
                 {
                     return NotFound("Booking not found or already canceled.");
@@ -211,10 +365,22 @@ namespace MeetingRoomBooking.WebApp.Controllers {
                 }
             }
 
-            TempData["SuccessMessage"] = "Booking canceled successfully.";
-            return RedirectToAction("Index");
+            // Prevent reuse of the same password
+            if (model.NewPassword == model.CurrentPassword)
+            {
+                ModelState.AddModelError("NewPassword", "The new password cannot be the same as the current password.");
+                return View("Setting", model);
+            }
+
+            // Encrypt and save the new password
+            user.Password = PasswordManager.EncryptPassword(model.NewPassword);
+            _context.SaveChanges();
+
+            // Set the success message for TempData
+            TempData["SuccessMessage"] = "Your password has been successfully updated.";
+
+            // Redirect to the "Setting" view to display the success message and reset the page state
+            return RedirectToAction("Setting");
         }
-
-
     }
 }

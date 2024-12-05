@@ -28,8 +28,13 @@ namespace MeetingRoomBooking.Services.ServiceModels {
         public DateTime? RecurringEnd { get; set; }
 
         public override string ToString() {
-            return $"MeetingTitle: {MeetingTitle}" +
-                $"MeetingDate: {MeetingDate}";
+            return $"MeetingTitle: {MeetingTitle}, " +
+                   $"MeetingDate: {MeetingDate}, " +
+                   $"TimeStart: {TimeStart}, " +
+                   $"TimeEnd: {TimeEnd}, " +
+                   $"IsRecurring: {IsRecurring}, " +
+                   $"RecurringPattern: {RecurringPattern ?? "N/A"}, " +
+                   $"RecurringEnd: {(RecurringEnd.HasValue ? RecurringEnd.Value.ToString() : "N/A")}";
         }
 
     }
