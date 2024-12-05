@@ -58,7 +58,7 @@ namespace MeetingRoomBooking.WebApp.Controllers {
         }
 
         public IActionResult ViewAll() {
-
+            ViewBag.ActivePage = "BookingManagement";
             int id = int.Parse(User.FindFirstValue("UserId"));
 
             var bookings = _context.Bookings
@@ -215,12 +215,6 @@ namespace MeetingRoomBooking.WebApp.Controllers {
 
 			return View("Index", rooms.ToList());
 		}
-
-
-
-	}
-            return new JsonResult(events);
-        }
 
         [HttpPost]
         public async Task<IActionResult> EditBooking(EditBooking book) {

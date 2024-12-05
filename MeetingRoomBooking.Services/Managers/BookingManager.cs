@@ -209,13 +209,13 @@ namespace MeetingRoomBooking.Services.Managers {
             {
                 return false; // Invalid ID
             }
-            var booking = await _context.Bookings.FirstOrDefaultAsync(r => r.BookingId == bookingId);
+            var booking = await _context.BookingInstance.FirstOrDefaultAsync(r => r.BookingInstanceId == bookingId);
             if (booking == null)
             {
                 return false; // Booking not found
             }
-            booking.BookingStatus = "Canceled";
-            _context.Bookings.Remove(booking);
+            booking.MeetingStatus = "Canceled";
+            _context.BookingInstance.Remove(booking);
             await _context.SaveChangesAsync();
 
             return true;       

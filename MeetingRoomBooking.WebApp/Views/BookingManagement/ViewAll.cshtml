@@ -20,7 +20,7 @@
                 @foreach(var instance in booking.BookingInstances) {
                     <hr style="margin: 0;" />
                     <li class="meeting">
-                        <span>@instance.MeetingDate</span>
+                        <span>@instance.MeetingDate (@instance.StartTime - @instance.EndTime)</span>
                         <form class="" method="post" asp-action="CancelBook">
                             <input type="hidden" name="meetingId" value="@instance.BookingInstanceId" />
                             <button type="submit">Cancel</button>

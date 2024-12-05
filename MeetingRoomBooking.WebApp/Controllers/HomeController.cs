@@ -277,43 +277,31 @@ namespace MeetingRoomBooking.WebApp.Controllers {
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CancelBooking(int bookingId)
         {
-            var status = _context.BookingInstance.Where(u => u.BookingInstanceId == bookingId).FirstOrDefault();
-            var userId = int.Parse(User.FindFirstValue("UserId"));
-            var role = int.Parse(User.FindFirstValue("Role"));
+            var status = _context.BookingInstance.FirstOrDefault(u => u.BookingInstanceId == bookingId);
+            //var booking = await _context.BookingInstance.FindAsync(bookingId);
 
-            if (bookingId <= 0)
-            {
+            if (bookingId <= 0) {
                 return BadRequest("Invalid booking ID.");
             }
 
-            if (booking.BookingStatus == "Scheduled")
-            {
-                // Check if the booking is already canceled
-                if (status.MeetingStatus == "Canceled")
-                {
-                    TempData["CanceledSucess"] = "Booking is already canceled.";
-                    return RedirectToAction("Index");
-                }
+            if (status.MeetingStatus == "Scheduled") {
                 bool success = await _bookingManager.CancelBooking(bookingId);
 
-                if (!success)
-                {
+                if (!success) {
                     return NotFound("Booking not found or already canceled.");
                 }
                 TempData["CanceledSucess"] = "Booking canceled successfully.";
             }
-            else if (booking.BookingStatus == "Canceled")
-            {
+            else if (status.MeetingStatus == "Canceled") {
                 bool success = await _bookingManager.DeleteBooking(bookingId);
 
-                if (!success)
-                {
+                if (!success) {
                     return NotFound("Booking not found or already canceled.");
                 }
                 TempData["CanceledSucess"] = "Booking deleted successfully.";
             }
 
-            
+
             return RedirectToAction("Index");
             }
 
