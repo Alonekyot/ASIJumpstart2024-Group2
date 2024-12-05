@@ -106,7 +106,7 @@
                     <td>@booking.BookingStatus</td>
                     <td>@booking.RoomLocation</td>  
                     <td class="icons-area">
-                        <a href="#" class="table-icon">
+                        <a class="table-icon" asp-route-id="@booking.BookingID", asp-controller="BookingManagement" asp-action="Edit">
                             <i class="bi bi-pencil-square"></i>
                         </a>
                         <a href="#" class="table-icon" data-id="@booking.BookingID" data-bs-toggle="modal" data-bs-target="#exampleModal" data-status="@booking.BookingStatus">
@@ -118,6 +118,7 @@
         </tbody>
     </table>
 </div>
+<div>
     <ul class="pagination">
         <li class="page-item"><a class="page-link" href="#">Prev</a></li>
         <li class="page-item"><a class="page-link" href="#">1</a></li>

@@ -1,4 +1,5 @@
 ﻿@import url('https://fonts.googleapis.com/css2?family=Inclusive+Sans:ital@0;1&family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inclusive+Sans:ital@0;1&family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap');
 
 .title {
     font-size: 1.25rem;
@@ -132,11 +133,14 @@ section ul li{
     font-size: 0.8rem;
     margin: 7px auto;
 }
-
+.book-title{
+    align-items: flex-end;
+}
 .book-title a {
     text-decoration: none;
     font: normal 0.9rem "Inclusive sans", sans-serif;
     color: #437DD6;
+    margin-bottom: 0.5rem;
 }
 .card-grid {
     display: grid;

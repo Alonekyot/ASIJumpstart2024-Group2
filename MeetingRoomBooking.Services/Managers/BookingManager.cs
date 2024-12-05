@@ -18,6 +18,8 @@ namespace MeetingRoomBooking.Services.Managers {
             if (newbook == null) {
                 return false;
             }
+
+            // Create a booking object
             var booking = new Booking()
             {
                 UserId = userId,
@@ -32,52 +34,92 @@ namespace MeetingRoomBooking.Services.Managers {
                 RecurringEnd = newbook.RecurringEnd.HasValue ? DateOnly.FromDateTime(newbook.RecurringEnd.Value) : (DateOnly?)null
             };
 
-            // Handle recurring bookings
+            // Check for conflicts with recurring bookings
             if (newbook.IsRecurring && newbook.RecurringPattern != null && booking.RecurringEnd.HasValue) {
-                // Generate recurring instances
                 var recurringInstances = GenerateRecurrence(booking);
 
-                // Check for conflicts
                 foreach (var instance in recurringInstances) {
                     if (IsMeetingConflict(instance)) {
-                        await _context.DisposeAsync();
-                        return false; // Conflict detected, stop processing
+                        return false; // Conflict detected; exit early
                     }
                 }
+            }
+            // Check for conflicts with non-recurring booking
+            else if (IsMeetingConflict(new BookingInstance
+            {
+                UserId = booking.UserId,
+                RoomId = booking.RoomId,
+                MeetingDate = booking.MeetingDate,
+                StartTime = booking.StartTime,
+                EndTime = booking.EndTime,
+                MeetingStatus = booking.BookingStatus
+            })) {
+                return false; // Conflict detected
+            }
 
-                // Add all valid instances to the database
-                _context.Bookings.AddRange(recurringInstances);
+            // Save the booking to the database
+            await _context.Bookings.AddAsync(booking);
+            await _context.SaveChangesAsync(); // Ensure BookingId is generated
+            
+            if (booking.Recurring) {
+                var bookingInstances = GenerateRecurrence(booking);
+                await _context.BookingInstance.AddRangeAsync(bookingInstances);
             }
             else {
-                // Handle non-recurring bookings
-                if (IsMeetingConflict(booking)) {
-                    await _context.DisposeAsync();
-                    return false; // Conflict detected
-                }
-
-                _context.Bookings.Add(booking);
-            }
-
-            await _context.SaveChangesAsync();
-            await _context.DisposeAsync();
-
-            return true;
-        }
-
-        private List<Booking> GenerateRecurrence(Booking booking) {
-            var bookings = new List<Booking>();
-            DateOnly current = booking.MeetingDate;
-            while(current <= booking.RecurringEnd) {
-                bookings.Add(new Booking
+                var bookingInstance = new BookingInstance()
                 {
                     UserId = booking.UserId,
                     RoomId = booking.RoomId,
+                    BookingId = booking.BookingId,
+                    MeetingTitle = booking.MeetingTitle,
+                    MeetingDate = booking.MeetingDate,
+                    StartTime = booking.StartTime,
+                    EndTime = booking.EndTime,
+                    MeetingStatus = booking.BookingStatus
+                };
+                await _context.BookingInstance.AddAsync(bookingInstance);
+            }
+            
+            
+
+
+            await _context.SaveChangesAsync(); // Save BookingInstance records
+            return true;
+        }
+
+        public async Task<bool> EditBooking(EditBooking booking) {
+            if (IsMeetingConflict(booking)) {
+                return false;
+            }
+            var b = await _context.BookingInstance
+                .FirstOrDefaultAsync(b => b.BookingInstanceId == booking.BookingId);
+            if (b == null) {
+                return false;
+            }
+            b.MeetingTitle = booking.MeetingTitle;
+            b.MeetingDate = booking.MeetingDate;
+            b.StartTime = booking.StartTime;
+            b.EndTime = booking.EndTime;
+            b.RoomId = booking.RoomId;
+
+            await _context.SaveChangesAsync();
+            return true;
+        }
+
+        private List<BookingInstance> GenerateRecurrence(Booking booking) {
+            var bookings = new List<BookingInstance>();
+            DateOnly current = booking.MeetingDate;
+            while(current <= booking.RecurringEnd) {
+                bookings.Add(new BookingInstance
+                {
+                    UserId = booking.UserId,
+                    RoomId = booking.RoomId,
+                    BookingId = booking.BookingId,
                     MeetingTitle = booking.MeetingTitle,
                     MeetingDate = current,
                     StartTime = booking.StartTime,
                     EndTime = booking.EndTime,
-                    BookingStatus = booking.BookingStatus,
-                    Recurring = false, // Individual instances are not marked as recurring
+                    MeetingStatus = booking.BookingStatus
                 });
                 current = booking.RecurringPattern switch
                 {
@@ -89,7 +131,7 @@ namespace MeetingRoomBooking.Services.Managers {
             }
             return bookings;
         }
-        private bool IsOverlap(List<Booking> existingBookings, Booking newBooking) {
+        private bool IsOverlap(List<BookingInstance> existingBookings, BookingInstance newBooking) {
             foreach (var booking in existingBookings) {
                 if (booking.RoomId == newBooking.RoomId &&
                     booking.MeetingDate == newBooking.MeetingDate &&
@@ -101,47 +143,43 @@ namespace MeetingRoomBooking.Services.Managers {
             return false;
         }
 
-        public bool ValidateRecurringBooking(List<Booking> existingBookings, Booking recurring) {
-            var newBookings = GenerateRecurrence(recurring);
-
-            foreach (var newBooking in newBookings) {
-                if (IsOverlap(existingBookings, newBooking)) {
-                    return false; // Conflict detected
-                }
-            }
-
-            return true; // No conflicts
-        }
-
         public List<Booking> GetBookings(int roomId) {
             return _context.Bookings
                 .Where(b => b.RoomId == roomId)
                 .ToList();
         }
 
-        public bool IsMeetingConflict(Booking book) {
-            var existingBookings = _context.Bookings
-                .Where(b => b.MeetingDate == book.MeetingDate)
-                .Where(o => o.RoomId == book.RoomId)
+        private bool IsMeetingConflict(BookingInstance book) {
+            var existingBookings = _context.BookingInstance
+                .Where(b => b.MeetingDate == book.MeetingDate && b.RoomId == book.RoomId && b.MeetingStatus != "Canceled")
                 .ToList();
 
             foreach (var existingBooking in existingBookings) {
-                // Check if there is a time overlap
-
+                // Check for time overlaps
                 if ((book.StartTime >= existingBooking.StartTime && book.StartTime < existingBooking.EndTime) ||
                     (book.EndTime > existingBooking.StartTime && book.EndTime <= existingBooking.EndTime) ||
                     (book.StartTime <= existingBooking.StartTime && book.EndTime >= existingBooking.EndTime)) {
-                    return true; // Conflict found
+                    return true; // Conflict detected
                 }
             }
+
             return false; // No conflict
         }
+        private bool IsMeetingConflict(EditBooking book) {
+            var existingBookings = _context.BookingInstance
+                .Where(b => b.MeetingDate == book.MeetingDate && b.RoomId == book.RoomId && b.MeetingStatus != "Canceled" && book.BookingId != b.BookingInstanceId)
+                .ToList();
 
-        private bool IsTimeOverlap(Booking book, Booking existingBooking) {
-            return (book.StartTime >= existingBooking.StartTime && book.StartTime < existingBooking.EndTime) ||
-                (book.EndTime > existingBooking.StartTime && book.EndTime <= existingBooking.EndTime) ||
-                (book.StartTime <= existingBooking.StartTime && book.EndTime >= existingBooking.EndTime);
+            foreach (var existingBooking in existingBookings) {
+                // Check for time overlaps
+                if ((book.StartTime >= existingBooking.StartTime && book.StartTime < existingBooking.EndTime) ||
+                    (book.EndTime > existingBooking.StartTime && book.EndTime <= existingBooking.EndTime) ||
+                    (book.StartTime <= existingBooking.StartTime && book.EndTime >= existingBooking.EndTime)) {
+                    return true; // Conflict detected
+                }
+            }
 
+            return false; // No conflict
         }
 
         public async Task<bool> CancelBooking(int bookingId)
@@ -151,7 +189,7 @@ namespace MeetingRoomBooking.Services.Managers {
                 return false; // Invalid ID
             }
 
-            var booking = await _context.Bookings.FirstOrDefaultAsync(r => r.BookingId == bookingId);
+            var booking = await _context.BookingInstance.FirstOrDefaultAsync(r => r.BookingInstanceId == bookingId);
 
             if (booking == null)
             {
@@ -159,8 +197,8 @@ namespace MeetingRoomBooking.Services.Managers {
             }
 
             // Update status to 'Canceled'
-            booking.BookingStatus = "Canceled";
-            _context.Bookings.Update(booking);
+            booking.MeetingStatus = "Canceled";
+            _context.BookingInstance.Update(booking);
             await _context.SaveChangesAsync();
 
             return true;
@@ -171,13 +209,13 @@ namespace MeetingRoomBooking.Services.Managers {
             {
                 return false; // Invalid ID
             }
-            var booking = await _context.Bookings.FirstOrDefaultAsync(r => r.BookingId == bookingId);
+            var booking = await _context.BookingInstance.FirstOrDefaultAsync(r => r.BookingInstanceId == bookingId);
             if (booking == null)
             {
                 return false; // Booking not found
             }
-            booking.BookingStatus = "Canceled";
-            _context.Bookings.Remove(booking);
+            booking.MeetingStatus = "Canceled";
+            _context.BookingInstance.Remove(booking);
             await _context.SaveChangesAsync();
 
             return true;       

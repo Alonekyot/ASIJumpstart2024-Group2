@@ -102,6 +102,7 @@
 	<main class="flex-grow-1 horizontal-margin padding-20">
 		<div class="flex justify-content-between book-title">
 			<h6 class="room-title">ROOMS AVAILABLE</h6>
+			<a asp-action="ViewAll">My Bookings</a>
 		</div>
 		<div class="card-grid">
 			@foreach (var room in Model)
@@ -165,7 +166,7 @@
 						</div>
 					</div>
 					<div>
-						<a class="book-btn" asp-action="Create" asp-route-roomName="@room.RoomName" asp-route-roomId="@room.RoomId">Book</a>
+						<a class="book-btn" asp-action="Create" asp-route-roomName="@room.RoomName" asp-route-roomId="@room.RoomId">Reserve</a>
 					</div>
 				</div>
 			}

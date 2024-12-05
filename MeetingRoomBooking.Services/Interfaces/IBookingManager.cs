@@ -13,6 +13,7 @@ namespace MeetingRoomBooking.Services.Interfaces
         public Task<bool> CreateBook(CreateBooking newbook, int userId, int roomId);
         public List<Booking> GetBookings(int roomId);
         public Task<bool> CancelBooking(int bookingId);
+        public Task<bool> EditBooking(EditBooking booking);
         public Task<bool> DeleteBooking(int bookingId);
     }
 }
