@@ -14,5 +14,6 @@ namespace MeetingRoomBooking.Services.Interfaces
         public List<Booking> GetBookings(int roomId);
         public Task<bool> CancelBooking(int bookingId);
         public Task<bool> EditBooking(EditBooking booking);
+        public Task<bool> DeleteBooking(int bookingId);
     }
 }

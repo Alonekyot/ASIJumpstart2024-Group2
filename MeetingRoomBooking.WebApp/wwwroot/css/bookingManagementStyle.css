@@ -4,7 +4,7 @@
 .title {
     font-size: 1.25rem;
 }
-aside p {
+form p {
     font: 600 1.25rem "Open sans", sans-serif;
 }
 .font-lato {
@@ -36,6 +36,8 @@ aside p {
     flex-direction: column;
     height: 500px;
     width: 350px;
+    position: sticky;
+    top : 10px;
 }
 .flex {
     display: flex;
