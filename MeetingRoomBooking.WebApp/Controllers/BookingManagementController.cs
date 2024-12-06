@@ -29,8 +29,14 @@ namespace MeetingRoomBooking.WebApp.Controllers {
 		[HttpGet]
 		public IActionResult Index() {
             ViewBag.ActivePage = "BookingManagement";
-			var rooms = _context.Rooms.ToList(); 	
-			return View(rooms);
+			var rooms = _context.Rooms.ToList();
+
+            //FOR THE NOTIFICATION
+            var userId = int.Parse(User.FindFirstValue("UserId"));
+            var userNotif = _context.Users.Where(u => u.UserId == userId).FirstOrDefault();
+            ViewBag.Notif = userNotif.Notification;
+
+            return View(rooms);
         }
 
         public IActionResult Create(int? roomId,string? roomName) {

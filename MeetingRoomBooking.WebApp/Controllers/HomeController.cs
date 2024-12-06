@@ -44,6 +44,7 @@ namespace MeetingRoomBooking.WebApp.Controllers {
             var userNotif = _context.Users.Where(u => u.UserId == userId).FirstOrDefault();
             ViewBag.Notif = userNotif.Notification;
 
+
             if (role == 1 || role == 2)
             {
 

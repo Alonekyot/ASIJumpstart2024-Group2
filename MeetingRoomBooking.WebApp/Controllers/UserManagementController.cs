@@ -7,6 +7,7 @@ using MeetingRoomBooking.WebApp.Models;
 using MeetingRoomBooking.Services.ServiceModels;
 using Microsoft.EntityFrameworkCore;
 using MeetingRoomBooking.Services.Interfaces;
+using System.Security.Claims;
 namespace MeetingRoomBooking.WebApp.Controllers {
 
     [Authorize]
@@ -43,7 +44,12 @@ namespace MeetingRoomBooking.WebApp.Controllers {
             ViewBag.TotalPages = (int)Math.Ceiling((double)totalRecords / pageSize);
             ViewBag.CurrentPage = pageNumber;
 
-            return View(userModel);
+			//FOR THE NOTIFICATION
+			var userId = int.Parse(User.FindFirstValue("UserId"));
+			var userNotif = _context.Users.Where(u => u.UserId == userId).FirstOrDefault();
+			ViewBag.Notif = userNotif.Notification;
+
+			return View(userModel);
         }
 
         [HttpPost]

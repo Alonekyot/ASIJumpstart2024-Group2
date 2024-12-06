@@ -10,7 +10,7 @@
 form {
     justify-content: center;
     width: 500px;
-    max-height: 920px;
+    height: 450px;
     display: block;
     flex-wrap: wrap;
     background-color: white;

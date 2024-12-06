@@ -6,6 +6,8 @@
     <link rel="stylesheet" href="~/css/ViewBookings.css" />
 }
 
+<a asp-action="Index" class="btn btn-primary btnBack">Back</a>
+
 <div class="accordion-area" id="bookingsAccordion">
     @foreach (var booking in Model) {
         <details class="accordion">

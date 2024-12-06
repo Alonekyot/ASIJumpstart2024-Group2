@@ -28,3 +28,17 @@
     font-size: 15px;
     color: #34a2eb;
 }
+
+.btnCancel:hover {
+    text-decoration: underline;
+}
+
+.btnBack {
+    width: 75px;
+    height: 50px;
+    margin-bottom: 10px;
+    background: none;
+    color: #0d6efd;
+    font-weight: 300;
+    font-family: Rubik;
+}
