@@ -158,3 +158,9 @@ button:active{
         padding: 1.25rem;
     }
 }
+.terms {
+    text-decoration: underline;
+}
+    .terms:hover {
+        color: #549CC5;
+    }

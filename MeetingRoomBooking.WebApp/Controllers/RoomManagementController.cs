@@ -13,6 +13,8 @@ using System.Collections;
 namespace MeetingRoomBooking.WebApp.Controllers
 {
 
+    [Authorize]
+    [RoleAuthorize(new int[] { 1, 2 })]// Only Roles with values 1 or 2, or Admin or Suer admin respectively
     public class RoomManagementController : Controller
     {
         private readonly MeetingRoomBookingDbContext _context;
@@ -59,11 +61,14 @@ namespace MeetingRoomBooking.WebApp.Controllers
         public async Task<IActionResult> Edit(EditRoomModel editedRoom)
         {
             var room = await _context.Rooms.FindAsync(editedRoom.RoomId);
-            Console.WriteLine(editedRoom.RoomId + "---------------------------------------");
+
+            Console.WriteLine("Audio:" + editedRoom.Audio + " Video:" + editedRoom.Video + " Whiteboard:" + editedRoom.WhiteBoard + " Projector:"+
+                editedRoom.Projector+" Loudspeaker:"+editedRoom.Loudspeaker);
+			
 
             if (ModelState.IsValid)
             {
-                room = _roomManager.Edit(editedRoom, room);
+                room = await _roomManager.Edit(editedRoom, room);
                 _context.Update(room);
                 await _context.SaveChangesAsync();
                 TempData["roomSuccess"] = "Room edited successfully";
@@ -81,7 +86,7 @@ namespace MeetingRoomBooking.WebApp.Controllers
             if (!ModelState.IsValid)
             {
                 return RedirectToAction("Index");
-            }
+             }
 
             byte[]? imageData = null;
 
