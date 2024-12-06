@@ -4,3 +4,6 @@
 .fc-button-primary span{
     color: white;
 }
+.fc-scroller{
+    overflow: hidden hidden !important;
+}

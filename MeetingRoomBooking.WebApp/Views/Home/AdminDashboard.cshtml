@@ -128,6 +128,8 @@
     </ul>
 </div>
 
+<p id="notiSwitch" hidden>@ViewBag.Notif</p>
+
 <!--MODAL CLASS-->
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
@@ -162,6 +164,8 @@
     transform: translateY(0);
 }
 </style>
+
+
 @if (TempData["CanceledSucess"] != null)
 {
     <div id="notification" class="alert alert-success notification" style="background-color: #f5f093; color: #757015">
@@ -171,26 +175,51 @@
 }
 
 <script>
-    let notificationPlayed = false; // Ensure the sound is played only once
+    let notificationPlayed = false; // Ensure the notification message is displayed only once
+    let soundPlayed = false; // Ensure the notification sound is played only once
+
+    const notifSetting = notiSwitch.textContent === 'True';
 
     window.onload = function () {
-        const notification = document.getElementById('notification');
-        const sound = document.getElementById('notificationSound');
+    const notification = document.getElementById('notification');
+    const sound = document.getElementById('notificationSound');
+    const notiSwitch = document.getElementById('notiSwitch'); // Get the switch element
 
-        if (notification && sound && !notificationPlayed) {
-            sound.play().catch(error => {
-                console.error("Notification sound failed to play:", error);
-            });
-            
-            notificationPlayed = true; // Mark as played
+    // Handle the notification message
+    if (notification && !notificationPlayed) {
+        notificationPlayed = true; // Mark the notification as displayed
 
-            // Optionally fade out the notification after a delay
+        // Fade out the notification after a delay
+        setTimeout(() => {
+        notification.style.opacity = '0'; // Start fade-out
             setTimeout(() => {
-                notification.style.opacity = '0';
-                setTimeout(() => notification.remove(), 500); // Remove from DOM after fade-out
-            }, 2000);
-        }
-    };
+                if (notification) {
+        notification.remove(); // Remove notification from DOM after fade-out
+                }
+            }, 500); // Wait for fade-out animation to complete
+        }, 2000); // Delay before fade-out starts
+    }
+
+    // Handle the notification sound
+    if (sound && notifSetting && !soundPlayed) {
+        sound.play().catch(error => {
+            console.error("Notification sound failed to play:", error);
+        });
+
+    soundPlayed = true; // Mark the sound as played
+    }
+};
+
+    // Event listener for the switch to dynamically control the sound
+    document.getElementById('notiSwitch').addEventListener('change', function () {
+    if (!this.checked) {
+        console.log("Sound is disabled."); // Optional log for debugging
+        soundPlayed = false; // Reset soundPlayed so the sound can be enabled again if turned on
+    } else {
+        console.log("Sound is enabled."); // Optional log for debugging
+    }
+});
+
 </script>
 
 <script>

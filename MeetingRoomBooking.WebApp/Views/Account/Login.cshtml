@@ -39,7 +39,11 @@
             </div>
             <span asp-validation-for="Email" class="error-message"></span>
             <button type="submit" >Log in</button>
-            <div class="extra-text">By continuing, you agree to the <a href="#">Terms of use</a> and <a href="#">Privacy Policy</a></div>
+            <div class="extra-text">
+                By continuing, you agree to the <a type="button" class="terms" data-bs-toggle="modal" data-bs-target="#termsofUse">Terms of Use</a> 
+                and
+                <a type="button" class="terms" data-bs-toggle="modal" data-bs-target="#privacyPolicy">Privacy Policy</a>
+            </div>
             <div class="forgot-pass">
                 <a asp-controller="Account" asp-action="ForgotPassword" class="extra-text">Forgot your password?</a>
             </div>
@@ -48,4 +52,85 @@
     </form>
 </div>
 
+<div class="modal fade" id="termsofUse" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Terms of Use</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p style ="text-align: justify">
+                By using our Meeting Room Booking System (Banky Solutions), 
+                you agree to comply with all terms and conditions outlined herein. 
+                The System is designed to streamline the scheduling and management 
+                of meeting room reservations within the organization. 
+                Users are required to provide accurate and truthful information during 
+                the booking process and are responsible for ensuring that their use of 
+                the System aligns with organizational policies. Misuse, such as unauthorized 
+                cancellations, false bookings, or tampering with the System, is strictly 
+                prohibited and may result in revoked access.
+            </p>
+            <p style="text-align: justify">
+                Access to the System is granted on an "as-is" basis. 
+                While we endeavor to maintain the System's accuracy and reliability, 
+                we do not guarantee error-free operation or uninterrupted availability. 
+                The organization is not liable for any inconveniences, losses, or damages 
+                arising from technical issues, cancellations, or scheduling conflicts. Users 
+                are advised to verify their bookings and promptly report discrepancies 
+                or concerns to the administration team.
+                </p>
+                <p style="text-align: justify">
+                The organization reserves the right to modify these 
+                terms or suspend user access as necessary to maintain the 
+                integrity and proper function of the System. By continuing 
+                to use the System, you acknowledge and agree to abide by the 
+                latest version of these terms. Please review this document 
+                periodically for updates.
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
 
+<div class="modal fade" id="privacyPolicy" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Privacy Policy</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p style="text-align: justify">
+                    The Meeting Room Booking System collects and processes personal
+                    information, including names, email addresses, and booking details,
+                    to facilitate the scheduling and communication of meeting room reservations.
+                    This data is stored securely and used exclusively for the stated purpose,
+                    ensuring efficient room management and user communication. We are committed
+                    to protecting user privacy and ensuring data handling aligns with relevant
+                    data protection laws and regulations.
+                </p>
+                <p style="text-align: justify">
+                    User data will not be shared with third parties unless required 
+                    by law or necessary to resolve technical or security-related issues. 
+                    Only authorized personnel have access to the stored information, and 
+                    appropriate measures are in place to prevent unauthorized access, disclosure, 
+                    or misuse. Users may request access to their data, make corrections, or request 
+                    deletion by contacting the system administrator.
+                </p>
+                <p style="text-align: justify">
+                    By using the System, you consent to the collection, storage, 
+                    and use of your personal information as outlined in this policy. 
+                    If you have any questions or concerns about our data practices, 
+                    please contact the administration team for assistance.
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>

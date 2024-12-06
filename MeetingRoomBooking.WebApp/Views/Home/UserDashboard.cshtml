@@ -29,56 +29,9 @@
     <audio id="notificationSound" src="/sound/notificationSound.mp3"></audio>
 }
 
-<div style="display: flex; flex: 1; flex-direction: column; justify-content: center; margin: 10px;">
-    <div id="calendar" style="width: 93%;"></div>
-    <div class="booking-table">
-        <div class="table-header">
-            <h3>Your Bookings</h3>
-        </div>
-        <div class="table-data">
-            <table>
-                <thead>
-                    <tr>
-                        <th>Meeting Agenda</th>
-                        <th>Room Name</th>
-                        <th>Meeting Date</th>
-                        <th>Start Time</th>
-                        <th>End Time</th>
-                        <th>Booking Status</th>
-                        <th>Location</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody class="table-group-divider">
-                    @foreach (var booking in Model) {
-                        <tr>
-                            <td>@booking.MeetingTitle</td>
-                            <td>@booking.RoomName</td>
-                            <td>@booking.MeetingDate</td>
-                            <td>@booking.StartTime</td>
-                            <td>@booking.EndTime</td>
-                            <td>@booking.BookingStatus</td>
-                            <td>@booking.RoomLocation</td>
-                            <td class="icons-area">
-                                <a class="table-icon" asp-route-id="@booking.BookingID" , asp-controller="BookingManagement" asp-action="Edit">
-                                    <i class="bi bi-pencil-square"></i>
-                                </a>
-                                <a href="#" class="table-icon" data-id="@booking.BookingID" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                                    <i class="bi bi-trash"></i>
-                                </a>
-                            </td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
-        </div>
-    </div>
-</div>
 
-
-
-<div style="display: flex; flex: 1;">
-    <div id="calendar"></div>
+<div class="calendar" style="display: flex; flex: 1;">
+    <div id="calendar" style="width: 100%;"></div>
 </div>
 
 
@@ -104,7 +57,8 @@
                     document.getElementById('modalEventEnd').textContent = info.event.end ? info.event.end.toLocaleString() : 'N/A';
                     var eventModal = new bootstrap.Modal(document.getElementById('eventModal'));
                     eventModal.show();
-            }
+            },
+            aspectRatio: 2
         });
 
         calendar.render();
@@ -136,27 +90,53 @@
     </div>
 </div>
 
+<p id="notiSwitch" hidden>@ViewBag.Notif</p>
+
 <script>
-    let notificationPlayed = false; // Ensure the sound is played only once
+    let notificationPlayed = false; // Ensure the notification message is displayed only once
+    let soundPlayed = false; // Ensure the notification sound is played only once
+
+    const notifSetting = notiSwitch.textContent === 'True';
 
     window.onload = function () {
         const notification = document.getElementById('notification');
         const sound = document.getElementById('notificationSound');
+        const notiSwitch = document.getElementById('notiSwitch'); // Get the switch element
 
-        if (notification && sound && !notificationPlayed) {
+        // Handle the notification message
+        if (notification && !notificationPlayed) {
+            notificationPlayed = true; // Mark the notification as displayed
+
+            // Fade out the notification after a delay
+            setTimeout(() => {
+                notification.style.opacity = '0'; // Start fade-out
+                setTimeout(() => {
+                    if (notification) {
+                        notification.remove(); // Remove notification from DOM after fade-out
+                    }
+                }, 500); // Wait for fade-out animation to complete
+            }, 2000); // Delay before fade-out starts
+        }
+
+        // Handle the notification sound
+        if (sound && notifSetting && !soundPlayed) {
             sound.play().catch(error => {
                 console.error("Notification sound failed to play:", error);
             });
-            
-            notificationPlayed = true; // Mark as played
 
-            // Optionally fade out the notification after a delay
-            setTimeout(() => {
-                notification.style.opacity = '0';
-                setTimeout(() => notification.remove(), 500); // Remove from DOM after fade-out
-            }, 2000);
+            soundPlayed = true; // Mark the sound as played
         }
     };
+
+    // Event listener for the switch to dynamically control the sound
+    document.getElementById('notiSwitch').addEventListener('change', function () {
+        if (!this.checked) {
+            console.log("Sound is disabled."); // Optional log for debugging
+            soundPlayed = false; // Reset soundPlayed so the sound can be enabled again if turned on
+        } else {
+            console.log("Sound is enabled."); // Optional log for debugging
+        }
+    });
 </script>
 
 <script>

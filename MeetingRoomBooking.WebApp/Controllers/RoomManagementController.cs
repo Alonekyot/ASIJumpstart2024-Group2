@@ -9,10 +9,13 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Collections;
+using System.Security.Claims;
 
 namespace MeetingRoomBooking.WebApp.Controllers
 {
 
+    [Authorize]
+    [RoleAuthorize(new int[] { 1, 2 })]// Only Roles with values 1 or 2, or Admin or Suer admin respectively
     public class RoomManagementController : Controller
     {
         private readonly MeetingRoomBookingDbContext _context;
@@ -27,6 +30,11 @@ namespace MeetingRoomBooking.WebApp.Controllers
 
         public IActionResult Index()
         {
+            //FOR THE NOTIFICATION
+            var userId = int.Parse(User.FindFirstValue("UserId"));
+            var userNotif = _context.Users.Where(u => u.UserId == userId).FirstOrDefault();
+            ViewBag.Notif = userNotif.Notification;
+
             ViewBag.ActivePage = "Room Management";
             var rooms = _context.Rooms.ToList();
 
@@ -59,11 +67,10 @@ namespace MeetingRoomBooking.WebApp.Controllers
         public async Task<IActionResult> Edit(EditRoomModel editedRoom)
         {
             var room = await _context.Rooms.FindAsync(editedRoom.RoomId);
-            Console.WriteLine(editedRoom.RoomId + "---------------------------------------");
 
             if (ModelState.IsValid)
             {
-                room = _roomManager.Edit(editedRoom, room);
+                room = await _roomManager.Edit(editedRoom, room);
                 _context.Update(room);
                 await _context.SaveChangesAsync();
                 TempData["roomSuccess"] = "Room edited successfully";
@@ -81,7 +88,7 @@ namespace MeetingRoomBooking.WebApp.Controllers
             if (!ModelState.IsValid)
             {
                 return RedirectToAction("Index");
-            }
+             }
 
             byte[]? imageData = null;
 
