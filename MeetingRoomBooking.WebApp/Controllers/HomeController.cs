@@ -43,7 +43,7 @@ namespace MeetingRoomBooking.WebApp.Controllers {
             if (role == 1 || role == 2)
             {
 
-                int todaysBooking = _context.Bookings
+                int todaysBooking = _context.BookingInstance
                     .Where(b => b.MeetingDate == DateOnly.FromDateTime(DateTime.Now))
                     .Count();
                 int roomCount = _context.Rooms
@@ -51,10 +51,14 @@ namespace MeetingRoomBooking.WebApp.Controllers {
                 int recurring = _context.Bookings
                     .Where(b => b.Recurring)
                     .Count();
+                int userCount = _context.Users
+                    .Where(u => !u.Deleted).Count();
+
 
                 ViewBag.RoomCount = roomCount;
                 ViewBag.TodaysBooking = todaysBooking;
                 ViewBag.Recurrings = recurring;
+                ViewBag.UserCount = userCount;
 
                 // For Admin: fetch all bookings (both admin and user)
                 var currentDate = DateOnly.FromDateTime(DateTime.Now);
@@ -132,7 +136,7 @@ namespace MeetingRoomBooking.WebApp.Controllers {
         public IActionResult ReportAnalytics() {
             ViewBag.ActivePage = "Report & Analytics";
 
-            int todaysBooking = _context.Bookings
+            int todaysBooking = _context.BookingInstance
                 .Where(b => b.MeetingDate == DateOnly.FromDateTime(DateTime.Now))
                 .Count();
             int roomCount = _context.Rooms
@@ -140,6 +144,8 @@ namespace MeetingRoomBooking.WebApp.Controllers {
             int recurring = _context.Bookings
                 .Where(b => b.Recurring)
                 .Count();
+            int userCount = _context.Users
+                .Where(u => !u.Deleted).Count();
 
             var roomLeaderboard = _context.Rooms
                 .Select(room => new RoomLeaderBoard {
@@ -168,6 +174,7 @@ namespace MeetingRoomBooking.WebApp.Controllers {
             ViewBag.RoomCount = roomCount;
             ViewBag.TodaysBooking = todaysBooking;
             ViewBag.Recurrings = recurring;
+            ViewBag.UserCount = userCount;
             return View(leaderboards);
         }
 

@@ -49,20 +49,20 @@
                             <span class="navbar-item-text">Dashboard</span>
                         </a>
                     </li>
-                    <li class="sidebar-item @(ViewBag.ActivePage == "BookingManagement" ? "active" : "")">
+                    <li class="sidebar-item @(ViewBag.ActivePage == "Booking Management" ? "active" : "")">
                         <a class="no-underline" href="@Url.Action("Index", "BookingManagement")">
                             <i class="bi bi-journal-bookmark-fill"></i>
                             <span class="navbar-item-text">Booking</span>
                         </a>
                     </li>
                     @if (int.TryParse(User.FindFirstValue("Role"), out int role) && role == 2 || role == 1) {
-                        <li class="sidebar-item @(ViewBag.ActivePage == "UserManagement" ? "active" : "")">
+                        <li class="sidebar-item @(ViewBag.ActivePage == "User Management" ? "active" : "")">
                             <a class="no-underline" href="@Url.Action("Index", "UserManagement")">
                                 <i class="bi bi-people"></i>
                                 <span class="navbar-item-text">User Management</span>
                             </a>
                         </li>
-                        <li class="sidebar-item @(ViewBag.ActivePage == "RoomManagement" ? "active" : "")">
+                        <li class="sidebar-item @(ViewBag.ActivePage == "Room Management" ? "active" : "")">
                             <a class="no-underline" href="@Url.Action("Index", "RoomManagement")">
                                 <i class="bi bi-door-open"></i>
                                 <span class="navbar-item-text">Room Management</span>

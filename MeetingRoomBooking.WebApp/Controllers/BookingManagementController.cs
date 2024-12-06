@@ -28,13 +28,13 @@ namespace MeetingRoomBooking.WebApp.Controllers {
 		}
 		[HttpGet]
 		public IActionResult Index() {
-            ViewBag.ActivePage = "BookingManagement";
+            ViewBag.ActivePage = "Booking Management";
 			var rooms = _context.Rooms.ToList(); 	
 			return View(rooms);
         }
 
         public IActionResult Create(int? roomId,string? roomName) {
-            ViewBag.ActivePage = "BookingManagement";
+            ViewBag.ActivePage = "Booking Management";
             ViewBag.RoomId = roomId;
             ViewBag.RoomName = roomName;
             return View();
@@ -58,7 +58,7 @@ namespace MeetingRoomBooking.WebApp.Controllers {
         }
 
         public IActionResult ViewAll() {
-            ViewBag.ActivePage = "BookingManagement";
+            ViewBag.ActivePage = "Booking Management";
             int id = int.Parse(User.FindFirstValue("UserId"));
 
             var bookings = _context.Bookings
@@ -71,8 +71,6 @@ namespace MeetingRoomBooking.WebApp.Controllers {
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CreateBooking(CreateBooking newBook, int roomId) {
-
-            Console.WriteLine(newBook);
             if (string.IsNullOrWhiteSpace(newBook.MeetingTitle)) {
                 ModelState.AddModelError("MeetingTitle", "Provide meeting title");
                 ViewBag.RoomId = roomId;

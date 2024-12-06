@@ -8,6 +8,7 @@ using MeetingRoomBooking.WebApp.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Collections;
 
 namespace MeetingRoomBooking.WebApp.Controllers
 {
@@ -26,7 +27,7 @@ namespace MeetingRoomBooking.WebApp.Controllers
 
         public IActionResult Index()
         {
-            ViewBag.ActivePage = "RoomManagement";
+            ViewBag.ActivePage = "Room Management";
             var rooms = _context.Rooms.ToList();
 
             var roomModel = new RoomModel
@@ -40,7 +41,12 @@ namespace MeetingRoomBooking.WebApp.Controllers
 
         public IActionResult Edit(int id)
         {
+            ViewBag.ActivePage = "Room Management";
             var room = _context.Rooms.FirstOrDefault(u => u.RoomId == id);
+            ViewBag.imageData = room.Image != null ?
+                Convert.ToBase64String(room.Image) :
+                string.Empty;
+
             if (room != null)
             {
                 return View(room);
@@ -120,6 +126,13 @@ namespace MeetingRoomBooking.WebApp.Controllers
             }
             TempData["roomSuccess"] = "Room deleted successfully";
             return RedirectToAction("Index");
+        }
+
+        private string ConvertByteArrayToImage(byte[] data) {
+            if (data == null || data.Length == 0)
+                return string.Empty;
+
+            return Convert.ToBase64String(data);
         }
 
     }
