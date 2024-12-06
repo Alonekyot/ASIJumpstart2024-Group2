@@ -60,7 +60,7 @@ namespace MeetingRoomBooking.WebApp.Controllers
 
             if (ModelState.IsValid)
             {
-                room = _roomManager.Edit(editedRoom, room);
+                room = await _roomManager.Edit(editedRoom, room);
                 _context.Update(room);
                 await _context.SaveChangesAsync();
                 TempData["roomSuccess"] = "Room edited successfully";
