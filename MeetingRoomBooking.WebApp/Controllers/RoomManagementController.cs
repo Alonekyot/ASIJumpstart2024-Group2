@@ -51,6 +51,8 @@ namespace MeetingRoomBooking.WebApp.Controllers
         public async Task<IActionResult> Edit(EditRoomModel editedRoom) {
             var room = await _context.Rooms.FindAsync(editedRoom.RoomId);
 
+            Console.WriteLine("Audio:" + editedRoom.Audio + " Video:" + editedRoom.Video + " Whiteboard:" + editedRoom.WhiteBoard + " Projector:"+
+                editedRoom.Projector+" Loudspeaker:"+editedRoom.Loudspeaker);
 			
 
 			if (ModelState.IsValid) {
