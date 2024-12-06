@@ -319,6 +319,12 @@ namespace MeetingRoomBooking.WebApp.Controllers {
                     return View("Setting", model);
                 }
 
+                if(model.CurrentPassword == password && model.NewPassword == null)
+                {
+                    ModelState.AddModelError("NewPassword", "This field is required");
+                    return View("Setting", model);
+                }
+
                 // Prevent reuse of the same password
                 if (model.NewPassword == model.CurrentPassword)
                 {

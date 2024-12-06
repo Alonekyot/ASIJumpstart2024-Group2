@@ -19,3 +19,12 @@
     display: flex;
     justify-content: space-between;
 }
+
+.btnCancel {
+    background-color: white;
+    border: none;
+    border-radius: 2px;
+    font-family: Rubik;
+    font-size: 15px;
+    color: #34a2eb;
+}

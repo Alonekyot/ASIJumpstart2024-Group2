@@ -13,7 +13,7 @@
                 <span>@booking.MeetingTitle</span>
                 <form asp-action="CancelRecurring" method="post" class="d-inline cancel-form">
                     <input type="hidden" name="id" value="@booking.BookingId" />
-                    <button type="submit">Cancel All</button>
+                    <button type="submit" class="btnCancel">Cancel All</button>
                 </form>
             </summary>
             <ul class="meeting-list">
@@ -23,7 +23,7 @@
                         <span>@instance.MeetingDate (@instance.StartTime - @instance.EndTime)</span>
                         <form class="" method="post" asp-action="CancelBook">
                             <input type="hidden" name="meetingId" value="@instance.BookingInstanceId" />
-                            <button type="submit">Cancel</button>
+                            <button type="submit" class="btnCancel">Cancel</button>
                         </form>
                         
                     </li>

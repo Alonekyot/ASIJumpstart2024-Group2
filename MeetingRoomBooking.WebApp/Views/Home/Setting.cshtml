@@ -8,14 +8,6 @@
     Layout = "_HomeLayout";
 }
 
-@if (TempData["SuccessMessage"] != null)
-    {
-        <div id="notification" class="alert alert-success notification">
-        @TempData["SuccessMessage"]
-        </div>
-        <audio id="notificationSound" src="/sound/notificationSound.mp3" preload="auto"></audio>
-    }
-
 <div class="form-container">
     <form method="post" asp-controller="Home" asp-action="ChangePassword">
         <div class="form-group">
@@ -29,8 +21,9 @@
                     <h6 class="uno">Use sounds to notify you about incoming notifications</h6>
                 </div>
                 <div>
+                    <!-- Rounded switch -->
                     <label class="switch">
-                        <input type="checkbox" checked>
+                        <input type="checkbox" id="notiSwitch" name="noti">
                         <span class="slider round"></span>
                     </label>
                 </div>
@@ -43,8 +36,9 @@
                     <h6 class="uno">Mute Notifications</h6>
                 </div>
                 <div>
+                    <!-- Rounded switch -->
                     <label class="switch">
-                        <input type="checkbox" checked>
+                        <input type="checkbox">
                         <span class="slider round"></span>
                     </label>
                 </div>
@@ -77,12 +71,22 @@
     </form>
 </div>
 
+@if (TempData["SuccessMessage"] != null)
+    {
+        <div id="notification" class="alert alert-success notification">
+        @TempData["SuccessMessage"]
+        </div>
+        <audio id="notificationSound" src="/sound/notificationSound.mp3" preload="auto"></audio>
+    }
+
 <script>
     let notificationPlayed = false; // Ensure the sound is played only once
 
+    // Load the saved state from localStorage
     window.onload = function () {
         const notification = document.getElementById('notification');
         const sound = document.getElementById('notificationSound');
+        const notiSwitch = document.getElementById('notiSwitch');
 
         if (notification && sound && !notificationPlayed) {
             sound.play().catch(error => {
@@ -97,5 +101,5 @@
                 setTimeout(() => notification.remove(), 500); // Remove from DOM after fade-out
             }, 2000);
         }
-    };
+    }
 </script>
