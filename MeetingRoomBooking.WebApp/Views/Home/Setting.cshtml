@@ -4,6 +4,10 @@
     <link rel="stylesheet" href="/css/Setting.css" />
 }
 
+@section script {
+    <script src="~/js/notification.js"></script>
+}
+
 @{
     Layout = "_HomeLayout";
 }
@@ -23,7 +27,7 @@
                 <div>
                     <!-- Rounded switch -->
                     <label class="switch">
-                        <input type="checkbox" id="notiSwitch" name="noti">
+                        <input type="checkbox" id="notiSwitch" asp-for="Notif" checked="@ViewBag.Notif">
                         <span class="slider round"></span>
                     </label>
                 </div>
@@ -78,28 +82,3 @@
         </div>
         <audio id="notificationSound" src="/sound/notificationSound.mp3" preload="auto"></audio>
     }
-
-<script>
-    let notificationPlayed = false; // Ensure the sound is played only once
-
-    // Load the saved state from localStorage
-    window.onload = function () {
-        const notification = document.getElementById('notification');
-        const sound = document.getElementById('notificationSound');
-        const notiSwitch = document.getElementById('notiSwitch');
-
-        if (notification && sound && !notificationPlayed) {
-            sound.play().catch(error => {
-                console.error("Notification sound failed to play:", error);
-            });
-
-            notificationPlayed = true; // Mark as played
-
-            // Optionally fade out the notification after a delay
-            setTimeout(() => {
-                notification.style.opacity = '0';
-                setTimeout(() => notification.remove(), 500); // Remove from DOM after fade-out
-            }, 2000);
-        }
-    }
-</script>
