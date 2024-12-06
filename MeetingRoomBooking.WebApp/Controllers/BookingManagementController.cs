@@ -29,8 +29,14 @@ namespace MeetingRoomBooking.WebApp.Controllers {
 		[HttpGet]
 		public IActionResult Index() {
             ViewBag.ActivePage = "Booking Management";
-			var rooms = _context.Rooms.ToList(); 	
-			return View(rooms);
+			var rooms = _context.Rooms.ToList();
+
+            //FOR THE NOTIFICATION
+            var userId = int.Parse(User.FindFirstValue("UserId"));
+            var userNotif = _context.Users.Where(u => u.UserId == userId).FirstOrDefault();
+            ViewBag.Notif = userNotif.Notification;
+
+            return View(rooms);
         }
 
         public IActionResult Create(int? roomId,string? roomName) {
@@ -149,16 +155,15 @@ namespace MeetingRoomBooking.WebApp.Controllers {
             return RedirectToAction("ViewAll");
         }
 
-        public JsonResult GetEvents() {
-       
-            var events = _context.BookingInstance
-                    .Where(b => b.MeetingStatus != "Canceled")
+        public JsonResult GetEvents(int roomId) {
+
+            var events = _context.BookingInstance.Where(b => b.RoomId == roomId)
                     .Join(_context.Rooms,
                                booking => booking.RoomId,
                                room => room.RoomId,
                                (booking, room) => new CalendarEvent
                                {
-                                   Title = booking.MeetingTitle ,
+                                   Title = booking.MeetingTitle,
                                    Start = booking.MeetingDate.ToDateTime(booking.StartTime),
                                    End = booking.MeetingDate.ToDateTime(booking.EndTime),
                                    Description = room.RoomLocation + " - " + room.RoomName
@@ -167,10 +172,10 @@ namespace MeetingRoomBooking.WebApp.Controllers {
                          .ToList();
             return new JsonResult(events);
         }
-		[HttpPost]
+        [HttpPost]
 		public ActionResult FilterRoom(RoomFilterModel filters)
 		{
-            ViewBag.ActivePage = "BookingManagement";
+            ViewBag.ActivePage = "Booking Management";
             var rooms = _context.Rooms.AsQueryable();
 
 			if (!string.IsNullOrEmpty(filters.SearchText))

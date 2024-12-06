@@ -4,24 +4,16 @@
     <link rel="stylesheet" href="/css/Setting.css" />
 }
 
+@section script {
+    <script src="~/js/notification.js"></script>
+}
+
 @{
     Layout = "_HomeLayout";
 }
 
-@if (TempData["SuccessMessage"] != null)
-    {
-        <div id="notification" class="alert alert-success notification">
-        @TempData["SuccessMessage"]
-        </div>
-        <audio id="notificationSound" src="/sound/notificationSound.mp3" preload="auto"></audio>
-    }
-
 <div class="form-container">
     <form method="post" asp-controller="Home" asp-action="ChangePassword">
-        <div class="form-group">
-            <label for="about">About yourself</label>
-            <textarea id="about" name="about" placeholder="Add bio..."></textarea>
-        </div>
         <div class="form-group">
             <div class="itemRow">
                 <div>
@@ -29,22 +21,9 @@
                     <h6 class="uno">Use sounds to notify you about incoming notifications</h6>
                 </div>
                 <div>
+                    <!-- Rounded switch -->
                     <label class="switch">
-                        <input type="checkbox" checked>
-                        <span class="slider round"></span>
-                    </label>
-                </div>
-            </div>
-        </div>
-        <div class="form-group">
-            <div class="itemRow">
-                <div>
-                    <span class="notif">Do not disturb</span>
-                    <h6 class="uno">Mute Notifications</h6>
-                </div>
-                <div>
-                    <label class="switch">
-                        <input type="checkbox" checked>
+                        <input type="checkbox" id="notiSwitch" asp-for="Notif" checked="@ViewBag.Notif">
                         <span class="slider round"></span>
                     </label>
                 </div>
@@ -52,7 +31,6 @@
         </div>
         <div class="form-group password-section">
             <span class="pass">Change Password</span>
-            <p>Your password must be at least 6 characters and should include a combination of numbers, letters, and special characters. (<span>&#33;&#36;&#64;&#37;</span>)</p>
 
             <label for="current-password">Current Password</label>
             <input asp-for="CurrentPassword" type="password" class="input-text">
@@ -68,34 +46,16 @@
 
         </div>
 
-
         <div class="button-group">
-            <button type="button" class="cancel-btn">Cancel</button>
-            <button type="submit" class="save-btn">Save Changes</button>          
-
+            <button type="submit" class="save-btn">Save Changes</button>
         </div>
     </form>
 </div>
 
-<script>
-    let notificationPlayed = false; // Ensure the sound is played only once
-
-    window.onload = function () {
-        const notification = document.getElementById('notification');
-        const sound = document.getElementById('notificationSound');
-
-        if (notification && sound && !notificationPlayed) {
-            sound.play().catch(error => {
-                console.error("Notification sound failed to play:", error);
-            });
-
-            notificationPlayed = true; // Mark as played
-
-            // Optionally fade out the notification after a delay
-            setTimeout(() => {
-                notification.style.opacity = '0';
-                setTimeout(() => notification.remove(), 500); // Remove from DOM after fade-out
-            }, 2000);
-        }
-    };
-</script>
+@if (TempData["SuccessMessage"] != null)
+    {
+        <div id="notification" class="alert alert-success notification">
+        @TempData["SuccessMessage"]
+        </div>
+        <audio id="notificationSound" src="/sound/notificationSound.mp3" preload="auto"></audio>
+    }

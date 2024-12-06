@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Collections;
+using System.Security.Claims;
 
 namespace MeetingRoomBooking.WebApp.Controllers
 {
@@ -29,6 +30,11 @@ namespace MeetingRoomBooking.WebApp.Controllers
 
         public IActionResult Index()
         {
+            //FOR THE NOTIFICATION
+            var userId = int.Parse(User.FindFirstValue("UserId"));
+            var userNotif = _context.Users.Where(u => u.UserId == userId).FirstOrDefault();
+            ViewBag.Notif = userNotif.Notification;
+
             ViewBag.ActivePage = "Room Management";
             var rooms = _context.Rooms.ToList();
 
@@ -61,10 +67,6 @@ namespace MeetingRoomBooking.WebApp.Controllers
         public async Task<IActionResult> Edit(EditRoomModel editedRoom)
         {
             var room = await _context.Rooms.FindAsync(editedRoom.RoomId);
-
-            Console.WriteLine("Audio:" + editedRoom.Audio + " Video:" + editedRoom.Video + " Whiteboard:" + editedRoom.WhiteBoard + " Projector:"+
-                editedRoom.Projector+" Loudspeaker:"+editedRoom.Loudspeaker);
-			
 
             if (ModelState.IsValid)
             {

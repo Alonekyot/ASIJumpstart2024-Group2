@@ -40,6 +40,11 @@ namespace MeetingRoomBooking.WebApp.Controllers {
             var userId = int.Parse(User.FindFirstValue("UserId"));
             var role = int.Parse(User.FindFirstValue("Role"));
 
+            //FOR THE NOTIFICATION
+            var userNotif = _context.Users.Where(u => u.UserId == userId).FirstOrDefault();
+            ViewBag.Notif = userNotif.Notification;
+
+
             if (role == 1 || role == 2)
             {
 
@@ -59,6 +64,8 @@ namespace MeetingRoomBooking.WebApp.Controllers {
                 ViewBag.TodaysBooking = todaysBooking;
                 ViewBag.Recurrings = recurring;
                 ViewBag.UserCount = userCount;
+
+                
 
                 // For Admin: fetch all bookings (both admin and user)
                 var currentDate = DateOnly.FromDateTime(DateTime.Now);
@@ -207,9 +214,8 @@ namespace MeetingRoomBooking.WebApp.Controllers {
 
             var userId = int.Parse(User.FindFirstValue("UserId"));
             var user = _context.Users.Where(u => u.UserId == userId).FirstOrDefault();
-            var password = PasswordManager.DecryptPassword(user.Password);
 
-            ViewBag.Password = password;
+            ViewBag.Notif = user.Notification;
 
             return View();
         }
@@ -246,7 +252,7 @@ namespace MeetingRoomBooking.WebApp.Controllers {
 
         public IActionResult SearchBooking(string filter) {
 
-            int todaysBooking = _context.Bookings
+            int todaysBooking = _context.BookingInstance
                     .Where(b => b.MeetingDate == DateOnly.FromDateTime(DateTime.Now))
                     .Count();
             int roomCount = _context.Rooms
@@ -254,13 +260,17 @@ namespace MeetingRoomBooking.WebApp.Controllers {
             int recurring = _context.Bookings
                 .Where(b => b.Recurring)
                 .Count();
+            int userCount = _context.Users
+                .Where(u => !u.Deleted).Count();
+
 
             ViewBag.RoomCount = roomCount;
             ViewBag.TodaysBooking = todaysBooking;
             ViewBag.Recurrings = recurring;
+            ViewBag.UserCount = userCount;
             ViewBag.ActivePage = "Dashboard";
 
-            var bookings = (from booking in _context.Bookings
+            var bookings = (from booking in _context.BookingInstance
                             join room in _context.Rooms on booking.RoomId equals room.RoomId
                             join user in _context.Users on booking.UserId equals user.UserId
                             where string.IsNullOrEmpty(filter) || booking.MeetingTitle.ToLower().Contains(filter) ||
@@ -273,7 +283,7 @@ namespace MeetingRoomBooking.WebApp.Controllers {
                                 StartTime = booking.StartTime,
                                 EndTime = booking.EndTime,
                                 RoomLocation = room.RoomLocation,
-                                BookingStatus = booking.BookingStatus,
+                                BookingStatus = booking.MeetingStatus,
                                 MeetingTitle = booking.MeetingTitle
                             }).ToList();
 
@@ -319,19 +329,27 @@ namespace MeetingRoomBooking.WebApp.Controllers {
                 var userId = int.Parse(User.FindFirstValue("UserId"));
                 var user = _context.Users.Where(u => u.UserId == userId).FirstOrDefault();
                 var password = PasswordManager.DecryptPassword(user.Password);
-
-                if (model.CurrentPassword != password)
+                
+                if(model.CurrentPassword != null || model.NewPassword != null || model.ConfirmPassword != null )
                 {
+                    if (model.CurrentPassword != password)
+                    {
                     ModelState.AddModelError("CurrentPassword", "The current password is incorrect.");
                     return View("Setting", model);
-                }
+                    }
 
-                // Prevent reuse of the same password
-                if (model.NewPassword == model.CurrentPassword)
-                {
+                    if (model.CurrentPassword == password && model.NewPassword == null)
+                    {
+                    ModelState.AddModelError("NewPassword", "This field is required");
+                    return View("Setting", model);
+                    }
+
+                    // Prevent reuse of the same password
+                    if (model.NewPassword == model.CurrentPassword)
+                    {
                     ModelState.AddModelError("NewPassword", "The new password cannot be the same as the current password.");
                     return View("Setting", model);
-                }
+                    }
 
                 // Encrypt and save the new password
                 user.Password = PasswordManager.EncryptPassword(model.NewPassword);
@@ -339,10 +357,15 @@ namespace MeetingRoomBooking.WebApp.Controllers {
 
                 // Set the success message for TempData
                 TempData["SuccessMessage"] = "Your password has been successfully updated.";
+                }
+      
+                user.Notification = model.Notif;
+                await _context.SaveChangesAsync();
 
                 // Redirect to the "Setting" view to display the success message and reset the page state
                 return RedirectToAction("Setting");
             }
+            
         }
     }
 
