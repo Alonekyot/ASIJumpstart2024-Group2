@@ -43,6 +43,14 @@ table{
     align-items: center;
 }
 
+.user-title {
+    font-family: Rubik;
+    font-weight: bold;
+    text-transform: uppercase;
+    margin-left: 6px;
+    color: #0F75AE;
+}
+
 .create-user-button {
     background-color: #37A3E0;
     color: white;
@@ -51,6 +59,7 @@ table{
     border-radius: 5px;
     display: flex;
     align-items: center;
+    transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
     .create-user-button i {
@@ -58,6 +67,16 @@ table{
         font-size: 20px;
         font-weight: bold;
     }
+
+.create-user-button:hover{
+    background-color: #0881c7;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.create-user-button:active{
+    background-color: #094669;
+     transform: scale(0.95);
+}
 
 @media (max-width: 800px) {
     .table {

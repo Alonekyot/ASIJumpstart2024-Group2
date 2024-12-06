@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="/css/roomManagementStyle.css" />
     <link rel="stylesheet" href="/css/Cards.css" />
     <link rel="stylesheet" href="/css/notificationBox.css" />
+    <link rel="stylesheet" href="~/css/Tooltip.css" />
 }
 
     <div class="rooms-content">
@@ -42,28 +43,33 @@
                             <span class="amenities-title"> <span>Amenities:</span></span>
                             <div class="icons-list">
                                 @if (room.Audio) {
-                                    <div class="circle" data-bs-toggle="tooltip">
-                                        <i class="bi bi-headset"></i>
-                                    </div>
+                                <div class="circle">
+                                    <span class="tooltip">Audio</span>
+                                    <i class="bi bi-headset"></i>
+                                </div>
                                 }
                                 @if (room.Video) {
                                     <div class="circle">
+                                        <span class="tooltip">Video</span>
                                         <i class="bi bi-camera-video-fill"></i>
                                     </div>
                                 }
                                 @if (room.WhiteBoard) {
                                     <div class="circle">
+                                        <span class="tooltip">Whiteboard</span>
                                         <i class="bi bi-tv-fill"></i>
                                     </div>
                                 }
                                 @if (room.Projector) {
                                     <div class="circle">
-                                        <i class="bi bi-projector-fill"></i>
+                                        <span class="tooltip">Projector</span>
+                                    <i class="bi bi-projector-fill"></i>
                                     </div>
                                 }
                                 @if (room.Loudspeaker) {
                                     <div class="circle">
-                                        <i class="bi bi-speaker-fill"></i>
+                                        <span class="tooltip">Loudspeaker</span>
+                                    <i class="bi bi-speaker-fill"></i>
                                     </div>
                                 }
                             </div>

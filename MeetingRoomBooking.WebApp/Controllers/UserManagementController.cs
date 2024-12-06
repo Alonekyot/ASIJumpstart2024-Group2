@@ -25,7 +25,7 @@ namespace MeetingRoomBooking.WebApp.Controllers {
 
 
         public IActionResult Index(int pageNumber = 1, int pageSize = 7) {
-            ViewBag.ActivePage = "UserManagement";
+            ViewBag.ActivePage = "User Management";
             var users = _context.Users
                 .Where(u => !u.Deleted)
                 .OrderBy(u => u.FirstName) // Sorting logic, adjust as needed
@@ -39,7 +39,7 @@ namespace MeetingRoomBooking.WebApp.Controllers {
                 CreateUser = new UserViewModel()
             };
 
-            int totalRecords = _context.Users.Count();
+            int totalRecords = _context.Users.Where(u => !u.Deleted).Count();
             ViewBag.TotalPages = (int)Math.Ceiling((double)totalRecords / pageSize);
             ViewBag.CurrentPage = pageNumber;
 
@@ -64,7 +64,7 @@ namespace MeetingRoomBooking.WebApp.Controllers {
                     CreateUser = new UserViewModel()
                 };
 
-                ViewBag.ActivePage = "UserManagement"; // Keep consistent with Index
+                ViewBag.ActivePage = "User Management"; // Keep consistent with Index
                 ViewBag.CurrentPage = 1; // Reset to first page for search results
                 ViewBag.TotalPages = 1; // Search results are not paginated
                 return View("Index", userModel);
@@ -77,7 +77,7 @@ namespace MeetingRoomBooking.WebApp.Controllers {
 
         public IActionResult Details(int? id)
         {
-            ViewBag.ActivePage = "UserManagement";
+            ViewBag.ActivePage = "User Management";
             var user = _context.Users
                 .FirstOrDefault(u => u.UserId == id);
             if(user != null) {

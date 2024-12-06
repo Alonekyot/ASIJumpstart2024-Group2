@@ -7,8 +7,18 @@
     border: 1px solid white;
     text-decoration: none;
     border-radius: 0.25rem;
-    font-family: "Inclusive sans", sans-serif;
+    font-family: Rubik;
     font-weight: 600;
+}
+
+.primary-btn:hover{
+    background-color: #1381bf;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.primary-btn:active{
+     background-color: #0a71ab;
+     transform: scale(0.95);
 }
 
 .secondary-btn {
@@ -18,16 +28,41 @@
     border: 1px solid #37A3E0;
     text-decoration: none;
     border-radius: 0.25rem;
-    font-family: "Inclusive sans", sans-serif;
+    font-family: Rubik;
     font-weight: 600;
+    transition: background-color 0.3s ease, transform 0.2s ease;
 }
+
+.secondary-btn:hover{
+    background-color: #37A3E0;
+    color: white;
+    border: 1px solid #37A3E0;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+.secondary-btn:active{
+     background-color: #1a80ba;
+     transform: scale(0.95);
+}
+
 .danger-btn {
     background-color: #dc3545;
-    padding: 0.5rem 0.75rem;
+    padding: 5px 12px;
     color: white;
     border: 1px solid #dc3545;
     text-decoration: none;
     border-radius: 0.25rem;
-    font-family: "Inclusive sans", sans-serif;
+    font-family: Rubik;
     font-weight: 600;
+}
+
+.danger-btn:hover{
+    background-color: #ab1120;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+
+.danger-btn:active{
+     background-color: #8c0d19;
+     transform: scale(0.95);
 }

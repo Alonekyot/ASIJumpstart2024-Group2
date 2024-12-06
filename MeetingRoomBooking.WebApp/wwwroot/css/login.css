@@ -103,7 +103,7 @@ button {
     margin: 1.875rem 0;
     padding: 0.625rem;
     border-radius: 3.125rem;
-    transition: background-color 0.3s ease, transform 0.2s ease; /* Smooth transition */
+    transition: background-color 0.3s ease, transform 0.2s ease; 
 }
 
 button:hover {
@@ -113,8 +113,8 @@ button:hover {
 }
 
 button:active{
-     background-color: #0056b3; /* Darker blue */
-     transform: scale(0.95); /* Slightly shrink */
+     background-color: #0056b3; 
+     transform: scale(0.95);
 }
 
 .form-title {

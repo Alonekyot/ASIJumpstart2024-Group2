@@ -6,11 +6,11 @@
 	<link href="~/css/bookingManagementStyle.css" rel="stylesheet" />
 	<link href="~/css/Cards.css" rel="stylesheet" />
 	<link href="~/css/notificationBox.css" rel="stylesheet" />
+	<link rel="stylesheet" href="~/css/Tooltip.css" />
 }
-<p class="title font-lato">Booking Management</p>
 <div class="flex" >
 	<form class="filter" asp-action="FilterRoom" method="post">
-		<p>Filter</p>
+		<p class="filter-title">Filter</p>
 		<div class="filter-section">
 			<div class="flex-center1">
 				<input type="text" class="search" name="SearchText" placeholder="Search Room" />
@@ -131,33 +131,33 @@
 							<div class="amenities">
 								<p> <span>Amenities: </span></p>
 								<div class="icons-list">
-									@if (room.Audio)
-									{
+									@if (room.Audio) {
 										<div class="circle">
+											<span class="tooltip">Audio</span>
 											<i class="bi bi-headset"></i>
 										</div>
 									}
-									@if (room.Video)
-									{
+									@if (room.Video) {
 										<div class="circle">
+											<span class="tooltip">Video</span>
 											<i class="bi bi-camera-video-fill"></i>
 										</div>
 									}
-									@if (room.WhiteBoard)
-									{
+									@if (room.WhiteBoard) {
 										<div class="circle">
+											<span class="tooltip">Whiteboard</span>
 											<i class="bi bi-tv-fill"></i>
 										</div>
 									}
-									@if (room.Projector)
-									{
+									@if (room.Projector) {
 										<div class="circle">
+											<span class="tooltip">Projector</span>
 											<i class="bi bi-projector-fill"></i>
 										</div>
 									}
-									@if (room.Loudspeaker)
-									{
+									@if (room.Loudspeaker) {
 										<div class="circle">
+											<span class="tooltip">Loudspeaker</span>
 											<i class="bi bi-speaker-fill"></i>
 										</div>
 									}
