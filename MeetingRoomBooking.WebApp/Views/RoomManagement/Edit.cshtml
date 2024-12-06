@@ -9,12 +9,13 @@
 @section script {
 	<script src="~/js/createRoom.js"></script>
 }
+
 <div>
 	<a class="btn btn-primary" asp-action="Index">Back</a>
 </div>
 
 <div class="create-room">
-	<form method="post" asp-action="Edit">
+	<form method="post" asp-action="Edit" enctype="multipart/form-data">
 		<input type="hidden" asp-for="RoomId" />
 		<div class="input-area">
 			<label class="room-label">Room name:</label>
@@ -29,32 +30,48 @@
 			<input type="number" class="txt-area" asp-for="RoomCapacity" required />
 		</div>
 		<div class="toggle-group">
-			<label class="toggle-btn" id="audio">
-				<input asp-for="Audio" type="checkbox" value="@Model.Audio" onclick="toggleClass(this, 'audio')" hidden />
+			<label class="toggle-btn @(Model.Audio ? "toggle-active" : "")" id="audio">
+				<input asp-for="Audio" type="checkbox" onclick="toggleClass(this, 'audio')" hidden />
 				<p>Audio</p>
 			</label>
-			<label class="toggle-btn" id="video">
-				<input asp-for="Video" type="checkbox" value="@Model.Video" onclick="toggleClass(this, 'video')" hidden />
+			<label class="toggle-btn @(Model.Video ? "toggle-active" : "")" id="video">
+				<input asp-for="Video" type="checkbox" onclick="toggleClass(this, 'video')" hidden />
 				<p>Video</p>
 			</label>
-			<label class="toggle-btn" id="projector">
-				<input asp-for="Projector" type="checkbox" value="@Model.Projector" onclick="toggleClass(this, 'projector')" hidden />
+			<label class="toggle-btn @(Model.Projector ? "toggle-active" : "")" id="projector">
+				<input asp-for="Projector" type="checkbox"  onclick="toggleClass(this, 'projector')" hidden />
 				<p>Projector</p>
 			</label>
-			<label class="toggle-btn" id="whiteBoard">
-				<input asp-for="WhiteBoard" type="checkbox" value="@Model.WhiteBoard" onclick="toggleClass(this, 'whiteBoard')" hidden />
+			<label class="toggle-btn @(Model.WhiteBoard ? "toggle-active" : "")" id="whiteBoard">
+				<input asp-for="WhiteBoard" type="checkbox" onclick="toggleClass(this, 'whiteBoard')" hidden />
 				<p>White Board</p>
 			</label>
-			<label class="toggle-btn" id="loudspeaker">
-				<input asp-for="Loudspeaker" type="checkbox" value="@Model.Loudspeaker" onclick="toggleClass(this, 'loudspeaker')" hidden />
+			<label class="toggle-btn @(Model.Loudspeaker ? "toggle-active" : "")" id="loudspeaker">
+				<input asp-for="Loudspeaker" type="checkbox" onclick="toggleClass(this, 'loudspeaker')" hidden />
 				<p>Loud speaker</p>
 			</label>
 		</div>
 		<div class="drop-area">
 			<div id="dropArea" class="drag-drop-box">
-				<p id="uploadText">Drag & Drop an image here or click to upload</p>
-				<input type="file" id="imageUpload" name="imageUpload" value="" accept="image/*" asp-for="Image" onchange="displayImage()" hidden />
-				<img id="previewImage" src="" alt="Uploaded Image" style="display:none;" />
+			
+				@{
+					string base64Image = null;
+					string imageSrc = null;
+
+					if (Model.Image != null && Model.Image.Length > 0)
+					{
+						base64Image = Convert.ToBase64String(Model.Image);
+						imageSrc = $"data:image/jpeg;base64,{base64Image}"; // Adjust MIME type as needed
+					}
+				}
+				
+				
+				
+				<p id="uploadText" style="display: @(string.IsNullOrEmpty(imageSrc) ? "block" : "none")">
+					Drag & Drop an image here or click to upload
+				</p>
+				<input type="file" id="imageUpload" name="ImageFile"  accept="image/*"  onchange="displayImage64()" hidden />
+				<img id="previewImage" src="@imageSrc" alt="Uploaded Image" style="display: @(string.IsNullOrEmpty(base64Image) ? "none" : "block")" />
 			</div>
 
 		</div>
@@ -65,6 +82,7 @@
 </div>
 
 <script>
+	
 
 	function toggleClass(checkbox, labelId) {
 		const label = document.getElementById(labelId); // Get the label element by ID
@@ -115,8 +133,12 @@
 		inputFile.click();
 	});
 
-	function displayImage() {
+	function displayImage64() {
+		const inputFile = document.getElementById('imageUpload');
+		const previewImage = document.getElementById('previewImage');
+		const uploadText = document.getElementById('uploadText');
 		const file = inputFile.files[0];
+
 		if (file && file.type.startsWith('image/')) {
 			const reader = new FileReader();
 			reader.onload = function (e) {

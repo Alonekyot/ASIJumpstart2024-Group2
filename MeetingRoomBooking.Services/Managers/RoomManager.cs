@@ -66,9 +66,21 @@ namespace MeetingRoomBooking.Services.Managers
         //    return !string.IsNullOrEmpty(extension) && permittedExtensions.Contains(extension);
         //}
 
-        public Room Edit(EditRoomModel model, Room room)
+        public async Task<Room> Edit(EditRoomModel model, Room room)
 		{
-			room.RoomName = model.RoomName;
+           
+
+            if (model.ImageFile != null)
+            {
+
+                using (var memoryStream = new MemoryStream())
+                {
+                    await model.ImageFile.CopyToAsync(memoryStream);
+                    room.Image = memoryStream.ToArray();
+                }
+            }
+
+            room.RoomName = model.RoomName;
 			room.RoomLocation = model.RoomLocation;
 			room.RoomCapacity = model.RoomCapacity;
 			room.Audio = model.Audio;
@@ -76,7 +88,7 @@ namespace MeetingRoomBooking.Services.Managers
 			room.WhiteBoard = model.WhiteBoard;
 			room.Projector = model.Projector;
 			room.Loudspeaker = model.Loudspeaker;
-			room.Image = model.Image;
+			
 
 
 			return room;
