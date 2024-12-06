@@ -61,3 +61,4 @@ function displayImage() {
 		console.error('Please select a valid image.');
 	}
 }
+

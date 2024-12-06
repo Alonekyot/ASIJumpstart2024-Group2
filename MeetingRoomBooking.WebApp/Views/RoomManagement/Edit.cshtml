@@ -9,12 +9,13 @@
 @section script {
 	<script src="~/js/createRoom.js"></script>
 }
+
 <div>
 	<a class="btn btn-primary" asp-action="Index">Back</a>
 </div>
 
 <div class="create-room">
-	<form method="post" asp-action="Edit">
+	<form method="post" asp-action="Edit" enctype="multipart/form-data">
 		<input type="hidden" asp-for="RoomId" />
 		<div class="input-area">
 			<label class="room-label">Room name:</label>
@@ -52,9 +53,25 @@
 		</div>
 		<div class="drop-area">
 			<div id="dropArea" class="drag-drop-box">
-				<p id="uploadText">Drag & Drop an image here or click to upload</p>
-				<input type="file" id="imageUpload" name="imageUpload" value="" accept="image/*" asp-for="Image" onchange="displayImage()" hidden />
-				<img id="previewImage" src="" alt="Uploaded Image" style="display:none;" />
+			
+				@{
+					string base64Image = null;
+					string imageSrc = null;
+
+					if (Model.Image != null && Model.Image.Length > 0)
+					{
+						base64Image = Convert.ToBase64String(Model.Image);
+						imageSrc = $"data:image/jpeg;base64,{base64Image}"; // Adjust MIME type as needed
+					}
+				}
+				
+				
+				
+				<p id="uploadText" style="display: @(string.IsNullOrEmpty(imageSrc) ? "block" : "none")">
+					Drag & Drop an image here or click to upload
+				</p>
+				<input type="file" id="imageUpload" name="ImageFile"  accept="image/*"  onchange="displayImage64()" hidden />
+				<img id="previewImage" src="@imageSrc" alt="Uploaded Image" style="display: @(string.IsNullOrEmpty(base64Image) ? "none" : "block")" />
 			</div>
 
 		</div>
@@ -65,6 +82,7 @@
 </div>
 
 <script>
+	
 
 	function toggleClass(checkbox, labelId) {
 		const label = document.getElementById(labelId); // Get the label element by ID
@@ -115,8 +133,12 @@
 		inputFile.click();
 	});
 
-	function displayImage() {
+	function displayImage64() {
+		const inputFile = document.getElementById('imageUpload');
+		const previewImage = document.getElementById('previewImage');
+		const uploadText = document.getElementById('uploadText');
 		const file = inputFile.files[0];
+
 		if (file && file.type.startsWith('image/')) {
 			const reader = new FileReader();
 			reader.onload = function (e) {

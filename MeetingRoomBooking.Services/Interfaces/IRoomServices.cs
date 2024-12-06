@@ -10,7 +10,7 @@ namespace MeetingRoomBooking.Services.Interfaces
 {
 	public interface IRoomServices	{
 		public Task<bool> AddAsync(CreateRoomModel model);
-        public Room Edit(EditRoomModel model, Room room);
+        public Task<Room> Edit(EditRoomModel model, Room room);
         public Task<bool> Delete(int roomId);
 
     }

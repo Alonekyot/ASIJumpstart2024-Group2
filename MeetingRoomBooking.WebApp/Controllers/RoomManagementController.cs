@@ -50,10 +50,11 @@ namespace MeetingRoomBooking.WebApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(EditRoomModel editedRoom) {
             var room = await _context.Rooms.FindAsync(editedRoom.RoomId);
-            Console.WriteLine(editedRoom.RoomId + "---------------------------------------");
 
-            if (ModelState.IsValid) {
-                room = _roomManager.Edit(editedRoom, room);
+			
+
+			if (ModelState.IsValid) {
+                room = await _roomManager.Edit(editedRoom, room);
                 _context.Update(room);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -68,7 +69,7 @@ namespace MeetingRoomBooking.WebApp.Controllers
             var newRoom = model.NewRoom;
             if (!ModelState.IsValid) {
                 return RedirectToAction("Index");
-            }
+             }
 
             byte[]? imageData = null;
 
