@@ -39,7 +39,7 @@ namespace MeetingRoomBooking.WebApp.Controllers {
                 CreateUser = new UserViewModel()
             };
 
-            int totalRecords = _context.Users.Count();
+            int totalRecords = _context.Users.Where(u => !u.Deleted).Count();
             ViewBag.TotalPages = (int)Math.Ceiling((double)totalRecords / pageSize);
             ViewBag.CurrentPage = pageNumber;
 
