@@ -5,17 +5,18 @@
 }
 @section style {
     <link rel="stylesheet" href="~/css/DeleteUser.css" />
+    <link rel="stylesheet" href="~/css/userList.css"/>
 }
 
 @{
     Layout = "_HomeLayout";
     ViewData["Title"] = "Details";
 }
-<h1>Details</h1>
+<h1 class="user-title" style="font-size:40px; margin-left: -3px; font-weight:500;">Account details</h1>
 <div style="display:flex; justify-content:space-between">
     
 
-    <h4>User</h4>
+    <h4 class="user-title" style="font-weight: 500; font-size: 25px; margin-left:-3px;">Profile</h4>
     <a class="secondary-btn" asp-action="Index">
         Return to List
     </a>
@@ -27,14 +28,14 @@
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <input type="hidden" asp-for="UserId" />
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.LastName)
+            Last Name
         </dt>
         <dd class="col-sm-10">
             <input asp-for="LastName" class="form-control" disabled/>
             <span asp-validation-for="LastName" class="text-danger"></span>
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.FirstName)
+            First Name
         </dt>
         <dd class="col-sm-10">
             <input asp-for="FirstName" class="form-control" disabled />
