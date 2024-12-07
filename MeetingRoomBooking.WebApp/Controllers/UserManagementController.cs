@@ -98,7 +98,9 @@ namespace MeetingRoomBooking.WebApp.Controllers {
             var newUser = model.CreateUser;
 
             if (_context.Users.Any(u => u.Email == newUser.Email)) {
-                ModelState.AddModelError("Email", "Email is already in use.");
+
+                TempData["createSuccess"]= "Email is already in use.";
+                return RedirectToAction("Index");
             }
 
             if (ModelState.IsValid) {
