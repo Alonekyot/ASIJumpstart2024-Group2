@@ -66,6 +66,10 @@ namespace MeetingRoomBooking.WebApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(EditRoomModel editedRoom)
         {
+            if(editedRoom.RoomCapacity <= 1 || editedRoom.RoomCapacity > 1000) {
+                TempData["InvaidCap"] = "Room capacity must be 2 - 1000";
+                return RedirectToAction("Edit", editedRoom.RoomId);
+            }
             var room = await _context.Rooms.FindAsync(editedRoom.RoomId);
 
             if (ModelState.IsValid)
@@ -89,6 +93,10 @@ namespace MeetingRoomBooking.WebApp.Controllers
             {
                 return RedirectToAction("Index");
              }
+            if (newRoom.RoomCapacity <= 1 || newRoom.RoomCapacity > 1000) {
+                TempData["InvaidCap"] = "Room capacity must be 2 - 1000";
+                return RedirectToAction("Index");
+            }
 
             byte[]? imageData = null;
 
