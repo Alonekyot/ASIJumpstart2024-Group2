@@ -19,7 +19,7 @@ namespace MeetingRoomBooking.Services.Managers {
 
             int[] returnData = new int[12];
 
-            var data = _context.Bookings
+            var data = _context.BookingInstance
                 .Where(b => b.MeetingDate.Year == year)
                 .ToList();
 

@@ -28,6 +28,9 @@
 		<div class="input-area">
 			<label class="room-label">Seating capacity:</label>
 			<input type="number" class="txt-area" asp-for="RoomCapacity" required />
+			@if (TempData["InvaidCap"] != null) {
+				<span class="text-danger">@TempData["InvaidCap"]</span>
+			}
 		</div>
 		<div class="toggle-group">
 			<label class="toggle-btn @(Model.Audio ? "toggle-active" : "")" id="audio">
