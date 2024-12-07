@@ -74,3 +74,13 @@ form {
 .switch input[type="checkbox"] {
     display: none;
 }
+
+.backBtn {
+    width: 75px;
+    height: 40px;
+    font-family: Rubik, sans-serif;
+}
+
+.fc {
+    width: 700px;
+}
