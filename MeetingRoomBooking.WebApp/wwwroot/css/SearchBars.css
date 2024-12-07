@@ -1,11 +1,12 @@
 ﻿.dashboard-search-group {
     width: 300px;
     display: flex;
-    border: 1px solid rgba(100,100,100,0.5);
+    /*    border: 1px solid rgba(100,100,100,0.5);*/
     height: 35px;
     border-radius: 20px;
     box-sizing: border-box;
     overflow: hidden;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
 }
 .dashboard-search{
     border: none;
@@ -16,7 +17,7 @@
 .dashboard-search-btn {
     border: none;
     flex: 1;
-    border-left: 1px solid rgba(100,100,100,0.5);
+/*    border-left: 1px solid rgba(100,100,100,0.5);*/
 }
 .dashboard-search-btn i {
     color: black;
