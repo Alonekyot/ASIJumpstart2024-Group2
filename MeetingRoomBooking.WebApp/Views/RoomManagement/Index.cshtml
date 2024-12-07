@@ -93,17 +93,19 @@
                     <span asp-validation-for="NewRoom.RoomCapacity" class="text-danger"></span>
                     <div class="input-area">
                         <label class="room-label">Room name:</label>
-                        <input type="text" class="txt-area" asp-for="NewRoom.RoomName"  />
+                        <input type="text" class="txt-area" asp-for="NewRoom.RoomName"  required/>
                     </div>
                     <div class="input-area">
                         <label class="room-label">Location:</label>
-                        <input type="text" class="txt-area" asp-for="NewRoom.RoomLocation"  />
+                        <input type="text" class="txt-area" asp-for="NewRoom.RoomLocation"  required/>
                     </div>
                     <div class="input-area">
                         <label class="room-label">Seating capacity:</label>
                         <input type="number" class="txt-area" asp-for="NewRoom.RoomCapacity"  />
-                        
-                    </div>
+                    @if (TempData["InvaidCap"] != null) {
+                        <span class="text-danger">@TempData["InvaidCap"]</span>
+                    }
+                </div>
                     <div class="toggle-group">
                         <label class="toggle-btn" id="audio">
                             <input type="checkbox" onclick="toggleClass(this, 'audio')" asp-for="NewRoom.Audio" hidden />
