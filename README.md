@@ -1,4 +1,1 @@
-##Table of Contents
-*General Info
-*Technologies
-*Setup
+<h1>Table of Contents</h1>
