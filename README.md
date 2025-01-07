@@ -35,7 +35,7 @@ Ensure you have the following installed:
 
 1. Clone the repository:
    https://github.com/Alonekyot/ASIJumpstart2024-Group2.git
-   Use the master branch
+   Use the vince branch
 2. Restore Database BackUp  
    MeetingRoomBookingDb.bak
 
