@@ -1,4 +1,4 @@
 ##Table of Contents
-General Info
-Technologies
-Setup
+*General Info
+*Technologies
+*Setup
