@@ -350,6 +350,11 @@ namespace MeetingRoomBooking.WebApp.Controllers {
                     ModelState.AddModelError("NewPassword", "The new password cannot be the same as the current password.");
                     return View("Setting", model);
                     }
+                    if (model.NewPassword != model.ConfirmPassword)
+                    {
+                    ModelState.AddModelError("ConfirmPassword", "The new password and confirmation password do not match.");
+                    return View("Setting", model);
+                    }
 
                 // Encrypt and save the new password
                 user.Password = PasswordManager.EncryptPassword(model.NewPassword);

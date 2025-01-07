@@ -21,7 +21,6 @@ namespace MeetingRoomBooking.Services.ServiceModels
 
         [DataType(DataType.Password)]
         [Display(Name = "confirm password")]
-        [Compare("NewPassword", ErrorMessage = "The new password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
 
         public bool Notif { get; set; }
